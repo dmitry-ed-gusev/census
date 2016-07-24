@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="windows-1251"?>
+
+<!--
+ Система СУПИД. Данный скрипт выполняет сборку системы (WAR-архив) и выкладывание системы на сервер (по протоколу FTP).
+ Также система выкладывается на общий файловый ресурс \\appserver\developer (см. текст скрипта).
+
+ Последняя версия скрипта от: 18.07.2011
+-->
+
+<project name="'MEMO!' BUILD SCRIPT" basedir="" default="3_war_build">
+
+    <!-- Во время выполнения сборки будет показана стандартная картинка анта и прогресс бар -->
+    <splash/>
+
+    <!-- Загрузка глобальных свойств из файла (общие свойства для всех скриптов) -->
+    <property file="global.ant.properties"/>
+    <!-- Локальные свойства данного проекта -->
+    <property name="project.name" value="webMemorandum"/>
+    <property name="war.name" value="memorandum"/>
+    <property name="javadoc.title" value="СИСТЕМА СЗ."/>
+    <property name="appserver.ftp.user" value="019els"/>
+    <property name="appserver.ftp.password" value="GoNduras76"/>
+
+    <!--
+     Список библиотек, используемых данным модулем. Библиотеки находятся в локальном каталоге libs (все *.jar файлы).
+     Все библиотеки из каталога libs включаются в результирующий WAR-файл.
+    -->
+    <fileset id="project_libraries" dir="${libs.dir}" includes="**/*.jar" casesensitive="false"/>
+    <!--
+     Список библиотек, используемых данным модулем. Библиотеки находятся в каталоге ресурсов (resources).
+     Данные библиотеки НЕ копируются в WAR, но участвуют в компиляции.
+    -->
+    <fileset id="ext_project_libraries" dir="${resources.dir}" casesensitive="false">
+        <include name="**/javaee.jar"/>
+    </fileset>
+
+    <!-- Инициализация перед сборкой версии библиотеки - создание необходимых каталогов, очистка каталогов. -->
+    <target name="1_init">
+        <!-- Создание необходимых каталогов (если их еще нет) -->
+        <mkdir dir="${build.dir}"/>
+        <mkdir dir="${temp.dir}"/>
+        <!-- Очистка необходимых каталогов (от остатков предыдущей сборки) -->
+        <delete includeemptydirs="true" failonerror="false">
+            <fileset dir="${build.dir}" includes="**/*"/>
+        </delete>
+        <delete includeemptydirs="true" failonerror="false">
+            <fileset dir="${temp.dir}" includes="**/*"/>
+        </delete>
+    </target>
+
+    <!-- Компиляция исходного кода библиотеки и сбор необходимых ресурсов. Задача зависит от задачи "init". -->
+    <target name="2_build" depends="1_init">
+        <!-- Компиляция исходников -->
+        <javac srcdir="${src.dir}" destdir="${build.dir}" debug="on" source="1.6"
+               target="1.6" includeantruntime="no">
+            <classpath>
+                <!-- Библиотеки проекта, которые войдут в WAR (будут включены в архив) -->
+                <fileset refid="project_libraries"/>
+                <!-- Библиотеки, участвующие в сборке (необходимые для компиляции), но не входящие в WAR -->
+                <fileset refid="ext_project_libraries"/>
+            </classpath>
+        </javac>
+        <!--
+        В каталог скомпилированных классов копируем необходимые файлы ресурсов (properties-файлы):
+        - файл-конфигуратор для библиотеки логгирования (log4j) для продакшен сервера копируется из каталога ресурсов (свойство
+          ${resources.dir}), т.к. в основном рабочем каталоге лежит файл для разработки системы (с консольным аппендером).
+        - файлы текстовых ресурсов (MessageResources) берутся те же самые, что используются в разработке.
+        - все xml-файлы для конфигурирования системы (в данном проекте для конфига MyBatis) также копируются в каталог со
+          скомпиленными классами системы.
+        -->
+        <copy file="${resources.dir}/log4j.production.properties" tofile="${build.dir}/log4j.properties"/>
+        <copy todir="${build.dir}">
+            <fileset dir="${src.dir}">
+                <include name="**/MessageResources*.properties"/>
+                <include name="**/*.xml"/>
+            </fileset>
+        </copy>
+        <!-- Делаем файл с номером билда -->
+        <buildnumber file="${project.name}.${buildnumber.file}"/>
+    </target>
+
+    <!-- Непосредственно сборка WAR-архива приложения. -->
+    <target name="3_war_build" depends="2_build">
+        <!-- Сборка WAR-файла. -->
+        <war destfile="${war.name}.war" webxml="${web.dir}/WEB-INF/web.xml" filesonly="true">
+            <!-- Файлы/каталоги ресурсов для сборки (эти файлы будут находиться в корне WAR-файла) -->
+            <fileset dir="${web.dir}">
+                <!-- исключаем из копиреумых ресурсов файл WEB-INF/web.xml - он указан спец. атрибутом "webxml" задачи "war" -->
+                <exclude name="WEB-INF/web.xml"/>
+                <!-- исключаем из копируемых ресурсов каталог META-INF - он указан спец. тегом "metainf" задачи "war" -->
+                <exclude name="META-INF/*"/>
+            </fileset>
+            <!-- Набор библиотек, для включения в WAR-файл (WEB-INF/lib) - берем библиотеки проекта (только *.jar) -->
+            <lib dir="${libs.dir}">
+                <include name="**/*.jar"/>
+            </lib>
+            <!-- Набор скомпилированных классов, включаемых в WAR-файл (WEB-INF/classes). -->
+            <classes dir="${build.dir}"/>
+            <!-- Содержимое указанной папки попадет в каталог META-INF собираемого WAR-файла -->
+            <metainf dir="${web.dir}/META-INF"/>
+        </war>
+    </target>
+
+
+    <!-- Проверка доступности сетевого ресурса и установка (в зависимотси от доступности) свойства net_available -->
+    <target name="_check_net_resources">
+        <available file="${projects.repository.net}" type="dir" property="net_available"/>
+        <echo message="Checking network resources..."/>
+    </target>
+
+    <!--
+     Копирование файлов на сетевой диск \\appserver\developer (сетевая инсталляция дистрибутива). Копирование производится
+     только если установлено свойство net_available - т.е. сеть доступна.
+    -->
+    <target name="5_distribute_net" if="net_available" depends="3_war_build, _check_net_resources">
+        <!-- Пытаемся создать общий каталог для дистрибутива (он будет создан, только если его еще нет) -->
+        <mkdir dir="${projects.repository.net}/${project.name}"/>
+        <!-- Пытаемся создать общий каталог для архива дистрибутива (он будет создан, только если его еще нет) -->
+        <mkdir dir="${projects.repository.net.archive}/${project.name}"/>
+        <!-- Устанавливаем свойство с текущими датой/временем (оно необходимо для создания архивного каталога) -->
+        <tstamp>
+            <format property="CURRENT_DATETIME" pattern="HH-mm-ss_dd-MM-yyyy"/>
+        </tstamp>
+        <!-- ZIPуем текущий дистрибутив в файл. Уровень компрессии - атрибут level (от 0 до 9) -->
+        <zip destfile="${projects.repository.net.archive}/${project.name}/${project.name}_${CURRENT_DATETIME}.zip"
+             basedir="${projects.repository.net}/${project.name}" update="false" level="9"/>
+        <!-- Очистка общего каталога с дистрибутивом библиотеки (только после отправки его в архив!) -->
+        <delete includeemptydirs="true" failonerror="false">
+            <fileset dir="${projects.repository.net}/${project.name}" includes="**/*"/>
+        </delete>
+        <!-- Копирование дистрибутива в общий каталог с библиотеками -->
+        <copy todir="${projects.repository.net}/${project.name}" file="${war.name}.war"/>
+        <copy todir="${projects.repository.net}/${project.name}" file="${project.name}.${buildnumber.file}"/>
+        <!-- Доки -->
+        <copy todir="${projects.repository.net}/${project.name}/${docs.dir}">
+            <fileset dir="${docs.dir}"/>
+        </copy>
+        <!-- Сырцы -->
+        <copy todir="${projects.repository.net}/${project.name}/${src.dir}">
+            <fileset dir="${src.dir}"/>
+        </copy>
+        <!-- Либы -->
+        <copy todir="${projects.repository.net}/${project.name}/${libs.dir}">
+            <fileset dir="${libs.dir}"/>
+        </copy>
+        <!-- Ресурсы (общие) -->
+        <copy todir="${projects.repository.net}/${project.name}/${resources.dir}">
+            <fileset dir="${resources.dir}"/>
+        </copy>
+        <!-- Веб-ресурсы (jsp-страницы, WEB-INF, META-INF) -->
+        <copy todir="${projects.repository.net}/${project.name}/${web.dir}">
+            <fileset dir="${web.dir}"/>
+        </copy>
+        <!-- Копирование сборочного скрипта в общий каталог с библиотеками -->
+        <copy todir="${projects.repository.net}/${project.name}" file="${build.file}"/>
+    </target>
+
+    <!-- Выкладываем на сервер новый модуль ОСНОВНОГО сервера обновлений. -->
+    <target name="6_ftp_server" depends="5_distribute_net">
+        <!-- Создаем временный каталог (для промежуточного хранения бекапируемой версии приложения) -->
+        <!--<mkdir dir="${local.temp.dir}"/>-->
+        <!-- Очищаем временный каталог (на всякий случай - вдруг там что-то осталось от предыдущего бекапа) -->
+        <delete includeemptydirs="true" failonerror="false">
+            <fileset dir="${temp.dir}" includes="**/*"/>
+        </delete>
+        <!-- Устанавливаем свойство с текущими датой/временем -->
+        <tstamp>
+            <format property="UPDATE_DATETIME" pattern="HH-mm-ss_dd-MM-yyyy"/>
+        </tstamp>
+        <!-- Создаем в архивном каталоге FTP-сервера папку для бекапа нашего приложения -->
+        <ftp passive="false" action="mkdir" server="${appserver.ftp.server}" port="${appserver.ftp.port}"
+             userid="${appserver.ftp.user}" password="${appserver.ftp.password}"
+             remotedir="${appserver.ftp.backups.dir}/${project.name}/${UPDATE_DATETIME}"/>
+        <!-- Копируем текущее серверное приложение в локальную временную папку (на данную машину)  -->
+        <ftp passive="false" action="get" server="${appserver.ftp.server}" port="${appserver.ftp.port}"
+             userid="${appserver.ftp.user}" password="${appserver.ftp.password}"
+             remotedir="${appserver.ftp.tomcat.server_3.dir}">
+            <fileset dir="${temp.dir}">
+                <include name="${war.name}.war"/>
+            </fileset>
+        </ftp>
+        <!-- Копируем текущее приложение в созданную папку для бекапа (на сервере) -->
+        <ftp passive="false" server="${appserver.ftp.server}" port="${appserver.ftp.port}"
+             userid="${appserver.ftp.user}" password="${appserver.ftp.password}"
+             remotedir="${appserver.ftp.backups.dir}/${project.name}/${UPDATE_DATETIME}">
+            <fileset file="${temp.dir}/${war.name}.war"/>
+        </ftp>
+        <!-- Удаляем текущее серверное приложение из временного каталога на данной машине -->
+        <delete file="${temp.dir}/${war.name}.war"/>
+        <!-- Заменяем текущее серверное приложение на новое -->
+        <ftp passive="false" server="${appserver.ftp.server}" port="${appserver.ftp.port}"
+             userid="${appserver.ftp.user}" password="${appserver.ftp.password}"
+             remotedir="${appserver.ftp.tomcat.server_3.dir}">
+            <fileset file="${war.name}.war"/>
+        </ftp>
+    </target>
+
+    <!-- Обновление необходимых библиотек из сетевого репозитория. -->
+    <target name="_refresh_libs_from_net" if="net_available" depends="_check_net_resources">
+        <!-- Библиотека jlib -->
+        <copy todir="${libs.dir}" file="${projects.repository.net}/jlib/jlib.jar" overwrite="true"/>
+        <copy todir="${libs.dir}/${docs.dir}/jlib" overwrite="true">
+            <fileset dir="${projects.repository.net}/jlib/${docs.dir}/jlib"/>
+        </copy>
+        <!-- Библиотека jdb -->
+        <copy todir="${libs.dir}" file="${projects.repository.net}/jdb/jdb.jar" overwrite="true"/>
+        <copy todir="${libs.dir}/${docs.dir}/jdb" overwrite="true">
+            <fileset dir="${projects.repository.net}/jdb/${docs.dir}/jdb"/>
+        </copy>
+
+        <!-- Библиотека jpersonnel -->
+        <copy todir="${libs.dir}" file="${projects.repository.net}/jpersonnel/jpersonnel.jar" overwrite="true"/>
+        <copy todir="${libs.dir}/${docs.dir}/jpersonnel" overwrite="true">
+            <fileset dir="${projects.repository.net}/jpersonnel/${docs.dir}/jpersonnel"/>
+        </copy>
+
+    </target>
+
+</project>

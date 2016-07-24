@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD//EN"
+ "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+    <class name="org.census.commons.dto.personnel.PositionDto" table="PPost">
+        <id       name="id"          column="ID"/>
+        <property name="name"        column="Name" />
+    </class>
+</hibernate-mapping>

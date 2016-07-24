@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <!-- Oracle data source for Census GUI application -->
+    <bean id="censusOraDataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+        <property name="driverClassName" value="${census.jdbc.driver}"/>
+        <property name="url" value="${census.db.url}"/>
+        <property name="username" value="${census.db.user}"/>
+        <property name="password" value="${census.db.pass}"/>
+        <property name="maxActive" value="50"/>
+        <property name="minIdle" value="5"/>
+        <property name="validationQuery" value="SELECT 1 FROM DUAL"/>
+        <property name="initialSize" value="10"/>
+        <property name="testOnReturn" value="true"/>
+        <property name="testOnBorrow" value="true"/>
+        <property name="logAbandoned" value="true"/>
+        <property name="testWhileIdle" value="true"/>
+    </bean>
+
+    <!-- Oracle session factory for Census GUI application -->
+    <bean id="censusOraSessionFactory" class="org.springframework.orm.hibernate4.LocalSessionFactoryBean" abstract="true">
+        <property name="dataSource" ref="censusOraDataSource"/>
+        <!-- In file hibernate.cfg.xml we can't use placeholders from .properties file -->
+        <!--<property name="configLocation" value="classpath:spring/hibernate.cfg.xml"/>-->
+        <property name="packagesToScan" value="org.census"/>
+        <!-- Here we can use placeholders like ${zzz} from .properties file -->
+        <property name="hibernateProperties">
+            <props>
+                <prop key="hibernate.dialect">${hibernate.dialect}</prop>
+                <prop key="hibernate.show_sql">${hibernate.show_sql}</prop>
+                <prop key="hibernate.format_sql">${hibernate.format_sql}</prop>
+                <!--
+                  value="create" to build a new database on each run;
+                  value="update" to modify an existing database;
+                  value="create-drop" means the same as "create" but also drops tables when Hibernate closes;
+                  value="validate" makes no changes to the database
+                -->
+                <prop key="hibernate.hbm2ddl.auto">create</prop>
+                <!-- character set for current database connection -->
+                <!--<prop key="hibernate.connection.charSet">UTF-8</prop>-->
+                <!-- Hibernate Search properties -->
+                <prop key="hibernate.search.default.directory_provider">filesystem</prop>
+                <prop key="hibernate.search.indexing_strategy">event</prop>
+                <prop key="hibernate.search.default.indexBase">${census.indexes.home}/fulltext_indexes</prop>
+            </props>
+        </property>
+        <!-- Hibernate xml mappings for entities classes -->
+        <property name="mappingResources">
+            <list/>
+        </property>
+    </bean>
+
+</beans>

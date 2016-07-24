@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD//EN"
+ "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+    <class name="org.census.commons.dto.personnel.departments.DepartmentDto" table="PDivision">
+        <id       name="id"          column="ID"/>
+        <property name="name"        column="Name" />
+        <property name="description" column="Description" />
+
+        <!-- Employees of this department. Filter "fake" employees (see 'where' clause). -->
+        <set name="employees" table="pList" inverse="true" lazy="false" fetch="select"
+             cascade="none" where="FirstName is not null and FirstName not like '0' and FirstName not like 'тест'">
+            <!-- foreign key in a pList table -->
+            <key>
+                <column name="Section"/>
+            </key>
+            <one-to-many class="org.census.commons.dto.personnel.employees.EmployeeTimedDto" />
+        </set>
+
+    </class>
+</hibernate-mapping>

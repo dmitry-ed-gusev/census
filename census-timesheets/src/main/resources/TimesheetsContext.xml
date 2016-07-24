@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context" xmlns:tx="http://www.springframework.org/schema/tx"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans   http://www.springframework.org/schema/beans/spring-beans.xsd
+                           http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+                           http://www.springframework.org/schema/tx      http://www.springframework.org/schema/tx/spring-tx.xsd">
+
+    <!-- Properties placeholder file -->
+    <context:property-placeholder location="classpath:Timesheets.properties"/>
+
+    <!-- Activates various annotations to be detected in Spring bean classes. -->
+    <context:annotation-config/>
+    <!-- Scans within the base package of the application for @Component/@Repository to configure as beans -->
+    <context:component-scan base-package="org.census"/>
+
+    <!-- Exceptions translator bean -->
+    <bean class="org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor"/>
+    <!-- Realization of exception translator for hibernate 4 -->
+    <bean class="org.springframework.orm.hibernate4.HibernateExceptionTranslator"/>
+    <!-- Spring controlled Hibernate transaction manager (bean) for database -->
+    <bean id="censusTXManager" class="org.springframework.orm.hibernate4.HibernateTransactionManager">
+        <property name="sessionFactory" ref="censusSessionFactory"/>
+    </bean>
+    <!-- Annotation-driven tx manager config (annotation @Transactional for classes/methods - enables the Hiber @Transactional programming model) -->
+    <tx:annotation-driven transaction-manager="censusTXManager" proxy-target-class="true"/>
+
+    <!-- Oracle data source for Census GUI application -->
+    <bean id="censusDataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+        <property name="driverClassName" value="com.microsoft.sqlserver.jdbc.SQLServerDriver"/>
+        <property name="url" value="jdbc:sqlserver://${db.server};databaseName=${db.database}"/>
+        <property name="username" value="${db.user}"/>
+        <property name="password" value="${db.password}"/>
+        <property name="maxActive" value="5"/>
+        <property name="minIdle" value="1"/>
+        <property name="validationQuery" value="SELECT 1"/>
+        <property name="initialSize" value="1"/>
+        <property name="testOnReturn" value="true"/>
+        <property name="testOnBorrow" value="true"/>
+        <property name="logAbandoned" value="true"/>
+        <property name="testWhileIdle" value="true"/>
+    </bean>
+
+    <!-- Oracle session factory for Census GUI application -->
+    <bean id="censusSessionFactory" class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
+        <property name="dataSource" ref="censusDataSource"/>
+
+        <!-- In file hibernate.cfg.xml we can't use placeholders from .properties file -->
+        <!--<property name="configLocation" value="classpath:spring/hibernate.cfg.xml"/>-->
+
+        <!-- packages for scanning for annotated entities -->
+        <!-- <property name="packagesToScan" value="org.census"/> -->
+
+        <!-- Here we can use placeholders like ${zzz} from .properties file -->
+        <property name="hibernateProperties">
+            <props>
+                <prop key="hibernate.dialect">org.hibernate.dialect.SQLServer2008Dialect</prop>
+                <prop key="hibernate.show_sql">${hibernate.show_sql}</prop>
+                <prop key="hibernate.format_sql">${hibernate.format_sql}</prop>
+                <!-- character set for current database connection -->
+                <!--<prop key="hibernate.connection.charSet">UTF-8</prop>-->
+            </props>
+        </property>
+
+        <!-- Hibernate xml mappings for entities classes -->
+        <property name="mappingResources">
+            <list>
+                <value>mappings/TimedEmployeeDto.hbm.xml</value>
+                <value>mappings/DepartmentDto.hbm.xml</value>
+                <value>mappings/PositionDto.hbm.xml</value>
+                <value>mappings/TimeMeasurementDto.hbm.xml</value>
+            </list>
+        </property>
+    </bean>
+
+    <!-- -->
+    <!--<bean id="employeeDao" class="org.census.commons.dao.hibernate.personnel.EmployeeDao"/>-->
+    <!--
+    <bean id="timesheetsEngine" class="org.census.commons.service.TimesheetsService">
+        <property name="sessionFactory" ref="censusSessionFactory" />
+    </bean>
+    -->
+
+</beans>

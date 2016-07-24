@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context" xmlns:tx="http://www.springframework.org/schema/tx"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans   http://www.springframework.org/schema/beans/spring-beans.xsd
+                           http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+                           http://www.springframework.org/schema/tx      http://www.springframework.org/schema/tx/spring-tx.xsd">
+
+    <!-- Properties placeholder file -->
+    <context:property-placeholder location="classpath:CensusCommon.properties" />
+
+    <!-- Apache DBCP (DataBase Connection Pool) - connection pool for Census DB. -->
+    <bean id="censusDataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+        <property name="driverClassName" value="${census.database.driver}"/>
+        <property name="url"             value="${census.database.url}"/>
+        <property name="username"        value="${census.database.username}"/>
+        <property name="password"        value="${census.database.password}"/>
+        <property name="maxActive"       value="50"/>
+        <property name="minIdle"         value="5"/>
+        <property name="validationQuery" value="${census.database.validationQuery}"/>
+        <property name="initialSize"     value="10"/>
+        <property name="testOnReturn"    value="true"/>
+        <property name="testOnBorrow"    value="true"/>
+        <property name="logAbandoned"    value="true" />
+        <property name="testWhileIdle"   value="true" />
+    </bean>
+
+    <!--
+     Hibernate session factory bean with Spring controlled pooled datasource (Oracle). This is "COMMON"
+     session factory for connecting to Oracle database.
+    -->
+    <bean id="censusSessionFactory" class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
+        <property name="dataSource" ref="censusDataSource" />
+        <!-- If we use file hibernate.cfg.xml, we can't use placeholders from .properties file
+         (in hibernate.cfg.xml). We will use direct property of factory named hibernateProperties. -->
+        <!--<property name="configLocation" value="classpath:spring/hibernate.cfg.xml"/>-->
+        <property name="packagesToScan" value="org.census.commons"/>
+        <!-- Here we can use placeholders ${zzz} from .properties file for Hibernate -->
+        <property name="hibernateProperties">
+            <props>
+                <!-- Base Hibernate properties -->
+                <prop key="hibernate.dialect">${census.hibernate.dialect}</prop>
+                <prop key="hibernate.show_sql">${census.hibernate.show_sql}</prop>
+                <prop key="hibernate.format_sql">${census.hibernate.format_sql}</prop>
+                <!--<prop key="hibernate.hbm2ddl.auto">${census.hibernate.hbm2ddl.auto}</prop>-->
+                <!--<prop key="hibernate.hbm2ddl.auto">create</prop>-->
+                <!-- Hibernate Search properties -->
+                <!--<prop key="hibernate.search.default.directory_provider">filesystem</prop>-->
+                <!--<prop key="hibernate.search.indexing_strategy">event</prop>-->
+                <!--<prop key="hibernate.search.default.indexBase">${census.home}/fulltext_indexes</prop>-->
+            </props>
+        </property>
+        <!-- Hibernate XML mappings -->
+        <property name="mappingResources">
+            <list>
+                <!--<value>hibernate/oracle/contracts/ContractDto_ORA.hbm.xml</value>-->
+            </list>
+        </property>
+    </bean>
+
+    <!-- Spring controlled Hibernate transaction manager (bean) -->
+    <bean id="censusTXManager" class="org.springframework.orm.hibernate4.HibernateTransactionManager">
+        <property name="sessionFactory" ref="censusSessionFactory" />
+    </bean>
+
+    <!-- Annotation driven config for transaction manager (using annotations @Transactional for classes/methods) -->
+    <tx:annotation-driven transaction-manager="censusTXManager" proxy-target-class="true"/>
+
+    <!-- Activates various annotations to be detected in Spring bean classes. -->
+    <context:annotation-config />
+    <!-- Scans within the base package of the application for @Component/@Repository to configure as beans -->
+    <context:component-scan base-package="org.census.commons" />
+
+    <!-- Exceptions translator bean -->
+    <bean class="org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor"/>
+    <!-- Realization of exception translator for hibernate 4 -->
+    <bean class="org.springframework.orm.hibernate4.HibernateExceptionTranslator"/>
+
+</beans>

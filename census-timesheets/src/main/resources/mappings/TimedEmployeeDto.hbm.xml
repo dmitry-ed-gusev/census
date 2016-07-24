@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD//EN"
+ "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+    <class name="org.census.commons.dto.personnel.employees.EmployeeTimedDto" table="pList">
+        <id       name="id"         column="ID"/>
+        <property name="name"       column="FirstName"/>
+        <property name="family"     column="Name" />
+        <property name="patronymic" column="MidName" />
+        <property name="timestamp"  column="ChangeTime" />
+
+        <!-- employees' department -> link to table PDivision -->
+        <many-to-one name="onlyDepartment" class="org.census.commons.dto.personnel.departments.DepartmentDto" lazy="false" cascade="merge">
+            <!-- foreign key in current table to external table -->
+            <column name="Section"/>
+        </many-to-one>
+
+        <!-- employees' position -> link to table PPost -->
+        <many-to-one name="onlyPosition" class="org.census.commons.dto.personnel.PositionDto" lazy="false" cascade="merge" not-found="ignore">
+            <!-- foreign key in current table to external table -->
+            <column name="Post"/>
+        </many-to-one>
+
+        <!-- time measurements for employee -->
+        <set name="timeMeasurements" table="pLogData" inverse="true" lazy="false" fetch="select" cascade="none" order-by="TimeVal desc">
+            <!-- foreign key in a pLogData table -->
+            <key>
+                <column name="HozOrgan"/>
+            </key>
+            <one-to-many class="org.census.commons.dto.hr.TimeMeasurementDto" />
+        </set>
+
+
+    </class>
+</hibernate-mapping>

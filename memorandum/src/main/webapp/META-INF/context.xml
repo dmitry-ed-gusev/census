@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Context path="/">
+
+    <Resource name="jdbc/memorandum" auth="Container" type="javax.sql.DataSource"
+              username="memorandum" password="memorandum" driverClassName="com.mysql.jdbc.Driver"
+              url="jdbc:mysql://W2003TEST:3306/memorandum?autoReconnect=true&amp;autoReconnectForPools=true&amp;maxReconnects=10"
+              initialSize="10" maxActive="30" maxIdle="20" minIdle="5" maxWait="20000" removeAbandoned="true"
+              removeAbandonedTimeout="300" logAbandoned="true" validationQuery="select 1" testOnBorrow="true"/>
+
+    <!--
+    <Resource name="jdbc/MemorandumMSSQLDSpro"
+              auth="Container"
+              type="javax.sql.DataSource"
+              username="root"
+              password="mysql"
+              driverClassName=""
+              url="jdbc:mysql://localhost:3306/memorandum"
+              initialSize="10"
+              maxActive="30"
+              maxIdle="20"
+              minIdle="5"
+              maxWait="20000"
+              removeAbandoned="true"
+              removeAbandonedTimeout="300"
+              logAbandoned="true"
+              validationQuery="select 1"
+              testOnBorrow="true"/>
+
+    <Resource name="jdbc/PersonnelMSSQLDSpro"
+              auth="Container"
+              type="javax.sql.DataSource"
+              username="root"
+              password="mysql"
+              driverClassName=""
+              url="jdbc:mysql://localhost:3306/personnel"
+              initialSize="10"
+              maxActive="30"
+              maxIdle="20"
+              minIdle="5"
+              maxWait="20000"
+              removeAbandoned="true"
+              removeAbandonedTimeout="300"
+              logAbandoned="true"
+              validationQuery="select 1"
+              testOnBorrow="true"/>
+
+
+    <Resource name="jdbc/MySQLUsersDS"
+              auth="Container"
+              type="javax.sql.DataSource"
+              username="root"
+              password="mysql"
+              driverClassName=""
+              url="jdbc:mysql://localhost:3306/stKx?autoReconnect=true&amp;autoReconnectForPools=true&amp;maxReconnects=10"
+              initialSize="10"
+              maxActive="30"
+              maxIdle="20"
+              minIdle="5"
+              maxWait="20000"
+              removeAbandoned="true"
+              removeAbandonedTimeout="300"
+              logAbandoned="true"
+              validationQuery="select 1"
+              testOnBorrow="true"/>
+    -->
+ 
+</Context>

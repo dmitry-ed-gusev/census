@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-configuration SYSTEM "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+
+<hibernate-configuration>
+ <session-factory>
+  <!-- Hibernate database dialect -->
+  <!--<property name="hibernate.dialect">org.hibernate.dialect.Oracle10gDialect</property>-->
+  <!-- Show and print nice SQL on stdout - for deep debug! -->
+  <!--<property name="show_sql">true</property>-->
+  <!--<property name="format_sql">true</property>-->
+  <!-- List of XML mapping files -->
+  <!--
+  <mapping resource="com/db/eps/cage/v3/commons/dto/BrokerAccount.hbm.xml"/>
+  <mapping resource="com/db/eps/cage/v3/commons/dto/OriginalConfirmation.hbm.xml"/>
+  <mapping resource="com/db/eps/cage/v3/commons/dto/Confirmation.hbm.xml"/>
+  <mapping resource="com/db/eps/cage/v3/commons/dto/ConfirmationHistory.hbm.xml"/>
+  <mapping resource="com/db/eps/cage/v3/commons/dto/ConfirmationComment.hbm.xml"/>
+  <mapping resource="com/db/eps/cage/v3/commons/dto/ApplicationError.hbm.xml"/>
+  <mapping resource="com/db/eps/cage/v3/commons/dto/EmailRecipient.hbm.xml"/>
+  -->
+ </session-factory>
+</hibernate-configuration>

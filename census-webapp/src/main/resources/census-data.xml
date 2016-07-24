@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:jee="http://www.springframework.org/schema/jee" xmlns:tx="http://www.springframework.org/schema/tx"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+                           http://www.springframework.org/schema/jee   http://www.springframework.org/schema/jee/spring-jee-3.0.xsd http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.1.xsd">
+
+ <!-- Entity manager factory (we need this factory if we will use JPA) - this is application-managed factory
+      (it needs pre-configured persistence unit - file META-INF/persistance.xml) -->
+ <!--
+ <bean id="censusEMF" class="org.springframework.orm.jpa.LocalEntityManagerFactoryBean">
+  <property name="persistenceUnitName" value="censusPU"/>
+ </bean>
+ -->
+
+ <!-- Entity manager factory (we need this factory if we will use JPA) - this is container-managed factory
+      (it doesn't need persistence unit). In this case SPRING is our container. -->
+ <bean id="censusEMF" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
+  <property name="dataSource" ref="dataSource" />
+  <property name="packagesToScan" value="org.census" />
+  <property name="jpaVendorAdapter">
+   <bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter">
+    <property name="showSql" value="${hibernate.show_sql}" />
+    <!--<property name="generateDdl" value="${jpa.generateDdl}" />-->
+    <property name="databasePlatform" value="${persistence.dialect}" />
+   </bean>
+  </property>
+ </bean>
+
+ <!-- Enable annotation style of managing transactions (annotation @Transactional).
+      Property proxy-target-class=true - directive for cglib always create a proxy for class. -->
+ <tx:annotation-driven transaction-manager="transactionManager" proxy-target-class="true" />
+
+ <!-- Spring-Hibernate4 transaction manager (for transactional components). We should use this TM if we use Hiber persistance. -->
+ <!--
+ <bean id="transactionManager" class="org.springframework.orm.hibernate4.HibernateTransactionManager">
+  <property name="sessionFactory" ref="sessionFactory"/>
+ </bean>
+ -->
+
+ <!-- Spring JPA transaction manager. We should use this TM if we are using JPA persistence. -->
+ <bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
+  <property name="entityManagerFactory" ref="censusEMF"/>
+ </bean>
+
+ <!-- JNDI data source. We can use this data source. -->
+ <!--<jee:jndi-lookup id="dataSource" jndi-name="${data.source.jndi.name}" resource-ref="true"/>-->
+
+ <!-- JDBC pooled data source -->
+ <!--
+ <bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource"
+       destroy-method="close"            p:driverClass="${app.jdbc.driverClassName}"
+       p:jdbcUrl="${app.jdbc.url}"       p:user="${app.jdbc.username}"
+       p:password="${app.jdbc.password}" p:acquireIncrement="5"
+       p:idleConnectionTestPeriod="60"   p:maxPoolSize="100"
+       p:maxStatements="50"              p:minPoolSize="10" />
+ -->
+
+ <!-- Data source. For additional connection properties we should use property "connectionProperties" of data source or
+      add additional properties direct to connection url (in .properties file we should use & as delimiter, in xml file
+      we should use &amp; as delimeter). -->
+ <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+  <!--<property name="driverClassName" value="${driverClassName}" />-->
+     <property name="driverClassName" value="com.mysql.jdbc.Driver" />
+
+  <!--
+  <property name="connectionProperties">
+   <props>
+    <prop key="useUnicode">true</prop>
+    <prop key="characterEncoding">UTF-8</prop>
+   </props>
+  </property>
+  -->
+  <property name="url" value="${url}" />
+  <property name="username" value="${user}" />
+  <property name="password" value="${password}" />
+ </bean>
+
+ <!-- Pooled data source MySql -->
+ <!--<bean id="pooledDataSourceMysql" class="org.apache.commons.dbcp.BasicDataSource">-->
+  <!--<property name="driverClassName" value="com.mysql.jdbc.Driver" />-->
+  <!--<property name="url" value="jdbc:mysql://localhost:3306/census?autoReconnect=true&amp;autoReconnectForPools=true&amp;maxReconnects=10" />-->
+  <!--<property name="username" value="root" />-->
+  <!--<property name="password" value="mysql" />-->
+  <!--<property name="initialSize" value="5" />-->
+  <!--<property name="maxActive" value="10" />-->
+  <!--<property name="maxIdle" value="2"/>-->
+  <!--<property name="minIdle" value="5"/>-->
+  <!--<property name="maxWait" value="20000"/>-->
+  <!--<property name="removeAbandoned" value="true"/>-->
+  <!--<property name="removeAbandonedTimeout" value="300"/>-->
+  <!--<property name="logAbandoned" value="true"/>-->
+  <!--<property name="validationQuery" value="select 1"/>-->
+  <!--<property name="testOnBorrow" value="true"/>-->
+ <!--</bean>-->
+
+ <!-- Session factory for data source (spring3+hibernate4). Property "packagesToScan" is for annotated entity classes finding. -->
+ <!--
+ <bean id="sessionFactory" class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
+  <property name="dataSource" ref="dataSource"/>
+  <property name="configLocation" value="${hibernate.config}"/>
+  <property name="packagesToScan" value="org.census"/>
+ </bean>
+ -->
+ <!-- Session factory config (spring3+hibernate3). Session factory used when we want to use Hibernate "as is". -->
+ <!-- <bean id="sessionFactory" class="org.springframework.orm.hibernate3.annotation.AnnotationSessionFactoryBean"
+       p:dataSource-ref="dataSource" p:configLocation="${hibernate.config}" p:packagesToScan="com.db.eps.cage.v3.commons.dto"/> -->
+
+ <!-- Exceptions translator bean -->
+ <bean class="org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor"/>
+ <!-- Realization of exception translator for hibernate 4 -->
+ <bean class="org.springframework.orm.hibernate4.HibernateExceptionTranslator"/>
+
+</beans>

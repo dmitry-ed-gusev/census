@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+         xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+
+    <!-- We using direct versions numbers (instead of placeholders ${}, because this module used by other
+         projects (msgLoader) and placeholders don't work with jar dependency. -->
+
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <artifactId>Census</artifactId>
+        <groupId>org.census</groupId>
+        <version>1.0</version>
+    </parent>
+    <groupId>org.census.storage</groupId>
+    <artifactId>census-storage</artifactId>
+    <name>Census :: Storage module.</name>
+
+    <!-- This module dependencies -->
+    <dependencies>
+    </dependencies>
+
+</project>

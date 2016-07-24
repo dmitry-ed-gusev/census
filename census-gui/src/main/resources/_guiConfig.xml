@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context" xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:jdbc="http://www.springframework.org/schema/jdbc" xmlns:util="http://www.springframework.org/schema/util"
+       xmlns:aop="http://www.springframework.org/schema/aop" xmlns:utils="http://www.springframework.org/schema/util"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans   http://www.springframework.org/schema/beans/spring-beans.xsd
+                           http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+                           http://www.springframework.org/schema/tx      http://www.springframework.org/schema/tx/spring-tx.xsd
+                           http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc.xsd
+                           http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd">
+
+    <!--  -->
+    <util:map id="tree" key-type="java.lang.String" value-type="java.util.List">
+        <entry key="Справочники">
+            <list value-type="org.census.gui.components.jtree.TreeNode">
+                <!-- tree node for buildings entity -->
+                <bean class="org.census.gui.components.jtree.TreeNode">
+                    <property name="nodeName" value="Здания" />
+                    <property name="dataGrid">
+                        <!-- buildings data grid -->
+                        <bean class="org.census.gui.components.grid.DataGrid">
+                            <constructor-arg index="0" ref="buildingsModel" />
+                        </bean>
+                    </property>
+                </bean>
+                <!-- tree node for work places entity -->
+                <!--  -->
+            </list>
+        </entry>
+        <entry key="Кадры">
+            <list value-type="org.census.gui.components.jtree.TreeNode">
+                <!-- departments list -->
+                <bean class="org.census.gui.components.jtree.TreeNode">
+                    <property name="nodeName" value="Подразделения" />
+                    <property name="dataGrid"><null/></property>
+                </bean>
+                <!-- employees list -->
+                <bean class="org.census.gui.components.jtree.TreeNode">
+                    <property name="nodeName" value="Сотрудники" />
+                    <property name="dataGrid"><null/></property>
+                </bean>
+            </list>
+        </entry>
+        <entry key="Документы">
+            <list value-type="org.census.gui.components.jtree.TreeNode">
+                <!-- input documents -->
+                <bean class="org.census.gui.components.jtree.TreeNode">
+                    <property name="nodeName" value="Входящие" />
+                    <property name="dataGrid"><null/></property>
+                </bean>
+                <!-- output documents -->
+                <bean class="org.census.gui.components.jtree.TreeNode">
+                    <property name="nodeName" value="Исходящие" />
+                    <property name="dataGrid"><null/></property>
+                </bean>
+            </list>
+        </entry>
+    </util:map>
+
+</beans>
