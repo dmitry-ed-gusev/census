@@ -27,23 +27,23 @@ public class ToolBar extends JToolBar {
 
         this.setFloatable(false);
         // SAVE data button
-        ToolBarButton saveButton = new ToolBarButton(Actions.SAVE, "save24x24.png");
+        ToolbarButton saveButton = new ToolbarButton(Actions.SAVE, "save24x24.png");
         saveButton.addActionListener(aListener);
         this.add(saveButton);
         // ADD row button
-        ToolBarButton addButton = new ToolBarButton(Actions.ADD, "add24x24.png");
+        ToolbarButton addButton = new ToolbarButton(Actions.ADD, "add24x24.png");
         addButton.addActionListener(aListener);
         this.add(addButton);
         // REMOVE row button
-        ToolBarButton removeButton = new ToolBarButton(Actions.REMOVE, "delete24x24.png");
+        ToolbarButton removeButton = new ToolbarButton(Actions.REMOVE, "delete24x24.png");
         removeButton.addActionListener(aListener);
         this.add(removeButton);
         // REFRESH data button
-        ToolBarButton refreshButton = new ToolBarButton(Actions.REFRESH, "refresh24x24.png");
+        ToolbarButton refreshButton = new ToolbarButton(Actions.REFRESH, "refresh24x24.png");
         refreshButton.addActionListener(aListener);
         this.add(refreshButton);
         // INFO button
-        ToolBarButton infoButton = new ToolBarButton(Actions.INFO, "info24x24.png");
+        ToolbarButton infoButton = new ToolbarButton(Actions.INFO, "info24x24.png");
         infoButton.addActionListener(aListener);
         this.add(infoButton);
     }

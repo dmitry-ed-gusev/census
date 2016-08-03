@@ -2,15 +2,15 @@ package org.census.commons.dao.simple.docs;
 
 import org.census.commons.dao.hibernate.personnel.EmployeesSimpleDao;
 import org.census.commons.dto.docs.memoDTO;
-import org.census.commons.dto.docs.recipientUserDTO;
 import org.census.commons.dto.personnel.employees.EmployeeDto;
-import org.census.commons.utils.JLibUtils;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
+
+//import org.census.commons.dto.docs.recipientUserDTO;
 
 /**
  * Данный класс реализует выполнение различных операций с объектами recipientUserDTO (записи из таблицы
@@ -41,7 +41,7 @@ public class recipientUserDAO extends Connectors {
         logger.debug("ENTERING recipientUserDAO.findAllByMemo()");
         Connection conn = null;
         ResultSet rs;
-        List<recipientUserDTO> recipientsList = null;
+        //List<recipientUserDTO> recipientsList = null;
 
         try {
 
@@ -52,8 +52,8 @@ public class recipientUserDAO extends Connectors {
                             "FROM recipientsUsers " +
                             "WHERE memoID = ? AND deleted = ?");
 
-            stmt.setInt(1, memoID);
-            stmt.setInt(2, deleted);
+            //stmt.setInt(1, memoID);
+            //stmt.setInt(2, deleted);
             logger.debug("Statement created.");
 
             rs = stmt.executeQuery();
@@ -63,34 +63,35 @@ public class recipientUserDAO extends Connectors {
             if (rs.next()) {
                 logger.debug("ResultSet is NOT EMPTY! Processing.");
                 // Инициализируем список
-                recipientsList = new ArrayList<recipientUserDTO>();
+                //recipientsList = new ArrayList<recipientUserDTO>();
                 EmployeeDto simpleEmployee;
                 // В цикле проходим по курсору и формируем список объектов
                 do {
-                    recipientUserDTO recipient = new recipientUserDTO();
+                    //recipientUserDTO recipient = new recipientUserDTO();
                     // Идентификатор получателя
-                    recipient.setId(rs.getInt("ID"));
+                    //recipient.setId(rs.getInt("ID"));
                     // Идентификатор служебки
-                    recipient.setMemoID(rs.getInt("MemoID"));
+                    //recipient.setMemoID(rs.getInt("MemoID"));
                     // Идентификатор отдела пользователя-получателя
-                    recipient.setRecipientDeptID(rs.getInt("RecipientDeptID"));
+                    //recipient.setRecipientDeptID(rs.getInt("RecipientDeptID"));
                     // Идентификатор пользователя получателя
-                    recipient.setRecipientUserID(rs.getInt("RecipientUserID"));
+                    //recipient.setRecipientUserID(rs.getInt("RecipientUserID"));
                     // Сообщение для пользователя, которому поручена служебка
-                    recipient.setSubject(rs.getString("Subject"));
+                    //recipient.setSubject(rs.getString("Subject"));
                     // Ответ пользователя, которому поручена служебка
-                    recipient.setAnswer(rs.getString("Answer"));
+                    //recipient.setAnswer(rs.getString("Answer"));
                     // Срок ответа на данную служебку для данного получателя
-                    recipient.setRealizedDate(JLibUtils.dateToPattern(rs.getDate("RealizedDate"), Defaults.DATE_PATTERN, null));
+                    //recipient.setRealizedDate(JLibUtils.dateToPattern(rs.getDate("RealizedDate"), Defaults.DATE_PATTERN, null));
                     // Выполнена ли данная служебка конкретным получателем
-                    recipient.setRealized(rs.getInt("Realized"));
+                    //recipient.setRealized(rs.getInt("Realized"));
                     // Признак отправки E-mail при выполнении поручения
-                    recipient.setSendemail(rs.getInt("sendemail"));
+                    //recipient.setSendemail(rs.getInt("sendemail"));
 
                     // Получаем объект "сотрудник ГУР"
-                    simpleEmployee = this.employeesDao.findById(recipient.getRecipientUserID());
+                    //simpleEmployee = this.employeesDao.findById(recipient.getRecipientUserID());
 
                     // Если объект найден - заполним значениями соотв. поля данного класса
+                    /*
                     if (simpleEmployee != null)
                         // Фамилия И.О. пользователя-получателя служебки
                         recipient.setRecipientShortName(simpleEmployee.getShortRusName());
@@ -104,6 +105,7 @@ public class recipientUserDAO extends Connectors {
 
                     // Добавляем созданный объект в список
                     recipientsList.add(recipient);
+                    */
                 }
                 while (rs.next());
                 logger.debug("Processing of ResultSet finished.");
@@ -125,7 +127,8 @@ public class recipientUserDAO extends Connectors {
             }
         }
         logger.debug("ENTERING recipientUserDAO.findAllByMemo()");
-        return recipientsList;
+        //return recipientsList;
+        return null;
     }
 
     /**
@@ -139,11 +142,11 @@ public class recipientUserDAO extends Connectors {
      * @param realized - признак выполненного поручения
      * @return - объект recipientUserDTO сотрудник ГУР, которому поручена служебка
      */
-    public recipientUserDTO findByMemoDeptID(daoHandler dH, int memberID, int memoID, int realized) {
+    public /*recipientUserDTO*/ void findByMemoDeptID(daoHandler dH, int memberID, int memoID, int realized) {
         logger.debug("ENTERING into recipientUserDAO.findByMemoDeptID().");
         Connection conn = null;
         ResultSet rs;
-        recipientUserDTO recipient = null;
+        //recipientUserDTO recipient = null;
 
         try {
 
@@ -163,35 +166,35 @@ public class recipientUserDAO extends Connectors {
             if (rs.next()) {
                 logger.debug("ResultSet is NOT EMPTY! Processing.");
                 // Инициализируем список
-                recipient = new recipientUserDTO();
+                //recipient = new recipientUserDTO();
                 // Идентификатор отдела-получателя из таблицы recipientsDepts
-                recipient.setId(rs.getInt("ID"));
+                //recipient.setId(rs.getInt("ID"));
                 // Идентификатор служебки
-                recipient.setMemoID(rs.getInt("MemoID"));
+                //recipient.setMemoID(rs.getInt("MemoID"));
                 // Идентификатор отдела, в котором работает сотрудник-получатель из БД "Кадры"
-                recipient.setRecipientDeptID(rs.getInt("RecipientDeptID"));
+                //recipient.setRecipientDeptID(rs.getInt("RecipientDeptID"));
                 // Идентификатор пользователя-поручителя служебки (из БД "Кадры")
-                recipient.setAppointedUserID(rs.getInt("AppointedUserID"));
+                //recipient.setAppointedUserID(rs.getInt("AppointedUserID"));
                 // Идентификатор пользователя-получателя служебки (из БД "Кадры")
-                recipient.setRecipientUserID(rs.getInt("RecipientUserID"));
+                //recipient.setRecipientUserID(rs.getInt("RecipientUserID"));
                 // Комментарий поручителя служебки
-                recipient.setSubject(rs.getString("Subject"));
+                //recipient.setSubject(rs.getString("Subject"));
                 // Ответ пользователя на поручение
-                recipient.setAnswer(rs.getString("Answer"));
+                //recipient.setAnswer(rs.getString("Answer"));
                 // Поле "выполнено/невыполнено" (Realized)
-                recipient.setRealized(rs.getInt("Realized"));
+                //recipient.setRealized(rs.getInt("Realized"));
                 // Признак отправки E-mail при выполнении поручения
-                recipient.setSendemail(rs.getInt("sendemail"));
+                //recipient.setSendemail(rs.getInt("sendemail"));
                 // Срок (дата) исполнения поручения
-                recipient.setRealizedDate(JLibUtils.dateToPattern(rs.getDate("RealizedDate"), Defaults.DATE_PATTERN, null));
+                //recipient.setRealizedDate(JLibUtils.dateToPattern(rs.getDate("RealizedDate"), Defaults.DATE_PATTERN, null));
 
                 // Получаем объект "сотрудник ГУР"
-                EmployeeDto simpleEmployee = this.employeesDao.findById(recipient.getRecipientUserID());
+                //EmployeeDto simpleEmployee = this.employeesDao.findById(recipient.getRecipientUserID());
 
                 // Если объект найден - заполним значениями соотв. поля данного класса
-                if (simpleEmployee != null)
+                //if (simpleEmployee != null)
                     // Фамилия И.О. пользователя-получателя служебки
-                    recipient.setRecipientShortName(simpleEmployee.getShortRusName());
+                    //recipient.setRecipientShortName(simpleEmployee.getShortRusName());
             }
             // Если набор данных пуст - сообщение(отладочное) в лог.
             else logger.debug("ResultSet is EMPTY!");
@@ -210,7 +213,7 @@ public class recipientUserDAO extends Connectors {
             }
         }
         logger.debug("LEAVING recipientUserDAO.findByMemoDeptID().");
-        return recipient;
+        //return recipient;
     }
 
     /**
@@ -222,11 +225,11 @@ public class recipientUserDAO extends Connectors {
      * @param recipientUserID - идентификатор "пользователь-получатель"
      * @return - объект recipientUserDTO "пользователь-получатель"
      */
-    public recipientUserDTO findByID(daoHandler dH, int recipientUserID) {
+    public /*recipientUserDTO*/ void findByID(daoHandler dH, int recipientUserID) {
         logger.debug("ENTERING into recipientUserDAO.findByID().");
         Connection conn = null;
         ResultSet rs;
-        recipientUserDTO recipient = null;
+        //recipientUserDTO recipient = null;
 
         try {
 
@@ -244,35 +247,35 @@ public class recipientUserDAO extends Connectors {
             if (rs.next()) {
                 logger.debug("ResultSet is NOT EMPTY! Processing.");
                 // Инициализируем возвращаемый объект
-                recipient = new recipientUserDTO();
+                //recipient = new recipientUserDTO();
                 // Идентификатор отдела-получателя из таблицы recipientsDepts
-                recipient.setId(rs.getInt("ID"));
+                //recipient.setId(rs.getInt("ID"));
                 // Идентификатор служебки
-                recipient.setMemoID(rs.getInt("MemoID"));
+                //recipient.setMemoID(rs.getInt("MemoID"));
                 // Идентификатор пользователя-поручителя служебки (из БД "Кадры")
-                recipient.setAppointedUserID(rs.getInt("AppointedUserID"));
+                //recipient.setAppointedUserID(rs.getInt("AppointedUserID"));
                 // Идентификатор отдела, в котором работает сотрудник-получатель из БД "Кадры"
-                recipient.setRecipientDeptID(rs.getInt("RecipientDeptID"));
+                //recipient.setRecipientDeptID(rs.getInt("RecipientDeptID"));
                 // Идентификатор пользователя-получателя служебки (из БД "Кадры")
-                recipient.setRecipientUserID(rs.getInt("RecipientUserID"));
+                //recipient.setRecipientUserID(rs.getInt("RecipientUserID"));
                 // Комментарий поручителя служебки
-                recipient.setSubject(rs.getString("Subject"));
+                //recipient.setSubject(rs.getString("Subject"));
                 // Ответ пользователя на поручение
-                recipient.setAnswer(rs.getString("Answer"));
+                //recipient.setAnswer(rs.getString("Answer"));
                 // Поле "выполнено/невыполнено" (Realized)
-                recipient.setRealized(rs.getInt("Realized"));
+                //recipient.setRealized(rs.getInt("Realized"));
                 // Срок (дата) исполнения поручения
-                recipient.setRealizedDate(JLibUtils.dateToPattern(rs.getDate("RealizedDate"), Defaults.DATE_PATTERN, null));
+                //recipient.setRealizedDate(JLibUtils.dateToPattern(rs.getDate("RealizedDate"), Defaults.DATE_PATTERN, null));
                 // Уведомление по email
-                recipient.setSendemail(rs.getInt("sendemail"));                
+                //recipient.setSendemail(rs.getInt("sendemail"));
 
                 // Получаем объект "сотрудник ГУР"
-                EmployeeDto simpleEmployee = this.employeesDao.findById(recipient.getRecipientUserID());
+                //EmployeeDto simpleEmployee = this.employeesDao.findById(recipient.getRecipientUserID());
 
                 // Если объект найден - заполним значениями соотв. поля данного класса
-                if (simpleEmployee != null)
+                //if (simpleEmployee != null)
                     // Фамилия И.О. пользователя-получателя служебки
-                    recipient.setRecipientShortName(simpleEmployee.getShortRusName());
+                    //recipient.setRecipientShortName(simpleEmployee.getShortRusName());
             }
             // Если набор данных пуст - сообщение(отладочное) в лог.
             else logger.debug("ResultSet is EMPTY!");
@@ -291,7 +294,7 @@ public class recipientUserDAO extends Connectors {
             }
         }
         logger.debug("LEAVING recipientUserDAO.findByID().");
-        return recipient;
+        //return recipient;
     }
 
     /**
@@ -353,11 +356,11 @@ public class recipientUserDAO extends Connectors {
 
                     memo.setSubject(memo.getSubject() + " ; Поручено:");
                     for (int i = 0; i < memo.getRecipientsUsers().size(); i++) {
-                        recipientUserDTO recipientUser = (recipientUserDTO) memo.getRecipientsUsers().get(i);
+                        //recipientUserDTO recipientUser = (recipientUserDTO) memo.getRecipientsUsers().get(i);
                         // Проверим, если поручение не выполнено и чел из этого отдела, то выводим его ФИО
-                        if (recipientUser.getRealized() == 0 && recipientUser.getRecipientDeptID() == DeptID) {
-                            memo.setSubject(memo.getSubject() + " " + recipientUser.getRecipientShortName());
-                        }
+                        //if (recipientUser.getRealized() == 0 && recipientUser.getRecipientDeptID() == DeptID) {
+                        //    memo.setSubject(memo.getSubject() + " " + recipientUser.getRecipientShortName());
+                        //}
                     }
                 }
                 memoList.add(memo);
@@ -388,10 +391,10 @@ public class recipientUserDAO extends Connectors {
      * параметра объект recipientUserDTO.
      *
      * @param dH        - Держатель ссылок на все DAO-компоненты приложения
-     * @param recipient - объект пользователь-получатель служебки
+     * //@param recipient - объект пользователь-получатель служебки
      * @throws Exception - отлавливаем ошибку выполнения транзакции
      */
-    public void create(daoHandler dH, recipientUserDTO recipient) throws Exception {
+    public void create(daoHandler dH/*, recipientUserDTO recipient*/) throws Exception {
         logger.debug("ENTERING recipientUserDAO.create()");
         Connection conn = null;
 
@@ -403,15 +406,15 @@ public class recipientUserDAO extends Connectors {
                     "INSERT INTO recipientsUsers(MemoID, RecipientDeptID, RecipientUserID, Subject, RealizedDate, " +
                             "Realized, UpdateUserID, AppointedUserID, SendEmail) VALUES (?,?,?,?,?,?,?,?,?)");
 
-            stmt.setInt(1, recipient.getMemoID());
-            stmt.setLong(2, recipient.getRecipientDeptID());
-            stmt.setLong(3, recipient.getRecipientUserID());
-            stmt.setString(4, recipient.getSubject());
-            stmt.setString(5, JLibUtils.dateStrToPattern(recipient.getRealizedDate(), Defaults.DATE_PATTERN, Defaults.DATE_MSSQL_PATTERN, null));
-            stmt.setInt(6, recipient.getRealized());
-            stmt.setLong(7, recipient.getUpdateUserID());
-            stmt.setLong(8, recipient.getAppointedUserID());
-            stmt.setInt(9, recipient.getSendemail());
+            //stmt.setInt(1, recipient.getMemoID());
+            //stmt.setLong(2, recipient.getRecipientDeptID());
+            //stmt.setLong(3, recipient.getRecipientUserID());
+            //stmt.setString(4, recipient.getSubject());
+            //stmt.setString(5, JLibUtils.dateStrToPattern(recipient.getRealizedDate(), Defaults.DATE_PATTERN, Defaults.DATE_MSSQL_PATTERN, null));
+            //stmt.setInt(6, recipient.getRealized());
+            //stmt.setLong(7, recipient.getUpdateUserID());
+            //stmt.setLong(8, recipient.getAppointedUserID());
+            //stmt.setInt(9, recipient.getSendemail());
             logger.debug("Statement created.");
 
             stmt.executeUpdate();
@@ -443,17 +446,17 @@ public class recipientUserDAO extends Connectors {
      * не существует или переданный шаблон пуст или равен null, то никаких действий не происходит.
      *
      * @param dH        - Держатель ссылок на все DAO-компоненты приложения
-     * @param recipient - объект пользователь-получатель служебки
+     * //@param recipient - объект пользователь-получатель служебки
      * @throws Exception - отлавливаем ошибку выполнения транзакции
      */
-    public void update(daoHandler dH, recipientUserDTO recipient) throws Exception {
+    public void update(daoHandler dH/*, recipientUserDTO recipient*/) throws Exception {
         logger.debug("ENTERING into recipientUserDAO.update().");
         Connection conn = null;
 
         try {
             // Вначале найдем изменяемую запись
-            if ((recipient == null) || (dH.getRecipientUserDAO().findByID(dH, recipient.getId()) == null))
-                throw new Exception("Recipient doesn't exists(nothing to update) !");
+            //if ((recipient == null) || (dH.getRecipientUserDAO().findByID(dH, recipient.getId()) == null))
+            //    throw new Exception("Recipient doesn't exists(nothing to update) !");
             logger.debug("Starting sql-query generation.");
 
             conn = this.getMemoConnection();
@@ -462,9 +465,9 @@ public class recipientUserDAO extends Connectors {
             PreparedStatement stmt = conn.prepareStatement(
                     "UPDATE recipientsUsers SET Realized = ?, Answer = ? WHERE id = ?");
 
-            stmt.setInt(1, recipient.getRealized());
-            stmt.setString(2, recipient.getAnswer());
-            stmt.setInt(3, recipient.getId());
+            //stmt.setInt(1, recipient.getRealized());
+            //stmt.setString(2, recipient.getAnswer());
+            //stmt.setInt(3, recipient.getId());
             logger.debug("Statement created.");
 
             stmt.executeUpdate();

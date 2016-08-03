@@ -3,7 +3,7 @@ package org.census.commons.dao.simple.docs;
 import org.census.commons.dao.hibernate.personnel.DepartmentsSimpleDao;
 import org.census.commons.dto.personnel.departments.DepartmentDto;
 import org.census.commons.dto.personnel.employees.EmployeeDto;
-import org.census.commons.dto.docs.recipientDeptDTO;
+//import org.census.commons.dto.docs.recipientDeptDTO;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -63,17 +63,18 @@ public class recipientDeptDAO extends Connectors{
                 recipientsList = new ArrayList();
                 // В цикле проходим по курсору и формируем список объектов
                 do {
-                    recipientDeptDTO recipient = new recipientDeptDTO();
+                    //recipientDeptDTO recipient = new recipientDeptDTO();
                     // Идентификатор получателя
-                    recipient.setId(rs.getInt("ID"));
+                    //recipient.setId(rs.getInt("ID"));
                     // Идентификатор служебки
-                    recipient.setMemoID(rs.getInt("MemoID"));
+                    //recipient.setMemoID(rs.getInt("MemoID"));
                     // Идентификатор отдела-получателя
-                    recipient.setRecipientDeptID(rs.getInt("RecipientDeptID"));
+                    //recipient.setRecipientDeptID(rs.getInt("RecipientDeptID"));
                     // Выполнена ли данная служебка конкретным получателем
-                    recipient.setRealized(rs.getInt("Realized"));
+                    //recipient.setRealized(rs.getInt("Realized"));
 
                     //Найдем данные подразделения по его идентификатору
+                    /*
                     DepartmentDto simpleDepartment = this.departmentsDao.findById(recipient.getRecipientDeptID());
                     if (simpleDepartment != null) {
                         // Трехзначный код отдела-получателя служебки
@@ -82,6 +83,7 @@ public class recipientDeptDAO extends Connectors{
                         recipient.setRecipientDeptName(simpleDepartment.getName());
                     }
                     recipientsList.add(recipient);
+                    */
                 }
                 while (rs.next());
 
@@ -152,19 +154,19 @@ public class recipientDeptDAO extends Connectors{
                 recipientsList = new ArrayList();
                 // В цикле проходим по курсору и формируем список объектов
                 do {
-                    recipientDeptDTO recipient = new recipientDeptDTO();
+                    //recipientDeptDTO recipient = new recipientDeptDTO();
                     // Идентификатор получателя
-                    recipient.setId(rs.getInt("ID"));
+                    //recipient.setId(rs.getInt("ID"));
                     // Идентификатор служебки
-                    recipient.setMemoID(rs.getInt("MemoID"));
+                    //recipient.setMemoID(rs.getInt("MemoID"));
                     // Идентификатор отдела-получателя
-                    recipient.setRecipientDeptID(rs.getInt("RecipientDeptID"));
+                    //recipient.setRecipientDeptID(rs.getInt("RecipientDeptID"));
                     // Выполнена ли данная служебка конкретным получателем
-                    recipient.setRealized(rs.getInt("Realized"));
+                    //recipient.setRealized(rs.getInt("Realized"));
                     // Трехзначный код отдела-получателя служебки
-                    DepartmentDto recDept = this.departmentsDao.findById(recipient.getRecipientDeptID());
-                    recipient.setRecipientDeptCode(recDept.getCode());
-                    recipientsList.add(recipient);
+                    //DepartmentDto recDept = this.departmentsDao.findById(recipient.getRecipientDeptID());
+                    //recipient.setRecipientDeptCode(recDept.getCode());
+                    //recipientsList.add(recipient);
 
                 }
                 while (rs.next());
@@ -203,11 +205,11 @@ public class recipientDeptDAO extends Connectors{
      * @param recipientDeptID - идентификатор подразделения
      * @return - объект "отдел-получатель" [recipientDeptDTO]
      */
-    public recipientDeptDTO findByID(daoHandler dH, long recipientDeptID) {
+    public void /*recipientDeptDTO*/ findByID(daoHandler dH, long recipientDeptID) {
         logger.debug("ENTERING into recipientDeptDAO.findByID().");
         Connection conn = null;
         ResultSet rs;
-        recipientDeptDTO recipientDept = null;
+        //recipientDeptDTO recipientDept = null;
 
         try {
 
@@ -225,14 +227,14 @@ public class recipientDeptDAO extends Connectors{
             if (rs.next()) {
                 logger.debug("ResultSet is NOT EMPTY! Processing.");
                 // Инициализируем список
-                recipientDept = new recipientDeptDTO();
+                //recipientDept = new recipientDeptDTO();
                 // Идентификатор отдела-получателя из таблицы recipientsDepts
-                recipientDept.setId(rs.getInt("ID"));
+                //recipientDept.setId(rs.getInt("ID"));
                 // Идентификатор отдела-получателя из БД "Кадры"
-                recipientDept.setRecipientDeptID(rs.getInt("RecipientDeptID"));
+                //recipientDept.setRecipientDeptID(rs.getInt("RecipientDeptID"));
                 // Трехзначный код отдела-получателя
-                DepartmentDto recDept = this.departmentsDao.findById(recipientDept.getRecipientDeptID());
-                recipientDept.setRecipientDeptCode(recDept.getCode());
+                //DepartmentDto recDept = this.departmentsDao.findById(recipientDept.getRecipientDeptID());
+                //recipientDept.setRecipientDeptCode(recDept.getCode());
 
                 // Наименование отдела
                 //recipientDept.setRecipientDeptName(rs.getString("DepartmentName"));
@@ -254,7 +256,7 @@ public class recipientDeptDAO extends Connectors{
             }
         }
         logger.debug("LEAVING recipientDeptDAO.findByID().");
-        return recipientDept;
+        //return recipientDept;
     }
 
     /**
@@ -265,11 +267,11 @@ public class recipientDeptDAO extends Connectors{
      * @param deptID - идентификатор подразделения
      * @return - объект "отдел-получатель" [recipientDeptDTO]
      */
-    public recipientDeptDTO findByDeptID(daoHandler dH, int deptID) {
+    public void /*recipientDeptDTO*/ findByDeptID(daoHandler dH, int deptID) {
         logger.debug("ENTERING into recipientDeptDAO.findByDeptID().");
         Connection conn = null;
         ResultSet rs;
-        recipientDeptDTO recipientDept = null;
+        //recipientDeptDTO recipientDept = null;
 
         try {
 
@@ -287,14 +289,14 @@ public class recipientDeptDAO extends Connectors{
             if (rs.next()) {
                 logger.debug("ResultSet is NOT EMPTY! Processing.");
                 // Инициализируем список
-                recipientDept = new recipientDeptDTO();
+                //recipientDept = new recipientDeptDTO();
                 // Идентификатор отдела-получателя из таблицы recipientsDepts
-                recipientDept.setId(rs.getInt("ID"));
+                //recipientDept.setId(rs.getInt("ID"));
                 // Идентификатор отдела-получателя из БД "Кадры"
-                recipientDept.setRecipientDeptID(rs.getInt("RecipientDeptID"));
+                //recipientDept.setRecipientDeptID(rs.getInt("RecipientDeptID"));
                 // Трехзначный код отдела-получателя
-                DepartmentDto recDept = this.departmentsDao.findById(recipientDept.getRecipientDeptID());
-                recipientDept.setRecipientDeptCode(recDept.getCode());
+                //DepartmentDto recDept = this.departmentsDao.findById(recipientDept.getRecipientDeptID());
+                //recipientDept.setRecipientDeptCode(recDept.getCode());
             }
             // Если набор данных пуст - сообщение(отладочное) в лог.
             else logger.debug("ResultSet is EMPTY!");
@@ -313,7 +315,7 @@ public class recipientDeptDAO extends Connectors{
             }
         }
         logger.debug("LEAVING recipientDeptDAO.findByDeptID().");
-        return recipientDept;
+        //return recipientDept;
     }
 
     /**
@@ -327,11 +329,11 @@ public class recipientDeptDAO extends Connectors{
      * @param memoID - идентификатор служебкной записки
      * @return - объект "отдел-получатель" [recipientDeptDTO]
      */
-    public recipientDeptDTO findByMemoDeptID(daoHandler dH, long deptID, int memoID) {
+    public /*recipientDeptDTO*/ void findByMemoDeptID(daoHandler dH, long deptID, int memoID) {
         logger.debug("ENTERING into recipientDeptDAO.findByMemoDeptID().");
         Connection conn = null;
         ResultSet rs;
-        recipientDeptDTO recipientDept = null;
+        //recipientDeptDTO recipientDept = null;
 
         try {
 
@@ -350,18 +352,18 @@ public class recipientDeptDAO extends Connectors{
             if (rs.next()) {
                 logger.debug("ResultSet is NOT EMPTY! Processing.");
                 // Инициализируем список
-                recipientDept = new recipientDeptDTO();
+                //recipientDept = new recipientDeptDTO();
                 // Идентификатор отдела-получателя из таблицы recipientsDepts
-                recipientDept.setId(rs.getInt("ID"));
+                //recipientDept.setId(rs.getInt("ID"));
                 // Идентификатор отдела-получателя из БД "Кадры"
-                recipientDept.setRecipientDeptID(rs.getInt("RecipientDeptID"));
+                //recipientDept.setRecipientDeptID(rs.getInt("RecipientDeptID"));
                 // Трехзначный код отдела-получателя
-                DepartmentDto recDept = this.departmentsDao.findById(recipientDept.getRecipientDeptID());
-                recipientDept.setRecipientDeptCode(recDept.getCode());
+                //DepartmentDto recDept = this.departmentsDao.findById(recipientDept.getRecipientDeptID());
+                //recipientDept.setRecipientDeptCode(recDept.getCode());
                 // Идентификатор служебки
-                recipientDept.setMemoID(rs.getInt("MemoID"));
+                //recipientDept.setMemoID(rs.getInt("MemoID"));
                 // Поле "выполнено/невыполнено" (Realized)
-                recipientDept.setRealized(rs.getInt("Realized"));
+                //recipientDept.setRealized(rs.getInt("Realized"));
             }
             // Если набор данных пуст - сообщение(отладочное) в лог.
             else logger.debug("ResultSet is EMPTY!");
@@ -380,7 +382,7 @@ public class recipientDeptDAO extends Connectors{
             }
         }
         logger.debug("LEAVING recipientDeptDAO.findByMemoDeptID().");
-        return recipientDept;
+        //return recipientDept;
     }
 
     /**
@@ -418,12 +420,12 @@ public class recipientDeptDAO extends Connectors{
 
                     if(dept != null){
                         logger.debug("DeptID [" + dept + "] FIND");
-                        recipientDeptDTO recipientDept = new recipientDeptDTO();
-                        recipientDept.setRecipientDeptID(deptID);
-                        recipientDept.setRecipientDeptCode(simpleDepartment.getCode());
+                        //recipientDeptDTO recipientDept = new recipientDeptDTO();
+                        //recipientDept.setRecipientDeptID(deptID);
+                        //recipientDept.setRecipientDeptCode(simpleDepartment.getCode());
 
                         if (deptList == null) deptList = new ArrayList();
-                        deptList.add(recipientDept);
+                        //deptList.add(recipientDept);
                     }                                        
                 }
             }
@@ -475,25 +477,25 @@ public class recipientDeptDAO extends Connectors{
                     DepartmentDto simpleDepartment = this.departmentsDao.findById((long) deptID);
 
                     // Создаем объект получателей
-                    recipientDeptDTO recipientDept = new recipientDeptDTO();
+                    //recipientDeptDTO recipientDept = new recipientDeptDTO();
 
                     // ID отдела
-                    recipientDept.setRecipientDeptID(simpleDepartment.getId());
+                    //recipientDept.setRecipientDeptID(simpleDepartment.getId());
                     // Трехзначный код отдела
-                    recipientDept.setRecipientDeptCode(simpleDepartment.getCode());
+                    //recipientDept.setRecipientDeptCode(simpleDepartment.getCode());
 
                     // Обращение к начальнику отдела, в зависимости от пола
                     // Для начала найдем начальника
                     EmployeeDto simpleEmployeeChief = this.departmentsDao.getChiefOfDept(simpleDepartment.getId());
 
                     if(simpleEmployeeChief != null){
-                        recipientDept.setRecipientChief((simpleEmployeeChief.isMale() ? "Уважаемый " :"Уважаемая ") + simpleEmployeeChief.getShortRusName());
+                        //recipientDept.setRecipientChief((simpleEmployeeChief.isMale() ? "Уважаемый " :"Уважаемая ") + simpleEmployeeChief.getShortRusName());
                     }
 
                     // Если мы что-то нашли - инициализируем список (если он еще не инициализирован)
                     // и добавляем в него найденный отдел
                     if (deptList == null) deptList = new ArrayList();
-                    deptList.add(recipientDept);
+                    //deptList.add(recipientDept);
                 }
             }
 
@@ -514,10 +516,10 @@ public class recipientDeptDAO extends Connectors{
      * для создания записи используется объект recipientDeptDTO, переданный в качестве параметра.
      *
      * @param dH        - Держатель ссылок на все DAO-компоненты приложения
-     * @param recipient - Объект "отдел-получатель служебки" [recipientsDeptsDTO]
+     * //@param recipient - Объект "отдел-получатель служебки" [recipientsDeptsDTO]
      * @throws Exception - ошибка
      */
-    public void create(daoHandler dH, recipientDeptDTO recipient) throws Exception {
+    public void create(daoHandler dH/*, recipientDeptDTO recipient*/) throws Exception {
         logger.debug("ENTERING recipientDeptDAO.create()");
         Connection conn = null;
 
@@ -529,10 +531,10 @@ public class recipientDeptDAO extends Connectors{
             PreparedStatement stmt = conn.prepareStatement(
                     "INSERT INTO recipientsDepts(MemoID, RecipientDeptID, Realized, UpdateUserID) VALUES (?,?,?,?)");
 
-            stmt.setInt(1, recipient.getMemoID());
-            stmt.setLong(2, recipient.getRecipientDeptID());
-            stmt.setInt(3, recipient.getRealized());
-            stmt.setLong(4, recipient.getUpdateUserID());
+            //stmt.setInt(1, recipient.getMemoID());
+            //stmt.setLong(2, recipient.getRecipientDeptID());
+            //stmt.setInt(3, recipient.getRealized());
+            //stmt.setLong(4, recipient.getUpdateUserID());
             logger.debug("Statement created.");
 
             stmt.executeUpdate();
@@ -563,18 +565,18 @@ public class recipientDeptDAO extends Connectors{
      * не существует или переданный шаблон пуст или равен null, то никаких действий не происходит.
      *
      * @param dH        - Держатель ссылок на все DAO-компоненты приложения
-     * @param recipient - Объект "отдел-получатель служебки" [recipientsDeptsDTO]
+     * //@param recipient - Объект "отдел-получатель служебки" [recipientsDeptsDTO]
      * @throws Exception - ошибка
      */
-    public void update(daoHandler dH, recipientDeptDTO recipient) throws Exception {
+    public void update(daoHandler dH/*, recipientDeptDTO recipient*/) throws Exception {
         logger.debug("ENTERING into recipientDeptDAO.update().");
         Connection conn = null;
 
         try {
             logger.debug("Checking data for change.");
             // Вначале найдем изменяемую запись
-            if ((recipient == null) || (dH.getRecipientDeptDAO().findByID(dH, recipient.getId()) == null))
-                throw new Exception("Recipient doesn't exists(nothing to update) !");
+            //if ((recipient == null) || (dH.getRecipientDeptDAO().findByID(dH, recipient.getId()) == null))
+            //    throw new Exception("Recipient doesn't exists(nothing to update) !");
             logger.debug("Starting sql-query generation.");
 
             conn = this.getMemoConnection();
@@ -583,8 +585,8 @@ public class recipientDeptDAO extends Connectors{
             PreparedStatement stmt = conn.prepareStatement(
                     "UPDATE recipientsDepts SET Realized = ? WHERE id = ?");
 
-            stmt.setInt(1, recipient.getRealized());
-            stmt.setLong(2, recipient.getId());
+            //stmt.setInt(1, recipient.getRealized());
+            //stmt.setLong(2, recipient.getId());
             logger.debug("Statement created.");
 
             stmt.executeUpdate();

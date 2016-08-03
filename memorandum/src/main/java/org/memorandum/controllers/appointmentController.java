@@ -5,8 +5,8 @@ import org.census.commons.dto.personnel.departments.DepartmentDto;
 import org.census.commons.dto.personnel.employees.EmployeeDto;
 import org.census.commons.dao.simple.docs.Defaults;
 import org.census.commons.dto.docs.memoDTO;
-import org.census.commons.dto.docs.recipientDeptDTO;
-import org.census.commons.dto.docs.recipientUserDTO;
+//import org.census.commons.dto.docs.recipientDeptDTO;
+//import org.census.commons.dto.docs.recipientUserDTO;
 import org.census.commons.utils.mail.JMail;
 import org.census.commons.utils.mail.JMailConfig;
 
@@ -94,7 +94,8 @@ public class appointmentController extends AbstractController {
 
                 // Также проверяем, что пользователь, поручающий служебку, работает в том отделе, в который служебка адресована
                 // (необходимо: отдел, в котором числится пользователь есть в списке получателей данной служебки)
-                recipientDeptDTO recipient = dH.getRecipientDeptDAO().findByMemoDeptID(dH, deptID, memoID);
+                //recipientDeptDTO recipient = dH.getRecipientDeptDAO().findByMemoDeptID(dH, deptID, memoID);
+                /*
                 if (recipient != null) {
                     // Список сотрудников отдела
                     request.setAttribute("membersList", this.getDepartmentsDao().getEmployeesOfDept(deptID));
@@ -105,6 +106,7 @@ public class appointmentController extends AbstractController {
                     destPage = APPOINT_PAGE;
                     acc_logger.info("appointmentController [" + request.getRemoteUser() + "] [Enter into " + APPOINT_PAGE + "]");
                 } else request.setAttribute(Defaults.ERROR_MSG_PARAM, "Вы не можете поручить данную служебную записку!");
+                */
             } else request.setAttribute(Defaults.ERROR_MSG_PARAM, "Неверный идентификатор отдела или служебной записки!");
         }
 
@@ -156,38 +158,38 @@ public class appointmentController extends AbstractController {
                     EmployeeDto simpleEmployee2;
                     simpleEmployee2 = (EmployeeDto) MemberList.get(r);
 
-                    recipientUserDTO recipient = new recipientUserDTO();
+                    //recipientUserDTO recipient = new recipientUserDTO();
                     // Комментарий исполнителю
-                    recipient.setSubject(subject);
+                    //recipient.setSubject(subject);
                     // Идентификатор поручаемой служебки
-                    recipient.setMemoID(memoID);
+                    //recipient.setMemoID(memoID);
                     // Идентификатор пользователя, кому поручена служебка
-                    recipient.setRecipientUserID(simpleEmployee2.getId());
+                    //recipient.setRecipientUserID(simpleEmployee2.getId());
 
                     // Идентификатор отдела, в котором работает пользователь, которому поручили служебку
                     // todo: temporary solution!!!
                     Set<DepartmentDto> depts = simpleEmployee2.getDepartments();
-                    recipient.setRecipientDeptID(depts != null && depts.size() > 0 ? depts.iterator().next().getId() : 0);
+                    //recipient.setRecipientDeptID(depts != null && depts.size() > 0 ? depts.iterator().next().getId() : 0);
 
                     // Срок исполнения служебки
-                    recipient.setRealizedDate(realizedDate);
+                    //recipient.setRealizedDate(realizedDate);
                     // Статус выполнения служебки - "не выполнено"
-                    recipient.setRealized(0);
+                    //recipient.setRealized(0);
                     // Пользователь, создавший запись
-                    recipient.setUpdateUserID(employee.getId());
+                    //recipient.setUpdateUserID(employee.getId());
                     // Пользователь, поручивший служебку
-                    recipient.setAppointedUserID(employee.getId());
+                    //recipient.setAppointedUserID(employee.getId());
                     // Признак отправки E-mail при выполнении поручения, по умолчанию 0-нет
                     if (sendemail != null && sendemail.equals("on")) {
-                        recipient.setSendemail(1);
+                        //recipient.setSendemail(1);
                     }
 
-                    acc_logger.info("appointmentController [" + request.getRemoteUser() + "] [Appoint memo: memoID=" + recipient.getMemoID() +
-                            ", appointedUserID=" + recipient.getAppointedUserID() + ", memberID=" + recipient.getRecipientUserID() + "]");
+                    //acc_logger.info("appointmentController [" + request.getRemoteUser() + "] [Appoint memo: memoID=" + recipient.getMemoID() +
+                    //        ", appointedUserID=" + recipient.getAppointedUserID() + ", memberID=" + recipient.getRecipientUserID() + "]");
 
                     // Непосредственно поручение служебки
                     try {
-                        dH.getRecipientUserDAO().create(dH, recipient);
+                        //dH.getRecipientUserDAO().create(dH, recipient);
                     }
                     catch (Exception e) {
                         logger.error("Can't appoint this memo!");
@@ -271,7 +273,8 @@ public class appointmentController extends AbstractController {
 
                     // Также проверяем, что пользователь, поручающий служебку, работает в том отделе, в который служебка адресована
                     // (необходимо: отдел, в котором числится пользователь есть в списке получателей данной служебки)
-                    recipientDeptDTO recipient = dH.getRecipientDeptDAO().findByMemoDeptID(dH, deptID, memoID);
+                    //recipientDeptDTO recipient = dH.getRecipientDeptDAO().findByMemoDeptID(dH, deptID, memoID);
+                    /*
                     if (recipient != null) {
 
                         // Список сотрудников отдела
@@ -310,6 +313,7 @@ public class appointmentController extends AbstractController {
                         acc_logger.info("appointmentController [" + request.getRemoteUser() + "] [Enter into " + APPOINT_PAGE + "]");
                     } else
                         request.setAttribute(Defaults.ERROR_MSG_PARAM, "Вы не можете поручить данную служебную записку!");
+                    */
                 } else
                     request.setAttribute(Defaults.ERROR_MSG_PARAM, "Неверный идентификатор отдела или служебной записки!");
             }

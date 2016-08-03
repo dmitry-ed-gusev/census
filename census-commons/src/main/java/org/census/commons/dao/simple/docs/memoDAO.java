@@ -3,7 +3,7 @@ package org.census.commons.dao.simple.docs;
 import org.census.commons.dao.hibernate.personnel.DepartmentsSimpleDao;
 import org.census.commons.dao.hibernate.personnel.EmployeesSimpleDao;
 import org.census.commons.dto.docs.memoDTO;
-import org.census.commons.dto.docs.recipientDeptDTO;
+//import org.census.commons.dto.docs.recipientDeptDTO;
 import org.census.commons.dto.personnel.departments.DepartmentDto;
 import org.census.commons.dto.personnel.employees.EmployeeDto;
 import org.census.commons.utils.JLibUtils;
@@ -359,13 +359,13 @@ public class  memoDAO extends Connectors
           else throw new Exception("Invalid box type [" + boxType + "]!");
 
           //Идентификатор подразделения получателя/отправителя
-          stmt.setLong(1, deptID);
+          //stmt.setLong(1, deptID);
           // Тип служебок для подсчета - удаленные/активные
-          stmt.setInt(2, deleted);
+          //stmt.setInt(2, deleted);
           
           // Текущую дату откручиваем 6 месяцев назад, запросы выполняются за полгода
           Date dat = JLibUtils.dateToPeriod(new Date(), -Defaults.SEARCH_INTERVAL, JLibUtils.DatePeriod.MONTH);
-          stmt.setString(3, JLibUtils.dateToPattern(dat, Defaults.DATE_MSSQL_PATTERN, null));
+          //stmt.setString(3, JLibUtils.dateToPattern(dat, Defaults.DATE_MSSQL_PATTERN, null));
 
           logger.debug("Statement created.");
 
@@ -745,7 +745,7 @@ public class  memoDAO extends Connectors
 
           // Вычисляем максимальный идентификатор в таблице служебок, для определения номера СЗ в этом году          
           stmt = conn.prepareStatement("SELECT MAX(ID) AS MAXID FROM memos WHERE year = ?");
-          stmt.setInt (1, new GregorianCalendar().get(Calendar.YEAR) - 1);
+          //stmt.setInt (1, new GregorianCalendar().get(Calendar.YEAR) - 1);
           ResultSet rs = stmt.executeQuery();
 
           //Определеяем номер в текущем году, и пробиваем в таблицу
@@ -770,11 +770,11 @@ public class  memoDAO extends Connectors
           // В цикле проходим по списку получателей и создаем их
           for (Object aObject : recipientsDeptsList) {
               // Берем из списка получателя служебки
-              recipientDeptDTO recipientDept = (recipientDeptDTO) aObject;
+              //recipientDeptDTO recipientDept = (recipientDeptDTO) aObject;
               // Присваиваем идентификатор созданной служебки
-              recipientDept.setMemoID(memoID);
+              //recipientDept.setMemoID(memoID);
               // Создаем запись в таблице получателей
-              dH.getRecipientDeptDAO().create(dH, recipientDept);
+              //dH.getRecipientDeptDAO().create(dH, recipientDept);
           }
           logger.debug("Recipients departments created.");
           
@@ -881,9 +881,9 @@ public class  memoDAO extends Connectors
               // В цикле проходим по списку получателей и создаем их
               for (Object aObject : recipientsDeptsList) {
                   // Берем из списка получателя служебки
-                  recipientDeptDTO recipientDept = (recipientDeptDTO) aObject;
+                  //recipientDeptDTO recipientDept = (recipientDeptDTO) aObject;
                   // Создаем запись в таблице получателей
-                  dH.getRecipientDeptDAO().create(dH, recipientDept);
+                  //dH.getRecipientDeptDAO().create(dH, recipientDept);
               }
 
               logger.debug("New recipients Depts list crated!");

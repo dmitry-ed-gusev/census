@@ -3,7 +3,7 @@ package org.memorandum.controllers;
 import org.census.commons.dto.personnel.departments.DepartmentDto;
 import org.census.commons.dao.simple.docs.Defaults;
 import org.census.commons.dto.docs.memoDTO;
-import org.census.commons.dto.docs.recipientDeptDTO;
+//import org.census.commons.dto.docs.recipientDeptDTO;
 import org.census.commons.utils.JLibUtils;
 import org.census.commons.utils.mail.JMail;
 import org.census.commons.utils.mail.JMailConfig;
@@ -92,7 +92,7 @@ public class senderController extends AbstractController {
                     // В цикле проходим по списку отделов-получателей служебки
                     for (Object aObject : recipients) {
                         // Получаем один объект отдел-получатель
-                        recipientDeptDTO recipientDept = (recipientDeptDTO) aObject;
+                        //recipientDeptDTO recipientDept = (recipientDeptDTO) aObject;
 
                         // В начале смотрим таблицу Mapping и получаем список его эл. адресов
                         // todo: get department emails list and send email notifications
@@ -195,8 +195,9 @@ public class senderController extends AbstractController {
                     // Если данная служебка - ответ на другую, то проверим, не была ли первая служебка прислана с флагом "требует ответа".
                     if (memo.getParentID() > 0) {
                         // Найдем свой отдел в списке получателей данной служебки
-                        recipientDeptDTO recipientDept = dH.getRecipientDeptDAO().findByMemoDeptID(dH, (deptsTmp != null && deptsTmp.size() > 0 ? deptsTmp.iterator().next().getId() : 0), memo.getParentID());
+                        //recipientDeptDTO recipientDept = dH.getRecipientDeptDAO().findByMemoDeptID(dH, (deptsTmp != null && deptsTmp.size() > 0 ? deptsTmp.iterator().next().getId() : 0), memo.getParentID());
                         // Если мы есть в списке получателей родительской служебки и значение поля "вып/невып" равно "не выполнено" - работаем
+                        /*
                         if ((recipientDept != null) && (recipientDept.getRealized() == 0)) {
                             // Создаем новый объект отдел-получатель для обновления записи
                             recipientDeptDTO recipientUpdate = new recipientDeptDTO();
@@ -210,6 +211,7 @@ public class senderController extends AbstractController {
                                 logger.error("Cannot update record in recipientsDepts table!");
                             }
                         }
+                        */
                     }
 
                     // Передаем ошибки(если они были) на страницу результата отправки
@@ -253,10 +255,10 @@ public class senderController extends AbstractController {
            //если все нормально идем далее по списку
            if (deptList != null)
            for (Object aObject : deptList){
-              recipientDeptDTO recipientDept = (recipientDeptDTO) aObject;
+              ///recipientDeptDTO recipientDept = (recipientDeptDTO) aObject;
               //Добавим в объект идентификатор служебки и идентификатор отправиытеля
-              recipientDept.setMemoID(memoID);
-              recipientDept.setUpdateUserID(employee.getId());
+              //recipientDept.setMemoID(memoID);
+              //recipientDept.setUpdateUserID(employee.getId());
 
                // todo: get department emails list and send email notifications
 
@@ -305,8 +307,8 @@ public class senderController extends AbstractController {
                   msgText = msgText + "Касательно: " + memo.getSubject() + "\n";
                   
                   msgText = msgText + "\n" + "кол.подразделений: " + deptList.size();
-                  msgText = msgText + "\n" + "подразделение: " + recipientDept.getRecipientDeptCode()
-                           + " e-mails: " + emailsList.size() + "\n";
+                  //msgText = msgText + "\n" + "подразделение: " + recipientDept.getRecipientDeptCode()
+                  //         + " e-mails: " + emailsList.size() + "\n";
 
                   msgText = msgText + "Содержание: ";
                   if (memo.getText().trim().length() > 200) {

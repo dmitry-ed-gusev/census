@@ -1,4 +1,7 @@
+# -- ignore maven output directory
+target/
+# -- ignore IntelliJ IDEA project files
 *.iml
-*.ids
-*.iws
 *.ipr
+*.iws
+*.ids

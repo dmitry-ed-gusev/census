@@ -12,11 +12,11 @@ import static com.google.common.base.Preconditions.*;
  * @version 1.0 (DATE: 21.11.2014)
 */
 
-public class ToolBarButton extends JButton {
+public class ToolbarButton extends JButton {
 
     /***/
-    public ToolBarButton(Actions action, String iconName) {
-        LogFactory.getLog(ToolBarButton.class).debug(
+    public ToolbarButton(Actions action, String iconName) {
+        LogFactory.getLog(ToolbarButton.class).debug(
                 String.format("ToolBarButton constructor() working. Action->[%s], icon->[%s].", action, iconName));
         // set some button parameters
         this.setIcon(new ImageIcon(getClass().getResource("icons/" + checkNotNull(iconName, "Icon name is null!"))));

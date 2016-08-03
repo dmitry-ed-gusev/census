@@ -3,7 +3,7 @@ package org.memorandum.controllers;
 import org.census.commons.dto.personnel.departments.DepartmentDto;
 import org.census.commons.dao.simple.docs.Defaults;
 import org.census.commons.dto.docs.memoDTO;
-import org.census.commons.dto.docs.recipientDeptDTO;
+//import org.census.commons.dto.docs.recipientDeptDTO;
 import org.census.commons.utils.JLibUtils;
 
 import javax.servlet.RequestDispatcher;
@@ -333,13 +333,13 @@ public class Controller extends AbstractController
            if (memo.getRecipientsDepts().size() > 1) {
                request.setAttribute("boss", "Начальникам отделов: ");
            } else {
-               recipientDeptDTO recipientDept = (recipientDeptDTO) memo.getRecipientsDepts().get(0);
+               //recipientDeptDTO recipientDept = (recipientDeptDTO) memo.getRecipientsDepts().get(0);
 
-               if (recipientDept.getRecipientDeptName().lastIndexOf("Сектор") > -1) {
-                   request.setAttribute("boss", "Начальнику сектора ");
-               } else {
-                   request.setAttribute("boss", "Начальнику отдела ");
-               }
+               //if (recipientDept.getRecipientDeptName().lastIndexOf("Сектор") > -1) {
+               //    request.setAttribute("boss", "Начальнику сектора ");
+               //} else {
+               //    request.setAttribute("boss", "Начальнику отдела ");
+               //}
            }
            request.setAttribute("memo", memo);
 

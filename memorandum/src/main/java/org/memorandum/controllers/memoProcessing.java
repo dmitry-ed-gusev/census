@@ -7,7 +7,7 @@ import org.apache.log4j.Logger;
 import org.census.commons.dto.personnel.departments.DepartmentDto;
 import org.census.commons.dao.simple.docs.Defaults;
 import org.census.commons.dto.docs.memoDTO;
-import org.census.commons.dto.docs.recipientDeptDTO;
+//import org.census.commons.dto.docs.recipientDeptDTO;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -162,13 +162,13 @@ public class memoProcessing extends AbstractController {
                         if (deptID > 0) {
 
                             // Новый объект - отдел-получатель служебки
-                            recipientDeptDTO recipientDept = new recipientDeptDTO();
+                            //recipientDeptDTO recipientDept = new recipientDeptDTO();
                             // Идентификатор отдела-получателя
-                            recipientDept.setRecipientDeptID(deptID);
+                            //recipientDept.setRecipientDeptID(deptID);
                             // Идентификатор пользователя, создавшего данную запись
-                            recipientDept.setUpdateUserID(employee.getId());
+                            //recipientDept.setUpdateUserID(employee.getId());
                             if (recipientsList == null) recipientsList = new ArrayList();
-                            recipientsList.add(recipientDept);
+                            //recipientsList.add(recipientDept);
 
                         }
                     }
@@ -245,8 +245,8 @@ public class memoProcessing extends AbstractController {
             // Если мы обновляем служебку, а не создаем ее, то каждому получателю надо установить ее идентификатор.
             if ((newMemoID > 0) && (recipientsList != null))
                 for (Object aObject : recipientsList) {
-                    recipientDeptDTO recipientDept = (recipientDeptDTO) aObject;
-                    recipientDept.setMemoID(newMemoID);
+                    //recipientDeptDTO recipientDept = (recipientDeptDTO) aObject;
+                    //recipientDept.setMemoID(newMemoID);
                 }
 
             // Непосредственное создание служебки или изменение служебки

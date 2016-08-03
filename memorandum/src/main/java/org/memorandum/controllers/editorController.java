@@ -2,8 +2,8 @@ package org.memorandum.controllers;
 
 import org.census.commons.dto.admin.LogicUserDto;
 import org.census.commons.dto.docs.memoDTO;
-import org.census.commons.dto.docs.recipientDeptDTO;
-import org.census.commons.dto.docs.recipientUserDTO;
+//import org.census.commons.dto.docs.recipientDeptDTO;
+//import org.census.commons.dto.docs.recipientUserDTO;
 import org.census.commons.dto.personnel.departments.DepartmentDto;
 import org.census.commons.dao.simple.docs.Defaults;
 import org.census.commons.utils.mail.JMail;
@@ -141,14 +141,14 @@ public class editorController extends AbstractController
                    // который находится в списке получателей. Метод вернет не NULL если отдел имеется в списке получателей
 
                    // todo: temporary solution!!!
-                   recipientDeptDTO recipientDept = dH.getRecipientDeptDAO().findByMemoDeptID(dH, (deptsTmp != null && deptsTmp.size() > 0 ? deptsTmp.iterator().next().getId() : 0), parentID);
+                   //recipientDeptDTO recipientDept = dH.getRecipientDeptDAO().findByMemoDeptID(dH, (deptsTmp != null && deptsTmp.size() > 0 ? deptsTmp.iterator().next().getId() : 0), parentID);
 
-                   if ((employee != null) && (recipientDept != null)) {
+                   //if ((employee != null) && (recipientDept != null)) {
                        //request.setAttribute("parentID", parentID);
                        // При ответе на служебку пропускаем шаг выбора подразделения получателя
-                       destPage = "/editor/controller?action=" + ADD_MEMO_STEP2 + "&memoID=" + memoID + "&parentID="
-                               + parentID + "&memberID=" + employee.getId() + "&depts=" + memo.getExecutorDeptID();
-                   } else request.setAttribute(Defaults.ERROR_MSG_PARAM, "ВЫ НЕ МОЖЕТЕ ОТВЕТИТЬ НА ДАННУЮ СЛУЖЕБКУ!");
+                   //    destPage = "/editor/controller?action=" + ADD_MEMO_STEP2 + "&memoID=" + memoID + "&parentID="
+                   //            + parentID + "&memberID=" + employee.getId() + "&depts=" + memo.getExecutorDeptID();
+                   //} else request.setAttribute(Defaults.ERROR_MSG_PARAM, "ВЫ НЕ МОЖЕТЕ ОТВЕТИТЬ НА ДАННУЮ СЛУЖЕБКУ!");
                } else request.setAttribute(Defaults.ERROR_MSG_PARAM, "ВЫ НЕ МОЖЕТЕ ОТВЕТИТЬ НА ДАННУЮ СЛУЖЕБКУ!");
            } else destPage = DEPTS_FORM;
        } else {
@@ -310,12 +310,12 @@ public class editorController extends AbstractController
                for (int u = 0; u < deptList.size(); u++){
 
                    //Дозаполним поля и добавляем получателей служебной записки
-                   recipientDeptDTO r = (recipientDeptDTO) deptList.get(u);
-                   r.setMemoID(memoID);
-                   r.setUpdateUserID(employee.getId());
+                   //recipientDeptDTO r = (recipientDeptDTO) deptList.get(u);
+                   //r.setMemoID(memoID);
+                   //r.setUpdateUserID(employee.getId());
                    try{
                        //Добавляем подразделение в список получателей служебки
-                       dH.getRecipientDeptDAO().create(dH, r);
+                       //dH.getRecipientDeptDAO().create(dH, r);
                        
                        // В начале смотрим таблицу Mapping и получаем список его эл. адресов
                        // todo: get emails for department and send emails
@@ -338,8 +338,8 @@ public class editorController extends AbstractController
                        */
 
                    }catch (Exception e){
-                       logger.error("Can't create recipientDept = " + r.getRecipientDeptCode());
-                       request.setAttribute(Defaults.ERROR_MSG_PARAM, "Can't create recipientDept = " + r.getRecipientDeptCode());}
+                       //logger.error("Can't create recipientDept = " + r.getRecipientDeptCode());
+                       //request.setAttribute(Defaults.ERROR_MSG_PARAM, "Can't create recipientDept = " + r.getRecipientDeptCode());}
                }
 
                // Если в списке есть хотя бы один адрес - работаем(отправляем письма по указанным адресам)
@@ -396,9 +396,9 @@ public class editorController extends AbstractController
                    request.setAttribute("forward", "forward");
                    destPage = SAVE_MEMO_RESULT_PAGE;
                }
-           }else{
-               logger.error("DEPTS list is EMPTY!"); request.setAttribute(Defaults.ERROR_MSG_PARAM, "DEPTS list is EMPTY!");
-           }                 
+           }//else{
+            //   logger.error("DEPTS list is EMPTY!"); request.setAttribute(Defaults.ERROR_MSG_PARAM, "DEPTS list is EMPTY!");
+           //}
        }else{
            request.setAttribute(Defaults.ERROR_MSG_PARAM, "memoId parameter is invalid!");
        }
@@ -407,7 +407,7 @@ public class editorController extends AbstractController
    // Удаление даты "Срок ответа"
    else if (DEL_REALIZEDDATE_ACTION.equals(ACTION)) {
        // Идентификатор измененной служебки
-       int memoID = -1;
+       //int memoID = -1;
        try {
            memoID = Integer.parseInt(request.getParameter("memoID"));
        }
@@ -446,7 +446,7 @@ public class editorController extends AbstractController
        // Передаем на страничку результата переменную с ошибками
        request.setAttribute("error", request.getAttribute("error"));
        // Также передадим на старничку с результатом идентификатор созданной/измененной служебки
-       int memoID = -1;
+       //int memoID = -1;
        try {
            memoID = Integer.parseInt(request.getParameter("memoID"));
        }
@@ -467,7 +467,7 @@ public class editorController extends AbstractController
 
    // Редактирование служебки (уже существующей)
    else if (EDIT_MEMO_ACTION.equals(ACTION)) {
-       int memoID = 0;
+       //int memoID = 0;
        // Получаем иеднтификатор редактируемой служебки
        try {
            memoID = Integer.parseInt(request.getParameter("memoID"));
@@ -522,7 +522,7 @@ public class editorController extends AbstractController
    // на нее не сможет! Теперь сможет, но только в пределах подразделения!
    else if (ANSWER_APPOINTED_MEMO_ACTION.equals(ACTION)) {
        // Идентификатор порученной служебки
-       int memoID = -1;
+       //int memoID = -1;
        try {memoID = Integer.parseInt(request.getParameter("memoID"));}
        catch (Exception e) {logger.error("editiorController: Can't recieve memoID parameter!");}
 
@@ -535,21 +535,21 @@ public class editorController extends AbstractController
        memoDTO memo = dH.getMemoDAO().findByID(dH, memoID);
 
        // Объект "сотрудник, которому поручена данная служебка", по идентификатору
-       recipientUserDTO recipient = null;
-       if (id > 0) {
-           recipient = dH.getRecipientUserDAO().findByID(dH, id);
-       }
+       //recipientUserDTO recipient = null;
+       //if (id > 0) {
+       //    recipient = dH.getRecipientUserDAO().findByID(dH, id);
+       //}
 
        // Проверим: является ли текущий пользователь(memberDTO member) сотрудником подразделения, к которому относится
        // чел. кому шеф поручил служебку. Сделано чтоб внутри подразделения сотрудники могли выполнять СЗ друг за друга.
        // Если все проверки завершились удачно - текущий пользователь может ответить на поручение (служебка ему поручена)
        // todo: temporary solution!!!
-       if ((recipient != null) && ((deptsTmp != null && deptsTmp.size() > 0 ? deptsTmp.iterator().next().getId() : 0) == recipient.getRecipientDeptID())) {
+       //if ((recipient != null) && ((deptsTmp != null && deptsTmp.size() > 0 ? deptsTmp.iterator().next().getId() : 0) == recipient.getRecipientDeptID())) {
 
            // Передаем объект "служебка"
            request.setAttribute("memo", memo);
            // Передаем объект "пользователь-получатель"
-           request.setAttribute("recipient", recipient);
+           //request.setAttribute("recipient", recipient);
            // Страница с формой для ответа на порученную служебку
            destPage = ANSWER_APPOINTED_MEMO_PAGE;
        } else request.setAttribute(Defaults.ERROR_MSG_PARAM, "Вы не можете ответить на данное поручение!");
@@ -586,13 +586,13 @@ public class editorController extends AbstractController
      memoDTO memo      = dH.getMemoDAO().findByID(dH, memoID);
 
      // Объект "сотрудник, которому была поручена данная служебка"
-     recipientUserDTO recipient = null;
+     //recipientUserDTO recipient = null;
      if (id > 0 && memoID > 0){
          //Найдем поручение по идентификатору, точно знаем какое будет
-         recipient = dH.getRecipientUserDAO().findByID(dH, id);
+         //recipient = dH.getRecipientUserDAO().findByID(dH, id);
      }else if(recipientUserID > 0 && memoID > 0){
          //Найдем первое не выполненное поручение
-         recipient = dH.getRecipientUserDAO().findByMemoDeptID(dH, recipientUserID, memoID, 0);
+         //recipient = dH.getRecipientUserDAO().findByMemoDeptID(dH, recipientUserID, memoID, 0);
      }
 
      // Текст ответа на порученную служебку
@@ -601,17 +601,17 @@ public class editorController extends AbstractController
      // Если все проверки завершились удачно - текущий пользователь может ответить на поручение,
      // тогда сохраняем текст его ответа, устанавливаем флажок "выполнено" и отправляем уведомление о выполнении
      // начальнику подразделения и тому, кто поручил данную служебку
-     if ((answer != null) && (!answer.trim().equals("")) && (recipient != null)) {
+     if ((answer != null) && (!answer.trim().equals("")) /*&& (recipient != null)*/) {
 
          // Создаем объект "пользователь, которому поручена служебка" и заносим в него данные
-         recipientUserDTO recipientUpdate = new recipientUserDTO();
-         recipientUpdate.setId(recipient.getId());
-         recipientUpdate.setRealized(1);
+         //recipientUserDTO recipientUpdate = new recipientUserDTO();
+         //recipientUpdate.setId(recipient.getId());
+         //recipientUpdate.setRealized(1);
          // Добавим к тексту ответа ФИО пользователя, для контроля при ответе другим сотрудником отдела
-         recipientUpdate.setAnswer(answer + "(исп. " + employee.getShortRusName() + ")");
+         //recipientUpdate.setAnswer(answer + "(исп. " + employee.getShortRusName() + ")");
          // Непосредственно сохранение результата ответа на служебку
          try {
-             dH.getRecipientUserDAO().update(dH, recipientUpdate);
+             //dH.getRecipientUserDAO().update(dH, recipientUpdate);
          }
          catch (Exception e) {
              logger.error("Can't save appoint memo answer result!");
@@ -619,7 +619,7 @@ public class editorController extends AbstractController
          
          // Отправка почтового уведомления (начальнику подразделения или поручителю), если
          // при создании поручения был указан признак получения уведомления по E-mail
-         if (recipient.getSendemail() == 1) {
+         if (/*recipient.getSendemail() == 1*/ false) {
              // Найдем чела поручившего служебку и получаем основной эл. адрес пользователя из БД LDAP
              // у поручившего может буть несколько логинов с основными email, получим их, и пройдемся по списку
              // todo: get emails for notifying
