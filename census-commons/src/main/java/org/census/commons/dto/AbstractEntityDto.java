@@ -16,8 +16,6 @@ import java.util.Date;
  * @version 1.0 (DATE: 02.05.12)
 */
 
-// todo: rename to AbstractEntityDto
-
 @MappedSuperclass // <- annotation for abstract DTO superclass
 public abstract class AbstractEntityDto implements Serializable {
 
@@ -77,6 +75,21 @@ public abstract class AbstractEntityDto implements Serializable {
 
     public void setDeleted(int deleted) {
         this.deleted = deleted;
+    }
+
+    @Override
+    @SuppressWarnings("MethodWithMultipleReturnPoints")
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+        // comparing
+        AbstractEntityDto other = (AbstractEntityDto) obj;
+        return id == other.id;
+    }
+
+    @Override
+    public int hashCode() {
+        return (int) (id ^ (id >>> 32));
     }
 
     @Override

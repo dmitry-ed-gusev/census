@@ -27,6 +27,15 @@ public class PositionDto extends AbstractEntityDto {
     @Column(name = "weight")
     private int    weight;
 
+    /** Default constructor. Usually used by frameworks (Spring/Hibernate). */
+    public PositionDto() {}
+
+    /***/
+    public PositionDto(long id, String name) {
+        this.setId(id);
+        this.name = name;
+    }
+
     public String getName() {
         return name;
     }
@@ -41,6 +50,26 @@ public class PositionDto extends AbstractEntityDto {
 
     public void setWeight(int weight) {
         this.weight = weight;
+    }
+
+    @Override
+    @SuppressWarnings("MethodWithMultipleReturnPoints")
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+        if (!super.equals(obj)) return false;
+
+        PositionDto other = (PositionDto) obj;
+
+        return name != null ? name.equals(other.name) : other.name == null;
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = super.hashCode();
+        result = 31 * result + (name != null ? name.hashCode() : 0);
+        return result;
     }
 
     @Override
