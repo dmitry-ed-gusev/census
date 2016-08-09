@@ -8,6 +8,7 @@ import org.apache.poi.hwpf.usermodel.*;
 
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.Arrays;
 
 /**
  * Temporary application for
@@ -67,11 +68,15 @@ public class CensusTmpApp {
                 System.out.println(String.format("row #%s (cells #%s)", rowIndex, columnsCount));
 
                 if (columnsCount == 1) { // procesing header
+                    // todo: for join array use StringUtils.join()!
                     System.out.print("HEADER CELL => ");
-                    System.out.println(CensusTmpApp.getCellContent(row.getCell(0)));
+                    System.out.println(Arrays.toString(CensusTmpApp.getCellContent(row.getCell(0))));
                     //TableCell headerCell = row.getCell(0);
                 } else if (columnsCount == 3) { // regular row with 3 columns (position-name-phone)
                     System.out.println("!!!");
+                    // (column #1) read position
+                    // (column #2) read full name
+                    // (column #3) read phone/email/address
                 } else { // some unusual case
                     LOG.warn(String.format("Unusual case: columns count [%s].", columnsCount));
                 }
@@ -127,23 +132,17 @@ public class CensusTmpApp {
 
     }
 
-    private static String getCellContent(TableCell cell) {
-        if (cell == null) {
+    /***/
+    private static String[] getCellContent(TableCell cell) {
+        if (cell == null) { // fail-fast
             throw new IllegalArgumentException("Can't read null cell!");
         }
-
-        StringBuilder result = new StringBuilder();
-        //Paragraph paragraph;
-        System.out.println("->[" + cell.numParagraphs() + "]");
+        // processing not-empty table cell
+        String[] result = new String[cell.numParagraphs()];
         for (int i = 0; i < cell.numParagraphs(); i++) {
-            String rawStr = cell.getParagraph(i).text();
-            System.out.println("rrrr");
-            System.out.println(rawStr.substring(rawStr.length() - 1));
-            System.out.println("*** " + rawStr);
-            result.append(StringUtils.trimToEmpty(rawStr));
+            result[i] = StringUtils.trimToEmpty(cell.getParagraph(i).text());
         }
-
-        return result.toString();
+        return result;
     }
 
 }
