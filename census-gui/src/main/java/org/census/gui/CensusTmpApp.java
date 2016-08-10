@@ -5,10 +5,14 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.poi.hwpf.HWPFDocument;
 import org.apache.poi.hwpf.usermodel.*;
+import org.census.commons.dto.personnel.PositionDto;
+import org.census.commons.dto.personnel.employees.EmployeeDto;
 
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 /**
  * Temporary application for
@@ -58,11 +62,15 @@ public class CensusTmpApp {
         TableIterator itr = new TableIterator(range);
         int tablesCounter = 0;
         int columnsCount;
+        String[] tmpStrArray; // temporary, for raw cell content
+        PositionDto position;
+        EmployeeDto employee;
+        List<EmployeeDto> employeesList = new ArrayList<>();
         while(itr.hasNext()) { // iterate over found tables
             System.out.println(String.format("\n%s\ntable #%s\n%s", DELIMETER, tablesCounter, DELIMETER));
 
             Table table = itr.next();
-            for(int rowIndex = 0; rowIndex < table.numRows(); rowIndex++) {
+            for(int rowIndex = 0; rowIndex < table.numRows(); rowIndex++) { // process a whole row
                 TableRow row = table.getRow(rowIndex);
                 columnsCount = row.numCells();
                 System.out.println(String.format("row #%s (cells #%s)", rowIndex, columnsCount));
@@ -74,9 +82,18 @@ public class CensusTmpApp {
                     //TableCell headerCell = row.getCell(0);
                 } else if (columnsCount == 3) { // regular row with 3 columns (position-name-phone)
                     System.out.println("!!!");
-                    // (column #1) read position
+                    // (column #0) read position
+                    tmpStrArray = CensusTmpApp.getCellContent(row.getCell(0));
+                    position = new PositionDto(0, StringUtils.join(tmpStrArray, " "));
                     // (column #2) read full name
+                    tmpStrArray = CensusTmpApp.getCellContent(row.getCell(1));
+                    employee = new EmployeeDto(0, StringUtils.join(tmpStrArray, " "));
+                    employee.setOnlyPosition(position);
                     // (column #3) read phone/email/address
+                    tmpStrArray = CensusTmpApp.getCellContent(row.getCell(2));
+                    // todo: contacts parsing!!!
+                    // adding found employee to resulting list
+                    employeesList.add(employee);
                 } else { // some unusual case
                     LOG.warn(String.format("Unusual case: columns count [%s].", columnsCount));
                 }
@@ -98,6 +115,9 @@ public class CensusTmpApp {
             }
             tablesCounter++;
         } // end of while
+
+        // debug output list of employees
+        employeesList.forEach(emp -> System.out.println("->" + emp));
 
         /*
         System.out.println("paragraphs -> " + range.numParagraphs());
