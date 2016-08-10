@@ -1,6 +1,6 @@
 package org.census.commons.dto.personnel.employees;
 
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.tuple.Pair;
 import org.census.commons.CensusDefaults;
@@ -13,6 +13,7 @@ import org.census.commons.utils.CommonStringUtils;
 import org.hibernate.search.annotations.Indexed;
 
 import javax.persistence.*;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -25,20 +26,24 @@ import java.util.Set;
 
 // todo: implement sorting (Comparable/Comparator)
 // todo: use internal exception instead of runtime?
-
+// todo: implement equals/hashCode - like in PositionDto
 @Entity
 @Table(name = "EMPLOYEES")
 @Indexed // <- Hibernate search indexed entity annotation
 public class EmployeeDto extends AbstractEntityDto {
 
     @Column(name = "name")
-    private String        name;       // mandatory field, shouldn't be empty!
+    private String        name;        // mandatory field, shouldn't be empty!
     @Column(name = "family")
-    private String        family;     // mandatory field, shouldn't be empty!
+    private String        family;      // mandatory field, shouldn't be empty!
     @Column(name = "patronymic")
-    private String        patronymic; // optional field, may be empty
+    private String        patronymic;  // optional field, may be empty
     @Column(name = "sex")
-    private int           sex;        // sex = 0 -> male, sex !=0 -> female
+    private int           sex;         // sex = 0 -> male, sex !=0 -> female
+    @Column(name = "birthDate")
+    private Date          birthDate;   // employee birth date
+    @Column(name = "clockNumber")
+    private String        clockNumber; // employee's own clock number (табельный номер)
 
     // Mapping many-to-many to Departments (both entity and db table). This side (EmployeeDto) is
     // relation owner. Relation is BI-directional.
@@ -64,11 +69,6 @@ public class EmployeeDto extends AbstractEntityDto {
             inverseJoinColumns = {@JoinColumn(name = "logicUserId", nullable = false, updatable = false)})
     private Set<LogicUserDto> logicUsers = new HashSet<>(0);
 
-    @Column(name = "birthDate")
-    private Date          birthDate;         // employee birth date
-    @Column(name = "clockNumber")
-    private String        clockNumber;       // employee's own clock number (табельный номер)
-
     // Mapping one-to-many to Contacts (both entity and db table) with extra table "employees_2_contacts".
     // Relation is UNI-directional (employee->contacts).
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
@@ -84,6 +84,26 @@ public class EmployeeDto extends AbstractEntityDto {
     private String        shortEngName; // derived field (transliteration from shortRusName), not persisted
     @Transient
     private String        fullName;     // merged FAMILY+NAME+PATRONYMIC fields
+
+    /** Default constructor. Usually used by frameworks like Spring/Hibernate. */
+    public EmployeeDto() {}
+
+    /**
+     * Create object with specified id and fullName. Full name will be split into
+     * family+name+patronymic fields with space as a separator. By tokens: #0 -> family,
+     * #1 -> name, #2 and further -> patronymic.
+     */
+    // todo: add unit tests!!!
+    public EmployeeDto(long id, String fullName) {
+        this.setId(id);
+        if (!StringUtils.isBlank(fullName)) {
+            String[] nameArray = StringUtils.trimToNull(fullName).split("\\s+");
+            this.family     = nameArray.length > 0 ? nameArray[0] : null;
+            this.name       = nameArray.length > 1 ? nameArray[1] : null;
+            this.patronymic = nameArray.length > 2 ?
+                    StringUtils.join(Arrays.copyOfRange(nameArray, 2, nameArray.length), " ") : null;
+        }
+    }
 
     public String getName() {
         return name;
