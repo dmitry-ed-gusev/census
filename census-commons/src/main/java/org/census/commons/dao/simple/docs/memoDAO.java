@@ -244,7 +244,7 @@ public class  memoDAO extends Connectors
               // Фамилия И.О. исполнителя служебки
               EmployeeDto execEmployee = this.employeesDao.findById(memo.getExecutorUserID());
 
-              memo.setExecutorShortName(execEmployee.getShortRusName());
+              //memo.setExecutorShortName(execEmployee.getShortRusName());
               // Идентификатор отдела-отправителя служебки
               memo.setExecutorDeptID(rs.getInt("ExecutorDeptID"));
 
@@ -265,7 +265,7 @@ public class  memoDAO extends Connectors
               // Фамилия И.О. отправителя служебки
               if (memo.getSendUserId() > 0) {
                   EmployeeDto sendEmployee = this.employeesDao.findById(memo.getSendUserId());
-                  memo.setSendShortName(sendEmployee.getShortRusName());
+                  //memo.setSendShortName(sendEmployee.getShortRusName());
               }
 
               // Прикрепленный файл
@@ -599,8 +599,8 @@ public class  memoDAO extends Connectors
                       // Фамилия И.О. исполнителя служебки
                       EmployeeDto simpleEmployee = this.employeesDao.findById(memo.getExecutorUserID());
 
-                      if (simpleEmployee != null) memo.setExecutorShortName(simpleEmployee.getShortRusName());
-                      else memo.setExecutorShortName("-");
+                      //if (simpleEmployee != null) memo.setExecutorShortName(simpleEmployee.getShortRusName());
+                      //else memo.setExecutorShortName("-");
                   }
                   // Поля, которые используются только в одном из ящиков - "входящие"
                   if (boxType.equals(Defaults.INBOX)) {

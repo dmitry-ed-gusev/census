@@ -78,12 +78,12 @@ public class EmployeeDto extends AbstractEntityDto {
     private Set<ContactDto>         contacts         = new HashSet<>(0); // contacts for employee
 
     // --- auto calculated fields (are not persisted)
-    @Transient
-    private String        shortRusName; // derived field (from fullName), not persisted
-    @Transient
-    private String        shortEngName; // derived field (transliteration from shortRusName), not persisted
-    @Transient
-    private String        fullName;     // merged FAMILY+NAME+PATRONYMIC fields
+    //@Transient
+    //private String        shortRusName; // derived field (from fullName), not persisted
+    //@Transient
+    //private String        shortEngName; // derived field (transliteration from shortRusName), not persisted
+    //@Transient
+    //private String        fullName;     // merged FAMILY+NAME+PATRONYMIC fields
 
     /** Default constructor. Usually used by frameworks like Spring/Hibernate. */
     public EmployeeDto() {}
@@ -93,7 +93,6 @@ public class EmployeeDto extends AbstractEntityDto {
      * family+name+patronymic fields with space as a separator. By tokens: #0 -> family,
      * #1 -> name, #2 and further -> patronymic.
      */
-    // todo: add unit tests!!!
     public EmployeeDto(long id, String fullName) {
         this.setId(id);
         if (!StringUtils.isBlank(fullName)) {
@@ -154,6 +153,11 @@ public class EmployeeDto extends AbstractEntityDto {
     }
 
     public String getShortRusName() {
+        return CommonStringUtils.getShortRusName(StringUtils.join(new String[] {this.family, this.name, this.patronymic}, " "));
+    }
+
+    /*
+    public String getShortRusName() {
         if (StringUtils.isBlank(this.shortRusName)) {
             this.initInternalFields();
         }
@@ -172,7 +176,7 @@ public class EmployeeDto extends AbstractEntityDto {
             this.initInternalFields();
         }
         return fullName;
-    }
+    */
 
     public Set<ContactDto> getContacts() {
         return contacts;
@@ -245,15 +249,15 @@ public class EmployeeDto extends AbstractEntityDto {
                 .append("family", family)
                 .append("patronymic", patronymic)
                 .append("sex", sex)
+                .append("birthDate", birthDate)
+                .append("clockNumber", clockNumber)
                 .append("departments", departments)
                 .append("positions", positions)
                 .append("logicUsers", logicUsers)
-                .append("birthDate", birthDate)
-                .append("clockNumber", clockNumber)
-                .append("shortRusName", this.getShortRusName())
-                .append("shortEngName", this.getShortEngName())
-                .append("fullName", this.getFullName())
                 .append("contacts", contacts)
+                //.append("shortRusName", this.getShortRusName())
+                //.append("shortEngName", this.getShortEngName())
+                //.append("fullName", this.getFullName())
                 .toString();
     }
 
@@ -270,11 +274,11 @@ public class EmployeeDto extends AbstractEntityDto {
             builder.append(" ").append(this.patronymic);
         }
         // init internal field - full name
-        this.fullName = builder.toString();
+        //this.fullName = builder.toString();
         // get short names (rus and translit)
         Pair<String, String> shortNames = CommonStringUtils.getShortAndTranslit(builder.toString());
-        this.shortRusName = shortNames.getLeft();
-        this.shortEngName = shortNames.getRight();
+        //this.shortRusName = shortNames.getLeft();
+        //this.shortEngName = shortNames.getRight();
     }
 
 }

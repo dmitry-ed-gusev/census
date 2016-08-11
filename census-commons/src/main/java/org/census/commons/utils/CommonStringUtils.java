@@ -93,4 +93,32 @@ public final class CommonStringUtils {
         return result;
     }
 
+    /**
+     * Method makes short russian name (Family N.P.) for full russian name (Family Name Patronymic).
+     * If received full name is empty or null, returns empty string (""). If there are tokens with english
+     * letters or mixed with rus/eng letters - they will be ignored.
+     * Method assumes: token #0 -> family, #1 -> name, #2 and further -> patronymic.
+     * @param str String cyrillic string with employee russian full name
+     * @return String short russian name
+     */
+    public static String getShortRusName(String str) {
+        StringBuilder shortRusName = new StringBuilder();
+
+        if (!StringUtils.isBlank(str)) { // input string is OK - processing
+            Matcher matcher = Pattern.compile("\\b(\\p{InCyrillic}+)\\b").matcher(str);
+            int counter = 0;
+            while (matcher.find()) {
+                counter++;
+                if (counter == 1) {
+                    shortRusName.append(matcher.group().replaceFirst(matcher.group().substring(0, 1),
+                            matcher.group().substring(0, 1).toUpperCase())).append(" ");
+                } else if (counter > 1) {
+                    shortRusName.append(matcher.group().substring(0, 1).toUpperCase()).append(".");
+                }
+            } // end of while
+        }
+
+        return StringUtils.trimToEmpty(shortRusName.toString());
+    }
+
 }
