@@ -77,14 +77,6 @@ public class EmployeeDto extends AbstractEntityDto {
             inverseJoinColumns = {@JoinColumn(name = "contactId",  nullable = false, updatable = false)})
     private Set<ContactDto>         contacts         = new HashSet<>(0); // contacts for employee
 
-    // --- auto calculated fields (are not persisted)
-    //@Transient
-    //private String        shortRusName; // derived field (from fullName), not persisted
-    //@Transient
-    //private String        shortEngName; // derived field (transliteration from shortRusName), not persisted
-    //@Transient
-    //private String        fullName;     // merged FAMILY+NAME+PATRONYMIC fields
-
     /** Default constructor. Usually used by frameworks like Spring/Hibernate. */
     public EmployeeDto() {}
 
@@ -155,28 +147,6 @@ public class EmployeeDto extends AbstractEntityDto {
     public String getShortRusName() {
         return CommonStringUtils.getShortRusName(StringUtils.join(new String[] {this.family, this.name, this.patronymic}, " "));
     }
-
-    /*
-    public String getShortRusName() {
-        if (StringUtils.isBlank(this.shortRusName)) {
-            this.initInternalFields();
-        }
-        return shortRusName;
-    }
-
-    public String getShortEngName() { // todo: rename to getShortTranslitName ???
-        if (StringUtils.isBlank(this.shortEngName)) {
-            this.initInternalFields();
-        }
-        return shortEngName;
-    }
-
-    public String getFullName() {
-        if (StringUtils.isBlank(this.fullName)) {
-            this.initInternalFields();
-        }
-        return fullName;
-    */
 
     public Set<ContactDto> getContacts() {
         return contacts;
@@ -255,30 +225,7 @@ public class EmployeeDto extends AbstractEntityDto {
                 .append("positions", positions)
                 .append("logicUsers", logicUsers)
                 .append("contacts", contacts)
-                //.append("shortRusName", this.getShortRusName())
-                //.append("shortEngName", this.getShortEngName())
-                //.append("fullName", this.getFullName())
                 .toString();
-    }
-
-    /** Method initializes internal fields -> shortRusName, shortEngName, fullName. */
-    private void initInternalFields() {
-        // check internal state
-        if (StringUtils.isBlank(this.family) || StringUtils.isBlank(this.name)) {
-            throw new IllegalStateException(
-                    String.format("Empty family [%s] or name [%s]!", this.family, this.name));
-        }
-        // build full name (Family Name Patronymic)
-        StringBuilder builder = new StringBuilder(this.family).append(" ").append(this.name);
-        if (!StringUtils.isBlank(this.patronymic)) {
-            builder.append(" ").append(this.patronymic);
-        }
-        // init internal field - full name
-        //this.fullName = builder.toString();
-        // get short names (rus and translit)
-        Pair<String, String> shortNames = CommonStringUtils.getShortAndTranslit(builder.toString());
-        //this.shortRusName = shortNames.getLeft();
-        //this.shortEngName = shortNames.getRight();
     }
 
 }
