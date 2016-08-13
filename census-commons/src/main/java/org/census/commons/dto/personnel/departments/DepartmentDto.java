@@ -53,6 +53,15 @@ public class DepartmentDto extends AbstractEntityDto {
             inverseJoinColumns = {@JoinColumn(name = "contactId",  nullable = false, updatable = false)})
     private Set<ContactDto>  contacts  = new HashSet<>(0); // contacts of this department
 
+    /** Default constructor. Usually used by frameworks Spring/Hibernate. */
+    public DepartmentDto() {}
+
+    /***/
+    public DepartmentDto(long id, String name) {
+        this.setId(id);
+        this.name = name;
+    }
+
     public String getCode() {
         return code;
     }

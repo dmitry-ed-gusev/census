@@ -28,6 +28,15 @@ public class ContactTypeDto extends AbstractEntityDto {
     @OneToMany (fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "contactType")
     private Set<ContactDto> contacts = new HashSet<>(0); // contacts with concrete type (this type)
 
+    /** Default constructor. Usually used by frameworks Spring/Hibernate. */
+    public ContactTypeDto() {}
+
+    /***/
+    public ContactTypeDto(long id, String type) {
+        this.setId(id);
+        this.type = type;
+    }
+
     public String getType() {
         return type;
     }

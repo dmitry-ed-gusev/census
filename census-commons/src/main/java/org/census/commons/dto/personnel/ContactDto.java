@@ -27,6 +27,16 @@ public class ContactDto extends AbstractEntityDto {
     @JoinColumn(name = "contactTypeId", nullable=false)
     private ContactTypeDto contactType; // type of this contact
 
+    /** Default constructor. Usually used by frameworks Spring/Hibernate. */
+    public ContactDto() {}
+
+    /***/
+    public ContactDto(long id, String contact, ContactTypeDto type) {
+        this.setId(id);
+        this.contact = contact;
+        this.contactType = type;
+    }
+
     public String getContact() {
         return contact;
     }
