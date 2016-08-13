@@ -1,8 +1,6 @@
 package org.census.commons.utils;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.tuple.ImmutablePair;
-import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -47,53 +45,6 @@ public final class CommonStringUtils {
     }
 
     /**
-     * Method makes short russian and transliteration names (Family N.P.).
-     * @param str String cyrillic string with employee full name
-     * @return Pair[String, String] latin string
-    */
-    // todo: unit tests!
-    public static Pair<String, String> getShortAndTranslit(String str) {
-        //log.debug("CommonUtils.getShortAndTranslit() working."); // -> too much output
-
-        Pair<String, String> result;
-        StringBuilder shortRusName = new StringBuilder();
-        StringBuilder shortEngName = new StringBuilder();
-
-        if (!StringUtils.isBlank(str)) { // input string is OK - processing
-            // Family Name Patronymic -> Family N. P. (short full name)
-            Matcher matcher = Pattern.compile("\\b(\\p{InCyrillic}+)\\b").matcher(str);
-            int counter = 0;
-            while (matcher.find()) {
-                counter++;
-                if (counter == 1) {
-                    shortRusName.append(matcher.group().replaceFirst(matcher.group().substring(0, 1),
-                            matcher.group().substring(0, 1).toUpperCase())).append(" ");
-                } else if (counter > 1) {
-                    shortRusName.append(matcher.group().substring(0, 1).toUpperCase()).append(". ");
-                }
-            }
-
-            // make a transliteration for short russian name
-            for (int i = 0; i < shortRusName.length(); i++) {
-                Character ch = shortRusName.charAt(i);
-                String charFromMap = CHARS_MAP.get(ch);
-                if (charFromMap == null) {
-                    shortEngName.append(ch);
-                } else {
-                    shortEngName.append(charFromMap);
-                }
-            }
-
-            // creating result
-            result = new ImmutablePair<>(shortRusName.toString().trim(), shortEngName.toString().trim());
-        } else { // input string is empty - we will return empty pair
-            result = new ImmutablePair<>("", "");
-        }
-
-        return result;
-    }
-
-    /**
      * Method makes short russian name (Family N.P.) for full russian name (Family Name Patronymic).
      * If received full name is empty or null, returns empty string (""). If there are tokens with english
      * letters or mixed with rus/eng letters - they will be ignored.
@@ -119,6 +70,31 @@ public final class CommonStringUtils {
         }
 
         return StringUtils.trimToEmpty(shortRusName.toString());
+    }
+
+    /**
+     * Returns transliterated russian string. If string is empty or null - returns empty string. All leading and trailing
+     * spaces will be removed. If string contains mix of rus-eng letters - only russian letter will be processed (other remain
+     * untouched).
+     * @param str String source for transliteration
+     * @return String transliteration result
+     */
+    public static String getTranslitOfString(String str) {
+        StringBuilder result = new StringBuilder();
+
+        if (!StringUtils.isBlank(str)) {
+            for (int i = 0; i < str.length(); i++) {
+                Character ch = str.charAt(i);
+                String charFromMap = CHARS_MAP.get(ch);
+                if (charFromMap == null) {
+                    result.append(ch);
+                } else {
+                    result.append(charFromMap);
+                }
+            }
+        }
+
+        return StringUtils.trimToEmpty(result.toString());
     }
 
 }

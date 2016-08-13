@@ -35,4 +35,22 @@ public class CommonStringUtilsTest {
         assertTrue("".equals(CommonStringUtils.getShortRusName("Engяяяяяяlish Naыыыыыыыыme")));
     }
 
+    @Test
+    public void testTranslitWithEmpty() {
+        assertTrue("".equals(CommonStringUtils.getTranslitOfString("")));
+        assertTrue("".equals(CommonStringUtils.getTranslitOfString("     ")));
+    }
+
+    @Test
+    public void testTranslitWithNull() {
+        assertTrue("".equals(CommonStringUtils.getTranslitOfString(null)));
+    }
+
+    @Test
+    public void testTranslit() {
+        assertTrue("privet".equals(CommonStringUtils.getTranslitOfString("  привет     ")));
+        assertTrue("privet".equals(CommonStringUtils.getTranslitOfString(" приvet   ")));
+        // todo: add more test cases!
+    }
+
 }
