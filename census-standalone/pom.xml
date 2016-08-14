@@ -11,9 +11,9 @@
         <groupId>org.census</groupId>
         <version>1.0</version>
     </parent>
-    <groupId>org.census.gui</groupId>
-    <artifactId>census-gui</artifactId>
-    <name>Census :: GUI (Swing) module.</name>
+    <groupId>org.census.standalone</groupId>
+    <artifactId>census-standalone</artifactId>
+    <name>Census :: Standalone application.</name>
 
     <!-- This module dependencies -->
     <dependencies>

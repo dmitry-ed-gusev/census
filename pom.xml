@@ -48,7 +48,7 @@
         <module>census-docs</module>
         <module>census-personnel</module>
         <module>census-storage</module>
-        <module>census-gui</module>
+        <module>census-standalone</module>
         <module>census-webapp</module>
         <!-- Memorandum project: old version -->
         <module>memorandum</module>
