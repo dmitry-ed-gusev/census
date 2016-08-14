@@ -5,6 +5,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.poi.hwpf.HWPFDocument;
 import org.apache.poi.hwpf.usermodel.*;
+import org.census.commons.dto.personnel.ContactTypeDto;
 import org.census.commons.dto.personnel.PositionDto;
 import org.census.commons.dto.personnel.employees.EmployeeDto;
 
@@ -52,8 +53,14 @@ public class CensusTmpApp {
         finStream.close();
         */
 
+        // prepare contacts types (hardcoded)
+        // todo: create Spring config and move it there
+        ContactTypeDto emailContact = new ContactTypeDto(0, "email");
+        ContactTypeDto phoneContact = new ContactTypeDto(0, "phone");
+        ContactTypeDto addressContact = new ContactTypeDto(0, "address");
+
         // input stream for word document
-        FileInputStream ins = new FileInputStream("C:\\temp\\phonebook.doc");
+        FileInputStream ins = new FileInputStream("phonebook.doc");
         // object for word document
         HWPFDocument doc = new HWPFDocument(ins);
         // main object for word document
@@ -81,7 +88,6 @@ public class CensusTmpApp {
                     System.out.println(Arrays.toString(CensusTmpApp.getCellContent(row.getCell(0))));
                     //TableCell headerCell = row.getCell(0);
                 } else if (columnsCount == 3) { // regular row with 3 columns (position-name-phone)
-                    System.out.println("!!!");
                     // (column #0) read position
                     tmpStrArray = CensusTmpApp.getCellContent(row.getCell(0));
                     position = new PositionDto(0, StringUtils.join(tmpStrArray, " "));
@@ -89,9 +95,11 @@ public class CensusTmpApp {
                     tmpStrArray = CensusTmpApp.getCellContent(row.getCell(1));
                     employee = new EmployeeDto(0, StringUtils.join(tmpStrArray, " "));
                     employee.setOnlyPosition(position);
-                    // (column #3) read phone/email/address
+                    // (column #3) read contact info (phone/email/address)
                     tmpStrArray = CensusTmpApp.getCellContent(row.getCell(2));
                     // todo: contacts parsing!!!
+                    System.out.print("CONTACTS CELL => ");
+                    System.out.println(Arrays.toString(tmpStrArray));
                     // adding found employee to resulting list
                     employeesList.add(employee);
                 } else { // some unusual case
