@@ -15,13 +15,13 @@ import java.util.Locale;
  * @version 2.0 (DATE: 09.11.2014)
 */
 
-public class CensusGUI {
+public class CensusApp {
 
-    private static final String SPRING_CONFIG_NAME = "CensusGUIContext.xml";
+    private static final String SPRING_CONFIG_NAME = "CensusAppContext.xml";
 
     /***/
     public static void main(String[] args)  {
-        Log log = LogFactory.getLog(CensusGUI.class);
+        Log log = LogFactory.getLog(CensusApp.class);
         log.info("Starting Census ERP system GUI application.");
 
         Locale.setDefault(Locale.US); // without this setting Oracle XE refuses connections (we have to set locale value).

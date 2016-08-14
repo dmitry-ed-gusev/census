@@ -5,10 +5,10 @@
 
     <!---->
     <bean id="censusHsqlDataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
-        <property name="driverClassName" value="org.hsqldb.jdbcDriver"/>
-        <property name="url"             value="jdbc:hsqldb:file:c:/temp/census/db/data;shutdown=true;hsqldb.write_delay=false"/>
-        <property name="username"        value="sa"/>
-        <property name="password"        value=""/>
+        <property name="driverClassName" value="${census.jdbc.driver}"/>
+        <property name="url"             value="${census.db.url}"/>
+        <property name="username"        value="${census.db.user}"/>
+        <property name="password"        value="${census.db.pass}"/>
         <property name="maxActive"       value="50"/>
         <property name="minIdle"         value="5"/>
         <!--<property name="validationQuery" value="SELECT 1 FROM DUAL"/>-->
@@ -28,14 +28,14 @@
         <!-- Here we can use placeholders ${zzz} from .properties file -->
         <property name="hibernateProperties">
             <props>
-                <prop key="hibernate.dialect">org.hibernate.dialect.HSQLDialect</prop>
-                <prop key="hibernate.show_sql">true</prop>
-                <prop key="hibernate.format_sql">true</prop>
+                <prop key="hibernate.dialect">${hibernate.dialect}</prop>
+                <prop key="hibernate.show_sql">${hibernate.show_sql}</prop>
+                <prop key="hibernate.format_sql">${hibernate.format_sql}</prop>
                 <prop key="hibernate.hbm2ddl.auto">update</prop>
                 <!-- Hibernate Search properties -->
                 <prop key="hibernate.search.default.directory_provider">filesystem</prop>
                 <prop key="hibernate.search.indexing_strategy">event</prop>
-                <prop key="hibernate.search.default.indexBase">c:/temp/census/fulltext_indexes</prop>
+                <prop key="hibernate.search.default.indexBase">${census.indexes.home}</prop>
             </props>
         </property>
         <!-- Hibernate XML mappings -->

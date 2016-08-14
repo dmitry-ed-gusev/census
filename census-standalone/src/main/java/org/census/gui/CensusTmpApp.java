@@ -20,6 +20,7 @@ import java.util.List;
  * Created by vinnypuhh on 07.08.2016.
  */
  // http://svn.apache.org/repos/asf/tika/trunk/tika-parsers/src/main/java/org/apache/tika/parser/microsoft/WordExtractor.java
+
 public class CensusTmpApp {
 
     private static final Log LOG = LogFactory.getLog(CensusTmpApp.class);

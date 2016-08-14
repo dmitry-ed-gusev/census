@@ -9,7 +9,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
 
-import static org.census.gui.GuiConstants.*;
+import static org.census.gui.AppDefaults.*;
 
 /**
  * Panel with toolbar and quick search text field. Place - top of main frame (NORTH).

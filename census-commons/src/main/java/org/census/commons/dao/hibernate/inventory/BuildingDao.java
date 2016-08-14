@@ -2,6 +2,8 @@ package org.census.commons.dao.hibernate.inventory;
 
 import org.census.commons.dao.AbstractHibernateDao;
 import org.census.commons.dto.inventory.BuildingDto;
+import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * Dao component for entity BuildingDto.
@@ -9,8 +11,8 @@ import org.census.commons.dto.inventory.BuildingDto;
  * @version 1.0 (DATE: 11.11.2014)
 */
 
-//@Repository
-//@Transactional
+@Repository
+@Transactional
 public class BuildingDao extends AbstractHibernateDao<BuildingDto> {
 
     public BuildingDao() {
