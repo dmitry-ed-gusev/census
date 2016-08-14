@@ -3,7 +3,7 @@ package org.census.webapp.services;
 import org.apache.log4j.Logger;
 import org.springframework.dao.DataAccessException;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.GrantedAuthorityImpl;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -76,14 +76,14 @@ public class CustomUserDetailsService implements UserDetailsService {
    // All users are granted with ROLE_USER access
    // Therefore this user gets a ROLE_USER by default
    logger.debug("Grant ROLE_USER to this user");
-   authList.add(new GrantedAuthorityImpl("ROLE_USER"));
+   authList.add(new SimpleGrantedAuthority("ROLE_USER"));
 
    // Check if this user has admin access
    // We interpret Integer(1) as an admin user
    if ( access.compareTo(1) == 0) {
     // User has admin access
     logger.debug("Grant ROLE_ADMIN to this user");
-    authList.add(new GrantedAuthorityImpl("ROLE_ADMIN"));
+    authList.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
    }
 
    // Return list of granted authorities
