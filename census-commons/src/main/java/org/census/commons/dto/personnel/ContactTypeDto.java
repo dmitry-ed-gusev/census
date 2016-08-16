@@ -20,7 +20,7 @@ import java.util.Set;
 @Table(name = "CONTACTSTYPES")
 public class ContactTypeDto extends AbstractEntityDto {
 
-    @Column(name = "contactType")
+    @Column(name = "contactType", unique = true)
     private String type;         // contact type value
     @Column(name = "description")
     private String description;  // contact type description

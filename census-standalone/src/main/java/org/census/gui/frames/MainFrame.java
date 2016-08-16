@@ -13,8 +13,8 @@ import javax.swing.*;
 import javax.swing.tree.DefaultMutableTreeNode;
 import java.awt.*;
 
-import static org.census.gui.AppDefaults.APP_TITLE;
-import static org.census.gui.AppDefaults.MAIN_FRAME_DIMENSION;
+import static org.census.gui.GuiDefaults.APP_TITLE;
+import static org.census.gui.GuiDefaults.MAIN_FRAME_DIMENSION;
 import static com.google.common.base.Preconditions.*;
 
 /**

@@ -22,8 +22,8 @@ import static org.census.commons.CensusDefaults.CS_DOMAIN_OBJECTS_STYLE;
 @Indexed
 public class PositionDto extends AbstractEntityDto {
 
-    @Column(name = "name")
-    private String name;
+    @Column(name = "name", unique = true)
+    private String name; // position name is unique
     @Column(name = "weight")
     private int    weight;
 

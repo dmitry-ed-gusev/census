@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Map;
 
 import static com.google.common.base.Preconditions.checkNotNull;
-import static org.census.gui.AppDefaults.JTREE_ROOT_NODE_NAME;
+import static org.census.gui.GuiDefaults.JTREE_ROOT_NODE_NAME;
 
 /**
  * Builder class for JTree object.

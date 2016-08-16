@@ -31,8 +31,9 @@
     <!--<import resource="_oracleConfig.xml" />-->
     <!-- hsql dbms config for application -->
     <import resource="_hsqlConfig.xml" />
-
-    <!---->
+    <!-- GUI application config -->
     <import resource="_guiConfig.xml" />
+    <!-- some additional beans definitions -->
+    <import resource="_beans.xml" />
 
 </beans>

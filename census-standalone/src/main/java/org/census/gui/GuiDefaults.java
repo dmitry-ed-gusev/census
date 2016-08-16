@@ -8,7 +8,7 @@ import java.awt.*;
  * @version 1.0 (DATE: 12.11.12)
  */
 
-public interface AppDefaults {
+public interface GuiDefaults {
 
     // default application title
     String APP_TITLE                   = "Census ERP system, 2012-2016.";
@@ -22,4 +22,9 @@ public interface AppDefaults {
     String QUICK_SEARCH_LABEL_TEXT     = "Быстрый поиск: ";
     // text for 'no data' label on main panel
     String NO_DATA_LABEL_TEXT          = "Нет данных для отображения!";
+    // default look and feel (windows classic)
+    String DEFAULT_LOOK_AND_FEEL       = "com.sun.java.swing.plaf.windows.WindowsLookAndFeel";
+    // spring bean name for main gui frame
+    String MAIN_FRAME_BEAN             = "mainFrame";
+
 }

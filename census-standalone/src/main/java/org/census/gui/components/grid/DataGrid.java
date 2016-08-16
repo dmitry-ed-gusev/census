@@ -10,7 +10,7 @@ import java.awt.*;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 
-import static org.census.gui.AppDefaults.NO_DATA_LABEL_TEXT;
+import static org.census.gui.GuiDefaults.NO_DATA_LABEL_TEXT;
 
 /**
  * DataGrid component, inherited from JPanel and implementing rich JTable component.

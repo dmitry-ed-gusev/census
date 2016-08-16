@@ -11,7 +11,7 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import java.awt.*;
 
 import static com.google.common.base.Preconditions.checkNotNull;
-import static org.census.gui.AppDefaults.*;
+import static org.census.gui.GuiDefaults.*;
 
 /**
  * Panel with objects tree. Place - left of the main frame.

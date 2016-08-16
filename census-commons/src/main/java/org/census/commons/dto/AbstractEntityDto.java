@@ -4,9 +4,7 @@ package org.census.commons.dto;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-import javax.persistence.Column;
-import javax.persistence.Id;
-import javax.persistence.MappedSuperclass;
+import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
 
@@ -22,7 +20,7 @@ public abstract class AbstractEntityDto implements Serializable {
     private static final long serialVersionUID = 1L;
 
     // Entity/DB record unique identifier.
-    @Id @Column(name = "ID")
+    @Id @Column(name = "ID") @GeneratedValue (strategy = GenerationType.AUTO)
     // We're using auto-generated id's values (annotation @GeneratedValue) and Hiber returns last insert
     // id value (when perform INSERT query). Sequence id generator used for ORACLE DBMS (generator = '<name>').
     //@GeneratedValue (strategy = GenerationType.AUTO, generator = "id_generator")
