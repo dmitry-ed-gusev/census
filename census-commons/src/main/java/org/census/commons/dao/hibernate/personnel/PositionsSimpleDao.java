@@ -19,4 +19,13 @@ public class PositionsSimpleDao extends AbstractHibernateDao<PositionDto> {
         super(PositionDto.class);
     }
 
+    /**
+     * Return Position object from DB by exact position name.
+     * @param name String position name
+     */
+    public PositionDto getPositionByName(String name) {
+        String query = String.format("select p from PositionDto as p where p.name = '%s'", name);
+        return (PositionDto) this.createQueryForCurrentSession(query).uniqueResult();
+    }
+
 }

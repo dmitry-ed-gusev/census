@@ -5,6 +5,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.poi.hwpf.HWPFDocument;
 import org.apache.poi.hwpf.usermodel.*;
+import org.census.commons.dao.hibernate.personnel.ContactsTypesSimpleDao;
 import org.census.commons.dao.hibernate.personnel.PositionsSimpleDao;
 import org.census.commons.dto.personnel.ContactTypeDto;
 import org.census.commons.dto.personnel.PositionDto;
@@ -29,6 +30,7 @@ import java.util.List;
 
 @Service
 @Transactional
+// todo: add package for service and create helper classes
 public class WordProcessingService {
 
     private static final String DELIMETER = StringUtils.repeat("=", 100);
@@ -37,9 +39,13 @@ public class WordProcessingService {
     private static final Log LOG = LogFactory.getLog(WordProcessingService.class);
 
     @Autowired @Qualifier(value = "wordPhoneBookFile")
-    private String phoneBookFile;
+    private String phoneBookFile; // file with phonebook in MS Word format
     @Autowired
-    private PositionsSimpleDao positionsDao;
+    private ContactsTypesSimpleDao contactsTypesDao; // DAO for contacts types
+    @Autowired
+    private PositionsSimpleDao positionsDao;         // DAO for positions
+    private ContactTypeDto emailContact;
+    private ContactTypeDto otherContact;
 
     public String getPhoneBookFile() {
         return phoneBookFile;
@@ -57,15 +63,58 @@ public class WordProcessingService {
         this.positionsDao = positionsDao;
     }
 
+    /**
+     * Preparing contacts types.
+     */
+    // todo: hardcoded values!
+    private void initContactTypes() {
+        ContactTypeDto contactType;
+        // add/check email contact type
+        contactType = this.contactsTypesDao.getContactTypeByType("email");
+        if (contactType == null) { // no such contact type
+            this.emailContact = new ContactTypeDto(0, "email");
+            this.contactsTypesDao.save(this.emailContact);
+            System.out.println("=>" + this.emailContact);
+        } else { // such contact type is found
+            this.emailContact = contactType;
+            System.out.println("found");
+        }
+
+        // add/check other contact type
+        contactType = this.contactsTypesDao.getContactTypeByType("other");
+        if (contactType == null) { // no such contact type
+            this.otherContact = new ContactTypeDto(0, "other");
+            this.contactsTypesDao.save(this.otherContact);
+            System.out.println("=>" + this.otherContact);
+        } else { // such contact type is found
+            this.otherContact = contactType;
+            System.out.println("found");
+        }
+
+    }
+
+    /***/
+    private PositionDto addPosition(String positionName) {
+
+        if (StringUtils.isBlank(positionName)) { // if empty - return null
+            return null;
+        }
+
+        PositionDto tmpPosition = this.positionsDao.getPositionByName(positionName);
+        if (tmpPosition == null) { // save new position
+            PositionDto position = new PositionDto(0, positionName);
+            this.positionsDao.save(position);
+            return position;
+        } else {
+            return tmpPosition;
+        }
+    }
+
     /***/
     public void loadPhoneBook() throws IOException {
         LOG.debug(String.format("Started loading phone book from [%s] file.", this.phoneBookFile));
 
-        // prepare contacts types (hardcoded)
-        // todo: create Spring config and move it there
-        ContactTypeDto emailContact = new ContactTypeDto(0, "email");
-        ContactTypeDto phoneContact = new ContactTypeDto(0, "phone");
-        ContactTypeDto addressContact = new ContactTypeDto(0, "address");
+        this.initContactTypes(); // init contacts types
 
         // input stream for word document
         FileInputStream ins = new FileInputStream(this.phoneBookFile);
@@ -98,13 +147,16 @@ public class WordProcessingService {
                 } else if (columnsCount == 3) { // regular row with 3 columns (position-name-phone)
                     // (column #0) read position
                     tmpStrArray = WordProcessingService.getCellContent(row.getCell(0));
-                    position = new PositionDto(0, StringUtils.join(tmpStrArray, " "));
-                    this.positionsDao.saveOrUpdate(position);
+                    // prepare postion name (join contents of cell and remove unnesessary spaces between words) and add it to db
+                    position = this.addPosition(StringUtils.join(tmpStrArray, " ").replaceAll("\\s+"," "));
 
                     // (column #2) read full name
                     tmpStrArray = WordProcessingService.getCellContent(row.getCell(1));
                     employee = new EmployeeDto(0, StringUtils.join(tmpStrArray, " "));
-                    employee.setOnlyPosition(position);
+                    if (position != null) { // set the only position, if it isn't null
+                        employee.setOnlyPosition(position);
+                    }
+
                     // (column #3) read contact info (phone/email/address)
                     tmpStrArray = WordProcessingService.getCellContent(row.getCell(2));
                     // todo: contacts parsing!!!

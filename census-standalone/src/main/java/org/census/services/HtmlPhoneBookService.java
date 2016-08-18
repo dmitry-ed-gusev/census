@@ -12,5 +12,5 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @Transactional
 public class HtmlPhoneBookService {
-
+    // todo: needs -> employees dao, departments dao + hierarchy of depts
 }

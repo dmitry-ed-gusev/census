@@ -3,12 +3,13 @@ package org.census.commons.dao;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.census.commons.dto.AbstractEntityDto;
+import org.hibernate.Query;
 import org.hibernate.SessionFactory;
+import org.hibernate.cfg.NotYetImplementedException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.util.List;
 
@@ -25,17 +26,25 @@ public abstract class AbstractHibernateDao <T extends AbstractEntityDto> {
     private Log log = LogFactory.getLog(AbstractHibernateDao.class);
 
     @Autowired @Qualifier("censusSessionFactory")
-    private SessionFactory sessionFactory;
+    private SessionFactory sessionFactory; // <- Hibernate session factory
+    private Class<T>       clazz; // <- class used for this DAO component (generic)
 
-    private Class<T> clazz; // <- class used for this DAO component
-
-    protected AbstractHibernateDao(Class<T> clazz) {
+    public AbstractHibernateDao(Class<T> clazz) {
         this.clazz = clazz;
     }
 
     /***/
     public SessionFactory getSessionFactory() {
         return sessionFactory;
+    }
+
+    /**
+     * Utility method. Creates HQL query object for current active hibernate session.
+     * @param query String query (string) for Query object
+     * @return Query
+     */
+    public Query createQueryForCurrentSession(String query) {
+        return this.sessionFactory.getCurrentSession().createQuery(query);
     }
 
     /**
@@ -53,7 +62,7 @@ public abstract class AbstractHibernateDao <T extends AbstractEntityDto> {
     public List<T> findAllActive() {
         //log.debug(String.format("Retrieving all active (not deleted) [%s] objects.", this.clazz.getSimpleName()));
         //return this.sessionFactory.getCurrentSession().createQuery("FROM " + clazz.getName() + " where ").list();
-        throw new NotImplementedException();
+        throw new NotYetImplementedException();
     }
 
     /**
@@ -61,7 +70,7 @@ public abstract class AbstractHibernateDao <T extends AbstractEntityDto> {
     */
     public T findById(Long id) {
         log.debug(String.format("Search object [%s] by ID = [%s].", this.clazz.getSimpleName(), id));
-        return (T) sessionFactory.getCurrentSession().get(clazz, id);
+        return (T) this.sessionFactory.getCurrentSession().get(clazz, id);
     }
 
     /**

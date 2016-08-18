@@ -19,4 +19,14 @@ public class ContactsTypesSimpleDao extends AbstractHibernateDao<ContactTypeDto>
         super(ContactTypeDto.class);
     }
 
+    /**
+     * Return ContactType object from DB by exact contact type name.
+     * @param type String contact type name
+     */
+    public ContactTypeDto getContactTypeByType(String type) {
+        return (ContactTypeDto) this.createQueryForCurrentSession(
+                "select ct from ContactTypeDto as ct where ct.type = '" + type + "'")
+                .uniqueResult();
+    }
+
 }
