@@ -1,6 +1,6 @@
 package org.census.commons.utils.mail;
 
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
 
