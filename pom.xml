@@ -13,8 +13,10 @@
         <spring.security.version>4.1.2.RELEASE</spring.security.version>
         <!-- Hibernate framework -->
         <!--<org.hibernate.version>4.1.0.Final</org.hibernate.version>-->
-        <org.hibernate.version>4.1.7.Final</org.hibernate.version>
-        <org.hibernate.search.version>4.1.0.Final</org.hibernate.search.version>
+        <!--<org.hibernate.version>4.1.7.Final</org.hibernate.version>-->
+        <org.hibernate.version>5.2.2.Final</org.hibernate.version>
+        <!--<org.hibernate.search.version>4.1.0.Final</org.hibernate.search.version>-->
+        <org.hibernate.search.version>5.5.4.Final</org.hibernate.search.version>
         <!-- JEE libraries -->
         <servlet.api.version>2.5</servlet.api.version>
         <jstl.version>1.2</jstl.version>
