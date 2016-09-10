@@ -11,15 +11,15 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 public interface CensusDefaults {
 
     /***/
-    public static final ToStringStyle CS_DOMAIN_OBJECTS_STYLE = ToStringStyle.SHORT_PREFIX_STYLE;
+    ToStringStyle CS_DOMAIN_OBJECTS_STYLE = ToStringStyle.SHORT_PREFIX_STYLE;
     /***/
-    //public static final String        CS_INIT_PROPERTIES      = "census-init.properties";
+    //String        CS_INIT_PROPERTIES      = "census-init.properties";
     /** Common system date format (date without time). */
-    public static final String        CS_DATE_FORMAT          = "dd.MM.yyyy";
+    String        CS_DATE_FORMAT          = "dd.MM.yyyy";
     /** Common system time format (date without date - just time). */
-    public static final String        CS_TIME_FORMAT          = "HH:mm:ss";
+    String        CS_TIME_FORMAT          = "HH:mm:ss";
     /** Common system datetime format (date and time). */
-    public static final String        CS_DATETIME_FORMAT      = "dd.MM.yyyy HH:mm:ss";
+    String        CS_DATETIME_FORMAT      = "dd.MM.yyyy HH:mm:ss";
     /** Batch size for collections (Hibernate). */
-    public static final int           CS_BATCH_SIZE           = 20;
+    int           CS_BATCH_SIZE           = 20;
 }
