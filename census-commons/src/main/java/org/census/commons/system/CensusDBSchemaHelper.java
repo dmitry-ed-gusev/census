@@ -8,11 +8,10 @@ import org.census.commons.dto.admin.LogicUserDto;
 import org.census.commons.dto.docs.CategoryDto;
 import org.census.commons.dto.docs.DocumentDto;
 import org.census.commons.dto.docs.DocumentTypeDto;
+import org.census.commons.dto.personnel.PositionDto;
 import org.census.commons.dto.personnel.departments.DepartmentDto;
 import org.census.commons.dto.personnel.employees.EmployeeDto;
-import org.census.commons.dto.personnel.PositionDto;
 import org.hibernate.cfg.Configuration;
-import org.hibernate.tool.hbm2ddl.SchemaExport;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 
@@ -80,9 +79,9 @@ public class CensusDBSchemaHelper {
         log.debug("Annotated entity classes added to config.");
 
         // set all hibernate properties/datasource here
-        SchemaExport schema = new SchemaExport(config);
-        schema.create(true, true);
-        log.debug("DB schema created.");
+        //SchemaExport schema = new SchemaExport(config);
+        //schema.create(true, true);
+        //log.debug("DB schema created.");
     }
 
 }
