@@ -15,11 +15,19 @@
     <!-- Exceptions translator bean -->
     <bean class="org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor"/>
     <!-- Realization of exception translator for hibernate 4 -->
-    <bean class="org.springframework.orm.hibernate4.HibernateExceptionTranslator"/>
-    <!-- Spring controlled Hibernate transaction manager (bean) for database -->
-    <bean id="censusTXManager" class="org.springframework.orm.hibernate4.HibernateTransactionManager">
+    <!--<bean class="org.springframework.orm.hibernate4.HibernateExceptionTranslator"/>-->
+    <!-- Realization of exception translator for hibernate 5 -->
+    <bean class="org.springframework.orm.hibernate5.HibernateExceptionTranslator"/>
+    <!-- Spring controlled Hibernate 4 transaction manager (bean) for database -->
+    <!--<bean id="censusTXManager" class="org.springframework.orm.hibernate4.HibernateTransactionManager">
         <property name="sessionFactory" ref="censusSessionFactory"/>
     </bean>
+    -->
+    <!-- Spring controlled Hibernate 5 transaction manager (bean) for database -->
+    <bean id="censusTXManager" class="org.springframework.orm.hibernate5.HibernateTransactionManager">
+        <property name="sessionFactory" ref="censusSessionFactory"/>
+    </bean>
+
     <!-- Annotation-driven tx manager config (annotation @Transactional for classes/methods - enables the Hiber @Transactional programming model) -->
     <tx:annotation-driven transaction-manager="censusTXManager" proxy-target-class="true"/>
 
