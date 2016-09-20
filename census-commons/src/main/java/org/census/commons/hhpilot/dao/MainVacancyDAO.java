@@ -155,7 +155,7 @@ public class MainVacancyDAO {
                     ", vacancynameeng = " + mainVacancyUpdate.getNameEng() +
                     ", updateuserid = " + mainVacancyUpdate.getUpdateUser() +
                     ", deleted = " + mainVacancyUpdate.getDeleted() +
-                    ", timestamp = " + mainVacancyUpdate.getTimestamp() +
+                    ", timestamp = " + mainVacancyUpdate.getCreatedOn() +
                     " when mainvacancy.id = " + mainVacancyUpdate.getId();
 
             try {
@@ -210,7 +210,7 @@ public class MainVacancyDAO {
                     ", " + mainVacancyInsert.getNameEng() +
                     ", " + mainVacancyInsert.getUpdateUser() +
                     ", " + mainVacancyInsert.getDeleted() +
-                    ", " + mainVacancyInsert.getTimestamp() + " )";
+                    ", " + mainVacancyInsert.getCreatedOn() + " )";
 
             try {
                 stmt = connectionDB.createStatement();

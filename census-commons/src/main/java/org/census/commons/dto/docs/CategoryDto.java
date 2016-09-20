@@ -1,7 +1,6 @@
 package org.census.commons.dto.docs;
 
-import org.census.commons.dto.AbstractEntityDto;
-import org.hibernate.search.annotations.Indexed;
+import org.census.commons.dto.AbstractEntity;
 
 import javax.persistence.*;
 import java.util.HashSet;
@@ -15,9 +14,9 @@ import java.util.Set;
 */
 
 //@Entity
-@Table(name = "CATEGORIES")
-@Indexed
-public class CategoryDto extends AbstractEntityDto {
+//@Table(name = "CATEGORIES")
+//@Indexed
+public class CategoryDto extends AbstractEntity {
 
     @Column(name = "CATEGORY_NAME")
     private String           name;

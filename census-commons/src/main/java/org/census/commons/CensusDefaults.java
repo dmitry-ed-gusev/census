@@ -22,4 +22,8 @@ public interface CensusDefaults {
     String        CS_DATETIME_FORMAT      = "dd.MM.yyyy HH:mm:ss";
     /** Batch size for collections (Hibernate). */
     int           CS_BATCH_SIZE           = 20;
+    /** Name for identifier generator sequence. */
+    String        CS_ID_GENERATOR_NAME    = "ID_GENERATOR";
+    /** Name for sequence that is used for identifier generation. */
+    String        CS_ID_GENERATOR_SEQUENCE_NAME = "ID_GENERATOR_SEQUENCE";
 }

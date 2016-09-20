@@ -2,15 +2,13 @@ package org.census.commons.dto.personnel.employees;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.tuple.Pair;
 import org.census.commons.CensusDefaults;
-import org.census.commons.dto.AbstractEntityDto;
+import org.census.commons.dto.AbstractEntity;
 import org.census.commons.dto.admin.LogicUserDto;
 import org.census.commons.dto.personnel.ContactDto;
-import org.census.commons.dto.personnel.departments.DepartmentDto;
 import org.census.commons.dto.personnel.PositionDto;
+import org.census.commons.dto.personnel.departments.DepartmentDto;
 import org.census.commons.utils.CommonStringUtils;
-import org.hibernate.search.annotations.Indexed;
 
 import javax.persistence.*;
 import java.util.Arrays;
@@ -27,14 +25,14 @@ import java.util.Set;
 // todo: implement sorting (Comparable/Comparator)
 // todo: use internal exception instead of runtime?
 // todo: implement equals/hashCode - like in PositionDto
-@Entity
-@Table(name = "EMPLOYEES")
-@Indexed // <- Hibernate search indexed entity annotation
-public class EmployeeDto extends AbstractEntityDto {
+//@Entity
+//@Table(name = "EMPLOYEES")
+//@Indexed // <- Hibernate search indexed entity annotation
+public class EmployeeDto extends AbstractEntity {
 
-    @Column(name = "name")
+    @Column(name = "name", nullable = false)
     private String        name;        // mandatory field, shouldn't be empty!
-    @Column(name = "family")
+    @Column(name = "family", nullable = false)
     private String        family;      // mandatory field, shouldn't be empty!
     @Column(name = "patronymic")
     private String        patronymic;  // optional field, may be empty
@@ -71,7 +69,7 @@ public class EmployeeDto extends AbstractEntityDto {
 
     // Mapping one-to-many to Contacts (both entity and db table) with extra table "employees_2_contacts".
     // Relation is UNI-directional (employee->contacts).
-    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToMany(fetch = FetchType.EAGER/*, cascade = CascadeType.ALL*/)
     @JoinTable(name = "link_employees_2_contacts",
             joinColumns        = {@JoinColumn(name = "employeeId", nullable = false, updatable = false)},
             inverseJoinColumns = {@JoinColumn(name = "contactId",  nullable = false, updatable = false)})
@@ -86,7 +84,7 @@ public class EmployeeDto extends AbstractEntityDto {
      * #1 -> name, #2 and further -> patronymic.
      */
     public EmployeeDto(long id, String fullName) {
-        this.setId(id);
+        //this.setId(id);
         if (!StringUtils.isBlank(fullName)) {
             String[] nameArray = StringUtils.trimToNull(fullName).split("\\s+");
             this.family     = nameArray.length > 0 ? nameArray[0] : null;

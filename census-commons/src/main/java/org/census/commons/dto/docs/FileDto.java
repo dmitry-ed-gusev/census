@@ -1,11 +1,8 @@
 package org.census.commons.dto.docs;
 
-import org.census.commons.dto.AbstractEntityDto;
-import org.hibernate.search.annotations.Indexed;
+import org.census.commons.dto.AbstractEntity;
 
 import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
 
 /**
  * Domain object - uploaded file.
@@ -13,10 +10,10 @@ import javax.persistence.Table;
  * @version 1.0 (DATE: 12.08.2015)
  */
 
-@Entity
-@Indexed
-@Table(name = "FILES")
-public class FileDto extends AbstractEntityDto {
+//@Entity
+//@Indexed
+//@Table(name = "FILES")
+public class FileDto extends AbstractEntity {
 
     @Column(name = "storedName")
     private String storedName; // under this name file will be stored in storage

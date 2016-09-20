@@ -2,7 +2,7 @@ package org.census.commons.dto.hr;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
-import org.census.commons.dto.AbstractEntityDto;
+import org.census.commons.dto.AbstractEntity;
 
 import java.util.Date;
 
@@ -13,7 +13,7 @@ import java.util.Date;
  * @deprecated
  */
 
-public class ApplicantDTO extends AbstractEntityDto {
+public class ApplicantDTO extends AbstractEntity {
 
     private String fioRus;
     private String fioEng;

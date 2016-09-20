@@ -2,10 +2,12 @@ package org.census.commons.dto.admin;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.census.commons.CensusDefaults;
-import org.census.commons.dto.AbstractEntityDto;
-import org.hibernate.search.annotations.Indexed;
+import org.census.commons.dto.AbstractEntity;
 
-import javax.persistence.*;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.FetchType;
+import javax.persistence.ManyToMany;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -16,10 +18,10 @@ import java.util.Set;
  * @version 1.0 (DATE: 05.08.2015)
 */
 
-@Entity
-@Table(name = "LOGICGROUPS")
-@Indexed
-public class LogicGroupDto extends AbstractEntityDto {
+//@Entity
+//@Table(name = "LOGICGROUPS")
+//@Indexed
+public class LogicGroupDto extends AbstractEntity {
 
     @Column(name = "name")
     private String name;

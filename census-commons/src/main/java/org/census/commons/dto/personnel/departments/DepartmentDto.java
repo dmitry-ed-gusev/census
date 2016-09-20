@@ -1,10 +1,9 @@
 package org.census.commons.dto.personnel.departments;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.census.commons.dto.AbstractEntityDto;
+import org.census.commons.dto.AbstractEntity;
 import org.census.commons.dto.personnel.ContactDto;
 import org.census.commons.dto.personnel.employees.EmployeeDto;
-import org.hibernate.search.annotations.Indexed;
 
 import javax.persistence.*;
 import java.util.HashSet;
@@ -18,15 +17,15 @@ import static org.census.commons.CensusDefaults.CS_DOMAIN_OBJECTS_STYLE;
  * @version 1.0 (DATE: 02.05.12)
  */
 
-@Entity
-@Indexed
-@Table(name = "DEPARTMENTS")
-public class DepartmentDto extends AbstractEntityDto {
+//@Entity
+//@Indexed
+//@Table(name = "DEPARTMENTS")
+public class DepartmentDto extends AbstractEntity {
 
-    @Column(name = "code", nullable = false)
-    private String           code;        // department inner code (not null)
-    @Column(name = "name")
-    private String           name;        // department name
+    @Column(name = "code")
+    private String           code;        // department inner code
+    @Column(name = "name", unique = true, nullable = false)
+    private String           name;        // department name (unique, not null)
     @Column(name = "description")
     private String           description; // department description
     @Column(name = "leftValue")
@@ -58,7 +57,7 @@ public class DepartmentDto extends AbstractEntityDto {
 
     /***/
     public DepartmentDto(long id, String name) {
-        this.setId(id);
+        //this.setId(id);
         this.name = name;
     }
 

@@ -2,6 +2,7 @@ package org.census.commons.dao.hibernate.personnel;
 
 import org.census.commons.dao.AbstractHibernateDao;
 import org.census.commons.dto.personnel.employees.EmployeeDto;
+import org.hibernate.Query;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -45,6 +46,30 @@ public class EmployeesSimpleDao extends AbstractHibernateDao<EmployeeDto> {
         return (EmployeeDto) this.getSessionFactory().getCurrentSession().createQuery(
                 "select e from EmployeeDto as e inner join e.logicUsers as logicUser where logicUser.login like '%" + loginName + "%'"
         ).uniqueResult();
+    }
+
+    /***/
+    public EmployeeDto getEmployee(EmployeeDto employee) {
+
+        if (employee == null) { //fail-fast
+            throw new IllegalArgumentException("Can't search for null employee!");
+        }
+
+        Query query = this.getSessionFactory().getCurrentSession().createQuery(
+                "select e from EmployeeDto as e where " +
+                        "e.name = '" + employee.getName() + "' and e.family = '" + employee.getFamily() + "'" +
+                        " and e.patronymic = '" + employee.getPatronymic() + "'"// + "' and " +
+                        //"p.name in :plist"
+        );
+        //query.setParameterList("plist", new String[] {"Генеральный директор", "должность какаято"});
+
+        //System.out.println("!!!");
+        //Object obj = query.uniqueResult();
+        //System.out.println(obj.getClass());
+        //System.out.println("+++");
+
+        //return null;
+        return (EmployeeDto) query.uniqueResult();
     }
 
 }

@@ -9,7 +9,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
  * @version 1.0 (DATE: 24.10.12)
  */
 
-public class MainVacancyDTO extends AbstractDictionaryDTO {
+public class MainVacancyDTO extends AbstractDictionary {
 
     public MainVacancyDTO() {}
 

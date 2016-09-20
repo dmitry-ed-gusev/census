@@ -20,7 +20,8 @@
     </bean>
 
     <!---->
-    <bean id="censusHsqlSessionFactory" class="org.springframework.orm.hibernate4.LocalSessionFactoryBean" abstract="true">
+    <!--<bean id="censusHsqlSessionFactory" class="org.springframework.orm.hibernate4.LocalSessionFactoryBean" abstract="true">-->
+    <bean id="censusHsqlSessionFactory" class="org.springframework.orm.hibernate5.LocalSessionFactoryBean" abstract="true">
         <property name="dataSource" ref="censusHsqlDataSource" />
         <!-- Here (in file hibernate.cfg.xml) we can't use placeholders from .properties file -->
         <!--<property name="configLocation" value="classpath:spring/hibernate.cfg.xml"/>-->

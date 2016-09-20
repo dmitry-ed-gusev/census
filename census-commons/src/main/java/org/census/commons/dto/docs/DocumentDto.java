@@ -1,18 +1,18 @@
 package org.census.commons.dto.docs;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.census.commons.dto.AbstractEntityDto;
+import org.census.commons.dto.AbstractEntity;
 import org.census.commons.dto.personnel.departments.DepartmentWithDocsDto;
 import org.census.commons.dto.personnel.employees.EmployeeWithDocsDto;
 import org.hibernate.annotations.BatchSize;
-import org.hibernate.search.annotations.Indexed;
 
 import javax.persistence.*;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
-import static org.census.commons.CensusDefaults.*;
+import static org.census.commons.CensusDefaults.CS_BATCH_SIZE;
+import static org.census.commons.CensusDefaults.CS_DOMAIN_OBJECTS_STYLE;
 
 /**
  * Domain object - electronic document.
@@ -20,15 +20,15 @@ import static org.census.commons.CensusDefaults.*;
  * @version 1.0 (DATE: 11.03.14)
 */
 
-@Entity
-@Table(name = "DOCUMENTS")
+//@Entity
+//@Table(name = "DOCUMENTS")
 
 // todo: map one entity to two tables?
 // http://stackoverflow.com/questions/22668350/how-to-map-one-class-with-multiple-tables-in-hibernate-javax-persistance
 // @SecondaryTable(name = "docstexts")
 
-@Indexed // <- Hibernate search indexed entity annotation
-public class DocumentDto extends AbstractEntityDto {
+//@Indexed // <- Hibernate search indexed entity annotation
+public class DocumentDto extends AbstractEntity {
 
     @Column(name = "parentId") // todo: create self-joined field (link to parent document)
     private long            parentId;      // parent document ID

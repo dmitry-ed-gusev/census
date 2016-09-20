@@ -155,7 +155,7 @@ public class SubVacancyFirstDAO {
                     ", vacancynameeng = " + subMainFirstVacancyUpdate.getNameEng() +
                     ", updateuserid = " + subMainFirstVacancyUpdate.getUpdateUser() +
                     ", deleted = " + subMainFirstVacancyUpdate.getDeleted() +
-                    ", timestamp = " + subMainFirstVacancyUpdate.getTimestamp() +
+                    ", timestamp = " + subMainFirstVacancyUpdate.getCreatedOn() +
                     " when submainfirstvacancy.id = " + subMainFirstVacancyUpdate.getId();
 
             try {
@@ -210,7 +210,7 @@ public class SubVacancyFirstDAO {
                     ", " + subMainFirstVacancyInsert.getNameEng() +
                     ", " + subMainFirstVacancyInsert.getUpdateUser() +
                     ", " + subMainFirstVacancyInsert.getDeleted() +
-                    ", " + subMainFirstVacancyInsert.getTimestamp() + " )";
+                    ", " + subMainFirstVacancyInsert.getCreatedOn() + " )";
 
             try {
                 stmt = connectionDB.createStatement();

@@ -1,6 +1,6 @@
 package org.census.commons.dto.hr;
 
-import org.census.commons.dto.AbstractEntityDto;
+import org.census.commons.dto.AbstractEntity;
 
 import java.util.Date;
 
@@ -9,7 +9,7 @@ import java.util.Date;
  * @author Ivanov Sergey
  * @version 1.0 (DATE: 26.10.12)
  */
-public class UsersDTO extends AbstractEntityDto {
+public class UsersDTO extends AbstractEntity {
 
     private String FIO;
     private String login;
@@ -22,9 +22,9 @@ public class UsersDTO extends AbstractEntityDto {
     public UsersDTO(int id, int deleted, int updateUser, String timestamp, String FIO, String login, String pass, Date dateValidPass) {
         //super(id, deleted, updateUser, timestamp);
 
-        this.setId(id);
-        this.setDeleted(deleted);
-        this.setUpdateUser(updateUser);
+        //this.setId(id);
+        //this.setDeleted(deleted);
+        //this.setUpdateUser(updateUser);
         //this.setTimestamp(timestamp);
         this.FIO = FIO;
         this.login = login;

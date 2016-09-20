@@ -3,7 +3,6 @@ package org.census.commons.dto.personnel.departments;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.census.commons.dto.docs.DocumentDto;
 import org.hibernate.annotations.BatchSize;
-import org.hibernate.search.annotations.Indexed;
 
 import javax.persistence.*;
 import java.util.HashSet;
@@ -18,9 +17,9 @@ import static org.census.commons.CensusDefaults.CS_DOMAIN_OBJECTS_STYLE;
  * @version 1.0 (DATE: 13.08.2015)
  */
 
-@Entity
-@Indexed
-@Table(name = "DEPARTMENTS")
+//@Entity
+//@Indexed
+//@Table(name = "DEPARTMENTS2")
 public class DepartmentWithDocsDto extends DepartmentDto {
 
     // Mapping many-to-many to Documents (both entity and db table). This side (Department) is

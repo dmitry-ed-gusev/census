@@ -1,12 +1,9 @@
 package org.census.commons.dto.personnel;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.census.commons.dto.AbstractEntityDto;
-import org.hibernate.search.annotations.Indexed;
+import org.census.commons.dto.AbstractEntity;
 
 import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
 
 import static org.census.commons.CensusDefaults.CS_DOMAIN_OBJECTS_STYLE;
 
@@ -17,12 +14,12 @@ import static org.census.commons.CensusDefaults.CS_DOMAIN_OBJECTS_STYLE;
  * @version 1.0 (DATE: 02.05.12)
 */
 
-@Entity
-@Table(name = "POSITIONS")
-@Indexed
-public class PositionDto extends AbstractEntityDto {
+//@Entity
+//@Table(name = "POSITIONS")
+//@Indexed
+public class PositionDto extends AbstractEntity {
 
-    @Column(name = "name", unique = true)
+    @Column(name = "name", unique = true, nullable = false)
     private String name; // position name is unique
     @Column(name = "weight")
     private int    weight;
@@ -32,7 +29,7 @@ public class PositionDto extends AbstractEntityDto {
 
     /***/
     public PositionDto(long id, String name) {
-        this.setId(id);
+        super(id);
         this.name = name;
     }
 

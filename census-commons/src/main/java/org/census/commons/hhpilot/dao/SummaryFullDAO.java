@@ -170,7 +170,7 @@ public class SummaryFullDAO {
                     ", idsubmainsecondvacancy = " + ((summaryFullUpdate.getSubVacancySecond() != null) ? summaryFullUpdate.getSubVacancySecond().getId() : 0) +
                     ", updateuserid = " + summaryFullUpdate.getUpdateUser() +
                     ", deleted = " + summaryFullUpdate.getDeleted() +
-                    ", timestamp = " + summaryFullUpdate.getTimestamp() +
+                    ", timestamp = " + summaryFullUpdate.getCreatedOn() +
                     " when summary.id = " + summaryFullUpdate.getId();
 
             try {
@@ -230,7 +230,7 @@ public class SummaryFullDAO {
                     ", " + ((summaryFullInsert.getSubVacancySecond() != null) ? summaryFullInsert.getSubVacancySecond().getId() : 0) +
                     ", " + summaryFullInsert.getUpdateUser() +
                     ", " + summaryFullInsert.getDeleted() +
-                    ", " + summaryFullInsert.getTimestamp() + " )";
+                    ", " + summaryFullInsert.getCreatedOn() + " )";
 
             try {
                 stmt = connectionDB.createStatement();

@@ -60,7 +60,7 @@ public class BuildingsModel extends AbstractDataGridModel<BuildingDto> {
             BuildingDto building = this.getObjectByIndex(rowIndex);
             switch (columnIndex) {
                 case 1: building.setBuildingName(String.valueOf(aValue)); break; // building name
-                case 2: building.setComment(String.valueOf(aValue));      break; // comment
+                case 2: /*building.setComment(String.valueOf(aValue));*/      break; // comment
                 default: log.error(String.format("Invalid column index [%s]!", columnIndex));
             }
         } else { // row or column index is invalid

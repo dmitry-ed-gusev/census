@@ -1,5 +1,6 @@
 package org.census.commons.dao.hibernate.personnel;
 
+import org.apache.commons.lang3.StringUtils;
 import org.census.commons.dao.AbstractHibernateDao;
 import org.census.commons.dto.personnel.PositionDto;
 import org.springframework.stereotype.Repository;
@@ -24,8 +25,25 @@ public class PositionsSimpleDao extends AbstractHibernateDao<PositionDto> {
      * @param name String position name
      */
     public PositionDto getPositionByName(String name) {
-        String query = String.format("select p from PositionDto as p where p.name = '%s'", name);
-        return (PositionDto) this.createQueryForCurrentSession(query).uniqueResult();
+        return (PositionDto) this.getSessionFactory().getCurrentSession().createQuery(
+                "select p from PositionDto as p where p.name = '" + name + "'"
+        ).uniqueResult();
+    }
+
+    /***/
+    public PositionDto addPositionByName(String name) {
+
+        if (StringUtils.isBlank(name)) { //fail-fast
+            throw new IllegalArgumentException("Can't add position by null name!");
+        }
+
+        PositionDto position = this.getPositionByName(name);
+        if (position == null) { // no such position
+            position = new PositionDto(0, name);
+            this.save(position);
+        }
+
+        return position;
     }
 
 }

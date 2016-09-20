@@ -3,7 +3,7 @@ package org.census.gui.components.grid;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.census.commons.dao.AbstractHibernateDao;
-import org.census.commons.dto.AbstractEntityDto;
+import org.census.commons.dto.AbstractEntity;
 
 import javax.swing.event.TableModelEvent;
 import javax.swing.table.AbstractTableModel;
@@ -21,7 +21,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
  * @version 1.0 (DATE: 11.11.2014)
 */
 
-public abstract class AbstractDataGridModel<T extends AbstractEntityDto> extends AbstractTableModel {
+public abstract class AbstractDataGridModel<T extends AbstractEntity> extends AbstractTableModel {
 
     @SuppressWarnings("ConstantNamingConvention")
     private static final Log log = LogFactory.getLog(AbstractDataGridModel.class);

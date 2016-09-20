@@ -2,10 +2,12 @@ package org.census.commons.dto.personnel;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.census.commons.CensusDefaults;
-import org.census.commons.dto.AbstractEntityDto;
+import org.census.commons.dto.AbstractEntity;
+import org.census.commons.dto.ContactType;
 import org.hibernate.search.annotations.Indexed;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 
 /**
  * Domain object - contact info (email/real address/skype/... etc.)
@@ -16,24 +18,25 @@ import javax.persistence.*;
 @Entity
 @Indexed
 @Table(name = "CONTACTS")
-public class ContactDto extends AbstractEntityDto {
+public class ContactDto extends AbstractEntity {
 
-    @Column(name = "contact")
+    @NotNull
+    @Column(name = "contact", unique = true, nullable = false)
     private String         contact;     // contact value
     @Column(name = "description")
     private String         description; // description of rhis contact
-
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinColumn(name = "contactTypeId", nullable=false)
-    private ContactTypeDto contactType; // type of this contact
+    @NotNull
+    @Enumerated(EnumType.STRING)        // -> store string instead of default position number (in enum)
+    private ContactType    contactType; // type of this contact (enum)
 
     /** Default constructor. Usually used by frameworks Spring/Hibernate. */
     public ContactDto() {}
 
     /***/
-    public ContactDto(long id, String contact, ContactTypeDto type) {
-        this.setId(id);
+    public ContactDto(long id, String contact, String description, ContactType type) {
+        super(id);
         this.contact = contact;
+        this.description = description;
         this.contactType = type;
     }
 
@@ -53,12 +56,8 @@ public class ContactDto extends AbstractEntityDto {
         this.description = description;
     }
 
-    public ContactTypeDto getContactType() {
+    public ContactType getContactType() {
         return contactType;
-    }
-
-    public void setContactType(ContactTypeDto contactType) {
-        this.contactType = contactType;
     }
 
     @Override

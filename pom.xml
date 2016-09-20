@@ -14,9 +14,9 @@
         <!-- Hibernate framework -->
         <!--<org.hibernate.version>4.1.0.Final</org.hibernate.version>-->
         <!--<org.hibernate.version>4.1.7.Final</org.hibernate.version>-->
-        <org.hibernate.version>5.2.2.Final</org.hibernate.version>
+        <org.hibernate.version>5.0.6.Final</org.hibernate.version>
         <!--<org.hibernate.search.version>4.1.0.Final</org.hibernate.search.version>-->
-        <org.hibernate.search.version>5.5.4.Final</org.hibernate.search.version>
+        <org.hibernate.search.version>5.5.3.Final</org.hibernate.search.version>
         <!-- JEE libraries -->
         <servlet.api.version>2.5</servlet.api.version>
         <jstl.version>1.2</jstl.version>
@@ -179,6 +179,17 @@
             <version>1.1.0.Final</version>
         </dependency>
 
+        <dependency>
+            <groupId>javax.transaction</groupId>
+            <artifactId>jta</artifactId>
+            <version>1.1</version>
+        </dependency>
+        <dependency>
+           <groupId>javax.el</groupId>
+           <artifactId>javax.el-api</artifactId>
+           <version>2.2.4</version>
+        </dependency>
+
         <!-- Hibernate framework -->
         <dependency>
             <groupId>org.hibernate</groupId>
@@ -190,18 +201,29 @@
             <artifactId>hibernate-entitymanager</artifactId>
             <version>${org.hibernate.version}</version>
         </dependency>
-        <!-- Hibernate - full-text search -->
         <dependency>
             <groupId>org.hibernate</groupId>
-            <artifactId>hibernate-search</artifactId>
+            <artifactId>hibernate-search-orm</artifactId>
             <version>${org.hibernate.search.version}</version>
         </dependency>
+        <!--<dependency>
+           <groupId>org.apache.lucene</groupId>
+           <artifactId>lucene-core</artifactId>
+           <version>5.3.1</version>
+        </dependency>-->
         <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-c3p0</artifactId>
             <version>${org.hibernate.version}</version>
         </dependency>
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-validator</artifactId>
+            <!--<version>${org.hibernate.version}</version>-->
+            <version>5.2.4.Final</version>
+        </dependency>
 
+        <!-- DB connection pooling c3p0 connection pool -->
         <dependency>
             <groupId>c3p0</groupId>
             <artifactId>c3p0</artifactId>
@@ -283,7 +305,14 @@
             <groupId>org.apache.poi</groupId>
             <artifactId>poi-scratchpad</artifactId>
             <version>${poi.version}</version>
-          </dependency>
+        </dependency>
+
+        <dependency>
+            <groupId>xml-apis</groupId>
+            <artifactId>xml-apis</artifactId>
+            <version>1.4.01</version>
+        </dependency>
+
     </dependencies>
 
     <!-- Project dependencies management - info inherited by all child modules. -->

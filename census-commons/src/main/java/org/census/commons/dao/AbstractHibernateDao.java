@@ -2,8 +2,7 @@ package org.census.commons.dao;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.census.commons.dto.AbstractEntityDto;
-import org.hibernate.Query;
+import org.census.commons.dto.AbstractEntity;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.NotYetImplementedException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +20,7 @@ import java.util.List;
 
 @Repository
 @Transactional
-public abstract class AbstractHibernateDao <T extends AbstractEntityDto> {
+public abstract class AbstractHibernateDao <T extends AbstractEntity> {
 
     private Log log = LogFactory.getLog(AbstractHibernateDao.class);
 
@@ -36,15 +35,6 @@ public abstract class AbstractHibernateDao <T extends AbstractEntityDto> {
     /***/
     public SessionFactory getSessionFactory() {
         return sessionFactory;
-    }
-
-    /**
-     * Utility method. Creates HQL query object for current active hibernate session.
-     * @param query String query (string) for Query object
-     * @return Query
-     */
-    public Query createQueryForCurrentSession(String query) {
-        return this.sessionFactory.getCurrentSession().createQuery(query);
     }
 
     /**

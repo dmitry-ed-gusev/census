@@ -1,12 +1,9 @@
 package org.census.commons.dto.docs;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.census.commons.dto.AbstractEntityDto;
-import org.hibernate.search.annotations.Indexed;
+import org.census.commons.dto.AbstractEntity;
 
 import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
 
 import static org.census.commons.CensusDefaults.CS_DOMAIN_OBJECTS_STYLE;
 
@@ -16,10 +13,10 @@ import static org.census.commons.CensusDefaults.CS_DOMAIN_OBJECTS_STYLE;
  * @version 2.0 (DATE: 25.03.2014)
 */
 
-@Entity
-@Table(name = "DOCUMENTSTYPES")
-@Indexed
-public class DocumentTypeDto extends AbstractEntityDto {
+//@Entity
+//@Table(name = "DOCUMENTSTYPES")
+//@Indexed
+public class DocumentTypeDto extends AbstractEntity {
 
     @Column(name = "name")
     private String name;

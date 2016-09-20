@@ -151,7 +151,7 @@ public class StatusDAO {
                     ", statusnameeng = " + statusUpdate.getNameEng() +
                     ", updateuserid = " + statusUpdate.getUpdateUser() +
                     ", deleted = " + statusUpdate.getDeleted() +
-                    ", timestamp = " + statusUpdate.getTimestamp() +
+                    ", timestamp = " + statusUpdate.getCreatedOn() +
                     " when status.id = " + statusUpdate.getId();
 
             try{
@@ -205,7 +205,7 @@ public class StatusDAO {
                     ", " + statusInsert.getNameEng() +
                     ", " + statusInsert.getUpdateUser() +
                     ", " + statusInsert.getDeleted() +
-                    ", " + statusInsert.getTimestamp() + " )";
+                    ", " + statusInsert.getCreatedOn() + " )";
 
             try{
                 stmt = connectionDB.createStatement();

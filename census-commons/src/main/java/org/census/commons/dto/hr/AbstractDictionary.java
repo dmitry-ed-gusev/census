@@ -2,7 +2,7 @@ package org.census.commons.dto.hr;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
-import org.census.commons.dto.AbstractEntityDto;
+import org.census.commons.dto.AbstractEntity;
 
 /**
  * hhpilot base vacancy DTO for all tables
@@ -10,12 +10,12 @@ import org.census.commons.dto.AbstractEntityDto;
  * @version 1.0 (DATE: 24.10.12)
  */
 
-public abstract class AbstractDictionaryDTO extends AbstractEntityDto {
+public abstract class AbstractDictionary extends AbstractEntity {
 
     private String nameRus;
     private String nameEng;
 
-    protected AbstractDictionaryDTO() {
+    protected AbstractDictionary() {
     }
 
     /*

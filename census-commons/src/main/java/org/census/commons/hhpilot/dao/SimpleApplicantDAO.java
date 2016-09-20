@@ -161,7 +161,7 @@ public class SimpleApplicantDAO {
                     ", photo = " + applicantUpdate.getPhoto() +
                     ", updateuserid = " + applicantUpdate.getUpdateUser() +
                     ", deleted = " + applicantUpdate.getDeleted() +
-                    ", timestamp = " + applicantUpdate.getTimestamp() +
+                    ", timestamp = " + applicantUpdate.getCreatedOn() +
                     " when applicant.id = " + applicantUpdate.getId();
 
             try {
@@ -219,7 +219,7 @@ public class SimpleApplicantDAO {
                     ", " + applicantInsert.getPhoto() +
                     ", " + applicantInsert.getUpdateUser() +
                     ", " + applicantInsert.getDeleted() +
-                    ", " + applicantInsert.getTimestamp() + ")";
+                    ", " + applicantInsert.getCreatedOn() + ")";
 
             try {
                 stmt = connectionDB.createStatement();

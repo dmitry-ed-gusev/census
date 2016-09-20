@@ -1,5 +1,6 @@
 package org.census.commons.dao.hibernate.personnel;
 
+import org.apache.commons.lang3.StringUtils;
 import org.census.commons.dao.AbstractHibernateDao;
 import org.census.commons.dto.personnel.departments.DepartmentDto;
 import org.census.commons.dto.personnel.employees.EmployeeDto;
@@ -37,6 +38,29 @@ public class DepartmentsSimpleDao extends AbstractHibernateDao<DepartmentDto> {
     public EmployeeDto getChiefOfDept(long departmentId) {
         DepartmentDto department = this.findById(departmentId);
         return (department == null ? null : department.getChief());
+    }
+
+    /***/
+    public DepartmentDto getDepartmentByName(String name) {
+        return (DepartmentDto) this.getSessionFactory().getCurrentSession().createQuery(
+                "select d from DepartmentDto as d where d.name = '" + name + "'"
+        ).uniqueResult();
+    }
+
+    /***/
+    public DepartmentDto addDepartmentByName(String name) {
+
+        if (StringUtils.isBlank(name)) { // fail-fast
+            throw new IllegalArgumentException("Can't add department by null name!");
+        }
+
+        DepartmentDto department = this.getDepartmentByName(name);
+        if (department == null) {
+            department = new DepartmentDto(0, name);
+            this.save(department);
+        }
+
+        return department;
     }
 
 }

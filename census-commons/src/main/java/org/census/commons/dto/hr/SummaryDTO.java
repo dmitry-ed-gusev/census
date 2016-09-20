@@ -2,7 +2,7 @@ package org.census.commons.dto.hr;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
-import org.census.commons.dto.AbstractEntityDto;
+import org.census.commons.dto.AbstractEntity;
 
 /**
  * hhpilot summary base applicant DTO
@@ -10,7 +10,7 @@ import org.census.commons.dto.AbstractEntityDto;
  * @version 1.0 (DATE: 24.10.12)
  */
 
-public class SummaryDTO extends AbstractEntityDto {
+public class SummaryDTO extends AbstractEntity {
 
     private String phone;
     private String email;

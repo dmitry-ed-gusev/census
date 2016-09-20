@@ -157,7 +157,7 @@ public class SubVacancySecondDAO {
                     ", vacancynameeng = " + subMainSecondVacancyUpdate.getNameEng() +
                     ", updateuserid = " + subMainSecondVacancyUpdate.getUpdateUser() +
                     ", deleted = " + subMainSecondVacancyUpdate.getDeleted() +
-                    ", timestamp = " + subMainSecondVacancyUpdate.getTimestamp() +
+                    ", timestamp = " + subMainSecondVacancyUpdate.getCreatedOn() +
                     " when submainsecondvacancy.id = " + subMainSecondVacancyUpdate.getId();
 
             try {
@@ -212,7 +212,7 @@ public class SubVacancySecondDAO {
                     ", " + subMainSecondVacancyInsert.getNameEng() +
                     ", " + subMainSecondVacancyInsert.getUpdateUser() +
                     ", " + subMainSecondVacancyInsert.getDeleted() +
-                    ", " + subMainSecondVacancyInsert.getTimestamp() + " )";
+                    ", " + subMainSecondVacancyInsert.getCreatedOn() + " )";
 
             try {
                 stmt = connectionDB.createStatement();

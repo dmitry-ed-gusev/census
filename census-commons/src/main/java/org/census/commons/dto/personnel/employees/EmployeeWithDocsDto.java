@@ -3,7 +3,6 @@ package org.census.commons.dto.personnel.employees;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.census.commons.dto.docs.DocumentDto;
 import org.hibernate.annotations.BatchSize;
-import org.hibernate.search.annotations.Indexed;
 
 import javax.persistence.*;
 import java.util.HashSet;
@@ -18,9 +17,9 @@ import static org.census.commons.CensusDefaults.CS_DOMAIN_OBJECTS_STYLE;
  * @version 1.0 (DATE: 13.08.2015)
  */
 
-@Entity
-@Table(name = "EMPLOYEES")
-@Indexed // <- Hibernate search indexed entity annotation
+//@Entity
+//@Table(name = "EMPLOYEES2")
+//@Indexed // <- Hibernate search indexed entity annotation
 public class EmployeeWithDocsDto extends EmployeeDto {
 
     // Mapping many-to-many to Documents (both entity and db table). This side (Employee) is

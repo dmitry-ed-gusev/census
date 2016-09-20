@@ -9,7 +9,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
  * @version 1.0 (DATE: 24.10.12)
  */
 
-public class StatusDTO extends AbstractDictionaryDTO {
+public class StatusDTO extends AbstractDictionary {
 
     public StatusDTO() {}
 

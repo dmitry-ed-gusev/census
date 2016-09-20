@@ -146,7 +146,7 @@ public class UserDAO {
                     ", datevalidpass = " + usersUpdate.getDateValidPass() +
                     ", updateuserid = " + usersUpdate.getUpdateUser() +
                     ", deleted = " + usersUpdate.getDeleted() +
-                    ", timestamp = " + usersUpdate.getTimestamp() +
+                    ", timestamp = " + usersUpdate.getCreatedOn() +
                     " when users.id = " + usersUpdate.getId();
 
             try {
@@ -201,7 +201,7 @@ public class UserDAO {
                     ", " + usersInsert.getDateValidPass() +
                     ", " + usersInsert.getUpdateUser() +
                     ", " + usersInsert.getDeleted() +
-                    ", " + usersInsert.getTimestamp() + ")";
+                    ", " + usersInsert.getCreatedOn() + ")";
 
             try {
                 stmt = connectionDB.createStatement();
