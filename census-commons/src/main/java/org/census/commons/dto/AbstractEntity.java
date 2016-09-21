@@ -43,6 +43,7 @@ public abstract class AbstractEntity implements Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "modifiedOn")
     @org.hibernate.annotations.UpdateTimestamp
+    // todo: check timestamp updating during SQL UPDATE
     private Date   modifiedOn;   // last modification date/time, assigned by Hibernate
 
     @Column(name = "UPDATE_USER")
