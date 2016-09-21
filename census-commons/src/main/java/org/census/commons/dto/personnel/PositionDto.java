@@ -20,7 +20,7 @@ import static org.census.commons.CensusDefaults.CS_DOMAIN_OBJECTS_STYLE;
 public class PositionDto extends AbstractEntity {
 
     @Column(name = "name", unique = true, nullable = false)
-    private String name; // position name is unique
+    private String name; // position name, mandatory, unique, not nullable
     @Column(name = "weight")
     private int    weight;
 

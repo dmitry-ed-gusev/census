@@ -10,7 +10,9 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
 /**
- * Domain object - contact info (email/real address/skype/... etc.)
+ * Domain entity object - contact info (email/real address/skype/... etc.).
+ * Related to employees and departments.Can hold duplicates (by value - contact info).
+ * Class is immutable.
  * @author Gusev Dmitry (Dmitry)
  * @version 1.0 (DATE: 12.07.2015)
  */
@@ -18,11 +20,12 @@ import javax.validation.constraints.NotNull;
 @Entity
 @Indexed
 @Table(name = "CONTACTS")
+// todo: immutability???
 public class ContactDto extends AbstractEntity {
 
     @NotNull
-    @Column(name = "contact", unique = true, nullable = false)
-    private String         contact;     // contact value
+    @Column(name = "contact", nullable = false)
+    private String         contact;     // contact value, mandatory property
     @Column(name = "description")
     private String         description; // description of rhis contact
     @NotNull
@@ -44,16 +47,8 @@ public class ContactDto extends AbstractEntity {
         return contact;
     }
 
-    public void setContact(String contact) {
-        this.contact = contact;
-    }
-
     public String getDescription() {
         return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
     }
 
     public ContactType getContactType() {
