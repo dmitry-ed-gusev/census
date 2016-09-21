@@ -120,7 +120,12 @@ public class WordProcessingService {
                     tmpStrArray = WordProcessingService.getCellContent(row.getCell(2));
                     // join contents and remove more than one space between words
                     tmpStr = StringUtils.join(tmpStrArray, " ").replaceAll("\\s+", " ");
-                    contact = (!StringUtils.isBlank(tmpStr) ? this.contactsDao.addContactByContent(tmpStr, ContactType.OTHER) : null);
+                    if (!StringUtils.isBlank(tmpStr)) {
+                        contact = new ContactDto(0, tmpStr, null, ContactType.OTHER);
+                        this.contactsDao.save(contact);
+                    } else {
+                        contact = null;
+                    }
 
                     // (column #1 (2nd)) read and save employee full name
                     tmpStrArray = WordProcessingService.getCellContent(row.getCell(1));
