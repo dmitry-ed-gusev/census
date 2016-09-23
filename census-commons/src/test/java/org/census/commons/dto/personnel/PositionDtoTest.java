@@ -13,8 +13,8 @@ public class PositionDtoTest {
 
     @Test
     public void testEquals() {
-        PositionDto position1 = new PositionDto(0, "position");
-        PositionDto position2 = new PositionDto(0, "position");
+        PositionDto position1 = new PositionDto(0, "position", 0);
+        PositionDto position2 = new PositionDto(0, "position", 0);
         assertTrue("position equals #1", position1.equals(position2));
         assertTrue("position equals #2", position2.equals(position1));
         assertTrue("position equals #3", position1.hashCode() == position2.hashCode());
@@ -32,20 +32,20 @@ public class PositionDtoTest {
     @Test
     public void testNotEquals() {
         // # case 1
-        PositionDto position1 = new PositionDto(1, "position");
-        PositionDto position2 = new PositionDto(2, "position");
+        PositionDto position1 = new PositionDto(1, "position", 0);
+        PositionDto position2 = new PositionDto(2, "position", 0);
         assertTrue("position not equals #1", !position1.equals(position2));
         assertTrue("position not equals #2", !position2.equals(position1));
         assertTrue("position not equals #3", position1.hashCode() != position2.hashCode());
         // # case 2
-        PositionDto position3 = new PositionDto(1, "position111");
-        PositionDto position4 = new PositionDto(1, "position222");
+        PositionDto position3 = new PositionDto(1, "position111", 2);
+        PositionDto position4 = new PositionDto(1, "position222", 14);
         assertTrue("position not equals #4", !position3.equals(position4));
         assertTrue("position not equals #5", !position4.equals(position3));
         assertTrue("position not equals #6", position3.hashCode() != position4.hashCode());
         // # case 3
-        PositionDto position5 = new PositionDto(1, "position111");
-        PositionDto position6 = new PositionDto(2, "position222");
+        PositionDto position5 = new PositionDto(1, "position111", 44);
+        PositionDto position6 = new PositionDto(2, "position222", 44);
         assertTrue("position not equals #7", !position5.equals(position6));
         assertTrue("position not equals #8", !position6.equals(position5));
         assertTrue("position not equals #9", position5.hashCode() != position6.hashCode());

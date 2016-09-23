@@ -2,35 +2,40 @@ package org.census.commons.dto.personnel;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.census.commons.dto.AbstractEntity;
+import org.hibernate.search.annotations.Indexed;
 
 import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 
 import static org.census.commons.CensusDefaults.CS_DOMAIN_OBJECTS_STYLE;
 
 /**
- * Domain object - one position. One employee may have zero or more positions. One position
- * may belong to zero or more employees - relation employees-positions is many-to-many.
+ * Domain entity object - one position. One employee may have zero or more (n) positions.
+ * One position may belong to zero or more (n) employees - relation employees-positions
+ * is many-to-many. Relation owner - employee domain entity object.
  * @author Gusev Dmitry (Дмитрий)
  * @version 1.0 (DATE: 02.05.12)
 */
 
-//@Entity
-//@Table(name = "POSITIONS")
-//@Indexed
+@Entity
+@Indexed
+@Table(name = "POSITIONS")
 public class PositionDto extends AbstractEntity {
 
     @Column(name = "name", unique = true, nullable = false)
     private String name; // position name, mandatory, unique, not nullable
     @Column(name = "weight")
-    private int    weight;
+    private int    weight; // position weight, nullable, not unique
 
     /** Default constructor. Usually used by frameworks (Spring/Hibernate). */
     public PositionDto() {}
 
     /***/
-    public PositionDto(long id, String name) {
+    public PositionDto(long id, String name, int weight) {
         super(id);
         this.name = name;
+        this.weight = weight;
     }
 
     public String getName() {
@@ -59,7 +64,6 @@ public class PositionDto extends AbstractEntity {
         PositionDto other = (PositionDto) obj;
 
         return name != null ? name.equals(other.name) : other.name == null;
-
     }
 
     @Override
@@ -71,7 +75,6 @@ public class PositionDto extends AbstractEntity {
 
     @Override
     public String toString() {
-        //LogFactory.getLog(PositionDto.class).debug("PositionDto.toString().");
         return new ToStringBuilder(this, CS_DOMAIN_OBJECTS_STYLE)
                 .appendSuper(super.toString())
                 .append("name", name)

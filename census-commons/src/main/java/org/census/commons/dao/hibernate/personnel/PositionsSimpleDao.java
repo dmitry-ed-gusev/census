@@ -39,7 +39,7 @@ public class PositionsSimpleDao extends AbstractHibernateDao<PositionDto> {
 
         PositionDto position = this.getPositionByName(name);
         if (position == null) { // no such position
-            position = new PositionDto(0, name);
+            position = new PositionDto(0, name, 0);
             this.save(position);
         }
 
