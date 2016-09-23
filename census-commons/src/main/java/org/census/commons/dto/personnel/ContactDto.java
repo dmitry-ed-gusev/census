@@ -12,15 +12,15 @@ import javax.validation.constraints.NotNull;
 /**
  * Domain entity object - contact info (email/real address/skype/... etc.).
  * Related to employees and departments.Can hold duplicates (by value - contact info).
- * Class is immutable.
  * @author Gusev Dmitry (Dmitry)
  * @version 1.0 (DATE: 12.07.2015)
  */
 
+// todo: 1. immutability? 2. equals()/hashCode()?
+
 @Entity
 @Indexed
 @Table(name = "CONTACTS")
-// todo: immutability???
 public class ContactDto extends AbstractEntity {
 
     @NotNull
@@ -43,16 +43,29 @@ public class ContactDto extends AbstractEntity {
         this.contactType = type;
     }
 
+
     public String getContact() {
         return contact;
+    }
+
+    public void setContact(String contact) {
+        this.contact = contact;
     }
 
     public String getDescription() {
         return description;
     }
 
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
     public ContactType getContactType() {
         return contactType;
+    }
+
+    public void setContactType(ContactType contactType) {
+        this.contactType = contactType;
     }
 
     @Override
