@@ -46,7 +46,7 @@ public class WordProcessingService {
 
     @Autowired private ContactsSimpleDao      contactsDao;      // DAO for contacts
     @Autowired private PositionsSimpleDao     positionsDao;     // DAO for positions
-    @Autowired private DepartmentsSimpleDao   departmemtsDao;   // DAO for departments
+    @Autowired private DepartmentsSimpleDao   departmentsDao;   // DAO for departments
     @Autowired private EmployeesSimpleDao     employeesDao;     // DAO for employees
 
     public String getPhoneBookFile() {
@@ -85,7 +85,7 @@ public class WordProcessingService {
         PositionDto   position;    // temporary position object
         ContactDto    contact;     // temporary contact object
         DepartmentDto department;  // temporary department
-        EmployeeDto employee;
+        EmployeeDto   employee;
 
         // todo: !!!!
         //employee = new EmployeeDto(0, "ff nn pp");
