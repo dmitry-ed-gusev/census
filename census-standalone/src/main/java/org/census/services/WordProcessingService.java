@@ -114,12 +114,18 @@ public class WordProcessingService {
                     tmpStrArray = WordProcessingService.getCellContent(row.getCell(0));
                     // prepare position name/object (join contents of cell and remove unnesessary spaces between words) and add it to db
                     tmpStr = StringUtils.join(tmpStrArray, " ").replaceAll("\\s+", " ");
-                    //position = (!StringUtils.isBlank(tmpStr) ? this.positionsDao.addPositionByName(tmpStr) : null);
+                    // todo: !!!
+                    if (!StringUtils.isBlank(tmpStr)) {
+                        position = this.positionsDao.addPositionByName(tmpStr);
+                    } else {
+                        position = null;
+                    }
 
                     // (column #2 (3rd)) read contact info (phone/email/address)
                     tmpStrArray = WordProcessingService.getCellContent(row.getCell(2));
                     // join contents and remove more than one space between words
                     tmpStr = StringUtils.join(tmpStrArray, " ").replaceAll("\\s+", " ");
+                    // todo: !!!
                     if (!StringUtils.isBlank(tmpStr)) {
                         contact = new ContactDto(0, tmpStr, null, ContactType.OTHER);
                         this.contactsDao.save(contact);
