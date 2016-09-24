@@ -39,6 +39,16 @@
                     <property name="nodeName" value="Сотрудники" />
                     <property name="dataGrid"><null/></property>
                 </bean>
+                <!-- contacts list -->
+                <bean class="org.census.gui.components.jtree.TreeNode">
+                    <property name="nodeName" value="Контакты" />
+                    <property name="dataGrid">
+                        <!-- contacts data grid -->
+                        <bean class="org.census.gui.components.grid.DataGrid">
+                            <constructor-arg index="0" ref="contactsModel" />
+                        </bean>
+                    </property>
+                </bean>
             </list>
         </entry>
         <entry key="Документы">

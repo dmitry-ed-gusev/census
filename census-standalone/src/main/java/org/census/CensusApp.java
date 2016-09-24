@@ -2,10 +2,12 @@ package org.census;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.census.gui.CensusGuiStarter;
 import org.census.services.WordProcessingService;
 import org.springframework.context.support.AbstractApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
+import javax.swing.*;
 import java.io.IOException;
 import java.util.Locale;
 
@@ -46,10 +48,10 @@ public class CensusApp {
             System.out.println("===> " + phoneContactType.getId());
             */
 
-            //CensusGuiStarter.startGui(context); // start GUI for Census application
+            CensusGuiStarter.startGui(context); // start GUI for Census application
 
-        } catch (/*ClassNotFoundException | UnsupportedLookAndFeelException |
-                InstantiationException | IllegalAccessException | */ IOException e) {
+        } catch (ClassNotFoundException | UnsupportedLookAndFeelException |
+                InstantiationException | IllegalAccessException | IOException e) {
             log.error(e);
         }
 
