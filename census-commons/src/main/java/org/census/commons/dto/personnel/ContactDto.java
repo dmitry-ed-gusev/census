@@ -16,21 +16,20 @@ import javax.validation.constraints.NotNull;
  * @version 1.0 (DATE: 12.07.2015)
  */
 
-// todo: 1. immutability? 2. equals()/hashCode()?
-
 @Entity
 @Indexed
 @Table(name = "CONTACTS")
 public class ContactDto extends AbstractEntity {
 
     @NotNull
-    @Column(name = "contact", nullable = false)
-    private String         contact;     // contact value, mandatory property
-    @Column(name = "description")
+    @Column(name = "CONTACT", nullable = false)
+    private String         contact;     // contact value, mandatory property, not unique
+    @Column(name = "DESCRIPTION")
     private String         description; // description of rhis contact
     @NotNull
     @Enumerated(EnumType.STRING)        // -> store string instead of default position number (in enum)
-    private ContactType    contactType; // type of this contact (enum)
+    @Column(name = "CONTACT_TYPE", nullable = false)
+    private ContactType    contactType; // type of this contact (enum), mndatory, not nullable, not unique
 
     /** Default constructor. Usually used by frameworks Spring/Hibernate. */
     public ContactDto() {}
@@ -42,7 +41,6 @@ public class ContactDto extends AbstractEntity {
         this.description = description;
         this.contactType = type;
     }
-
 
     public String getContact() {
         return contact;
@@ -66,6 +64,27 @@ public class ContactDto extends AbstractEntity {
 
     public void setContactType(ContactType contactType) {
         this.contactType = contactType;
+    }
+
+    @Override
+    @SuppressWarnings({"SimplifiableIfStatement", "MethodWithMultipleReturnPoints"})
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (!(obj instanceof ContactDto)) return false;
+        if (!super.equals(obj)) return false;
+
+        ContactDto other = (ContactDto) obj;
+
+        if (!contact.equals(other.contact)) return false;
+        return contactType == other.contactType;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = super.hashCode();
+        result = 31 * result + contact.hashCode();
+        result = 31 * result + contactType.hashCode();
+        return result;
     }
 
     @Override
