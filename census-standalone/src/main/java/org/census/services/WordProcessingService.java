@@ -128,7 +128,9 @@ public class WordProcessingService {
                     // todo: !!!
                     if (!StringUtils.isBlank(tmpStr)) {
                         contact = new ContactDto(0, tmpStr, null, ContactType.OTHER);
-                        this.contactsDao.save(contact);
+                        System.out.println("===> " + contact);
+                        //this.contactsDao.save(contact);
+                        this.contactsDao.merge(contact);
                     } else {
                         contact = null;
                     }
