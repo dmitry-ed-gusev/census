@@ -104,4 +104,10 @@ public abstract class AbstractHibernateDao <T extends AbstractEntity> {
         this.sessionFactory.getCurrentSession().delete(entity);
     }
 
+    /***/
+    public void merge (T entity) {
+        log.debug(String.format("Merging object [%s].", this.clazz.getSimpleName()));
+        this.sessionFactory.getCurrentSession().merge(entity);
+    }
+
 }
