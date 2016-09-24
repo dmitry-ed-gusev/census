@@ -23,9 +23,9 @@ import static org.census.commons.CensusDefaults.CS_DOMAIN_OBJECTS_STYLE;
 @Table(name = "POSITIONS")
 public class PositionDto extends AbstractEntity {
 
-    @Column(name = "name", unique = true, nullable = false)
+    @Column(name = "NAME", unique = true, nullable = false)
     private String name; // position name, mandatory, unique, not nullable
-    @Column(name = "weight")
+    @Column(name = "WEIGHT")
     private int    weight; // position weight, nullable, not unique
 
     /** Default constructor. Usually used by frameworks (Spring/Hibernate). */
@@ -55,21 +55,20 @@ public class PositionDto extends AbstractEntity {
     }
 
     @Override
-    @SuppressWarnings("MethodWithMultipleReturnPoints")
     public boolean equals(Object obj) {
         if (this == obj) return true;
-        if (obj == null || getClass() != obj.getClass()) return false;
+        if (!(obj instanceof PositionDto)) return false;
         if (!super.equals(obj)) return false;
 
         PositionDto other = (PositionDto) obj;
 
-        return name != null ? name.equals(other.name) : other.name == null;
+        return name.equals(other.name);
     }
 
     @Override
     public int hashCode() {
         int result = super.hashCode();
-        result = 31 * result + (name != null ? name.hashCode() : 0);
+        result = 31 * result + name.hashCode();
         return result;
     }
 
