@@ -13,6 +13,7 @@ import java.util.List;
  * Table model for JTable component in PilotApplicantsListFrame.
  * @author Gusev Dmitry (gusevd)
  * @version 1.0 (DATE: 12.11.12)
+ * @deprecated don't use it!
  */
 
 public class ApplicantsListTableModel extends AbstractTableModel {
