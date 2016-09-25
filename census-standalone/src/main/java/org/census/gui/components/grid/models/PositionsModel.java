@@ -2,37 +2,37 @@ package org.census.gui.components.grid.models;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.census.commons.dao.hibernate.personnel.ContactsSimpleDao;
-import org.census.commons.dto.personnel.ContactDto;
+import org.census.commons.dao.hibernate.personnel.PositionsSimpleDao;
+import org.census.commons.dto.personnel.PositionDto;
 import org.census.gui.components.grid.AbstractDataGridModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 /**
- * JTable GUI component model for ConatctDto entity object.
+ * JTable GUI component model for PositionDto entity object.
  * @author dgusev
- * @version 1.0
+ * @version 1.0 (24.09.2016)
  */
 
 @Component
-public class ContactsModel extends AbstractDataGridModel <ContactDto> {
+public class PositionsModel extends AbstractDataGridModel <PositionDto> {
 
-    private static final Log LOG = LogFactory.getLog(ContactsModel.class);
+    private static final Log LOG = LogFactory.getLog(PositionsModel.class);
 
     @Autowired
-    public ContactsModel(ContactsSimpleDao dao) {
-        super(new String[] {"ID", "Контакт", "Тип"}, dao);
+    public PositionsModel(PositionsSimpleDao dao) {
+        super(new String[] {"ID", "Позиция", "Вес"}, dao);
     }
 
     @Override
     public Object getValueAt(int rowIndex, int columnIndex) {
         Object result = null;
         if (rowIndex < this.getRowCount() && columnIndex < this.getColumnCount()) { // check row and column indexes
-            ContactDto contact = this.getObjectByIndex(rowIndex);
+            PositionDto position = this.getObjectByIndex(rowIndex);
             switch (columnIndex) {
-                case 0: result = contact.getId();          break; // ID
-                case 1: result = contact.getContact();     break; // contact value
-                case 2: result = contact.getContactType(); break; // contact type
+                case 0: result = position.getId();     break; // ID
+                case 1: result = position.getName();   break; // position name
+                case 2: result = position.getWeight(); break; // position weight
                 default: LOG.error(String.format("Invalid column index [%s]!", columnIndex));
             }
         } else { // row or column index is invalid
@@ -43,6 +43,7 @@ public class ContactsModel extends AbstractDataGridModel <ContactDto> {
 
     @Override
     protected void addEmptyObject() {
-        this.addObject(new ContactDto());
+        this.addObject(new PositionDto());
     }
+
 }

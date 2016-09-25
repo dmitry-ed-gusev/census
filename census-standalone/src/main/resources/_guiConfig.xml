@@ -49,6 +49,16 @@
                         </bean>
                     </property>
                 </bean>
+                <!-- positions list -->
+                <bean class="org.census.gui.components.jtree.TreeNode">
+                    <property name="nodeName" value="Должности" />
+                    <property name="dataGrid">
+                        <!-- positions data grid -->
+                        <bean class="org.census.gui.components.grid.DataGrid">
+                            <constructor-arg index="0" ref="positionsModel" />
+                        </bean>
+                    </property>
+                </bean>
             </list>
         </entry>
         <entry key="Документы">

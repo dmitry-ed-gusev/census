@@ -116,9 +116,9 @@ public class WordProcessingService {
                     tmpStr = StringUtils.join(tmpStrArray, " ").replaceAll("\\s+", " ");
                     // todo: !!!
                     if (!StringUtils.isBlank(tmpStr)) {
-                        position = this.positionsDao.addPositionByName(tmpStr);
+                        //position = this.positionsDao.addPositionByName(tmpStr);
                     } else {
-                        position = null;
+                        //position = null;
                     }
 
                     // (column #2 (3rd)) read contact info (phone/email/address)
@@ -128,11 +128,12 @@ public class WordProcessingService {
                     // todo: !!!
                     if (!StringUtils.isBlank(tmpStr)) {
                         contact = new ContactDto(0, tmpStr, null, ContactType.OTHER);
-                        System.out.println("===> " + contact);
-                        //this.contactsDao.save(contact);
-                        this.contactsDao.merge(contact);
+                        //System.out.println("===> " + contact);
+                        //this.contactsDao.saveOrUpdate(contact);
+                        //this.contactsDao.getSessionFactory().getCurrentSession().flush();
+                        //this.contactsDao.getSessionFactory().getCurrentSession().clear();
                     } else {
-                        contact = null;
+                        //contact = null;
                     }
 
                     // (column #1 (2nd)) read and save employee full name
