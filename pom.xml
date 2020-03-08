@@ -4,6 +4,7 @@
 
     <!-- Common project properties -->
     <properties>
+        <maven.compiler.plugin>2.5.1</maven.compiler.plugin>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <java.version>1.8</java.version>
         <!-- Spring framework -->
@@ -17,11 +18,11 @@
         <org.hibernate.version>5.0.6.Final</org.hibernate.version>
         <!--<org.hibernate.search.version>4.1.0.Final</org.hibernate.search.version>-->
         <org.hibernate.search.version>5.5.3.Final</org.hibernate.search.version>
-        <!-- JEE libraries -->
         <servlet.api.version>2.5</servlet.api.version>
         <jstl.version>1.2</jstl.version>
-        <!-- Apache POI version -->
-        <poi.version>3.14</poi.version>
+        <apache.poi.version>3.14</apache.poi.version>
+        <junit.version>4.12</junit.version>
+        <log4j.version>1.2.17</log4j.version>
     </properties>
 
     <modelVersion>4.0.0</modelVersion>
@@ -57,9 +58,13 @@
         <module>census-webapp</module>
         <!-- Memorandum project: old version -->
         <module>memorandum</module>
-        <!-- simple timesheets module -->
         <module>census-timesheets</module>
     </modules>
+
+    <!-- This tag should be here and filled with dummy data for Maven build number plugin to work. -->
+    <scm>
+        <developerConnection>scm:git:dummy</developerConnection>
+    </scm>
 
     <!-- Build plugins settings -->
     <build>
@@ -76,15 +81,46 @@
         </resources>
 
         <plugins>
+
+            <!-- maven compiler plugin settings -->
             <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <configuration>
                     <source>${java.version}</source>
                     <target>${java.version}</target>
                     <!-- sources files encoding -->
-                    <encoding>UTF-8</encoding>
+                    <encoding>${project.build.sourceEncoding}</encoding>
                 </configuration>
-                <version>2.5.1</version>
+                <version>${maven.compiler.plugin}</version>
+            </plugin>
+
+            <!--
+                Maven build number plugin - generates build number. For this plugin to work locally it's a must to
+                set <scm> tag (Source Code Management) - see it above. See details here:
+                http://stackoverflow.com/questions/9115765/is-it-possible-to-use-maven-buildnumber-plugin-to-generate-build-number-without
+            -->
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>buildnumber-maven-plugin</artifactId>
+                <version>1.0</version>
+                <configuration>
+                    <format>{0}-{1,date,yyyyMMdd}-build{2}</format>
+                    <items>
+                        <item>${project.version}</item>
+                        <item>timestamp</item>
+                        <item>buildNumber</item>
+                    </items>
+                    <doCheck>true</doCheck>
+                    <doUpdate>true</doUpdate>
+                </configuration>
+                <executions>
+                    <execution>
+                        <phase>validate</phase>
+                        <goals>
+                            <goal>create</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>
@@ -96,7 +132,7 @@
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <version>4.8.2</version>
+            <version>${junit.version}</version>
             <scope>test</scope>
         </dependency>
 
@@ -159,7 +195,7 @@
         <dependency>
             <groupId>log4j</groupId>
             <artifactId>log4j</artifactId>
-            <version>1.2.16</version>
+            <version>${log4j.version}</version>
         </dependency>
         <dependency>
             <groupId>commons-codec</groupId>
@@ -185,9 +221,9 @@
             <version>1.1</version>
         </dependency>
         <dependency>
-           <groupId>javax.el</groupId>
-           <artifactId>javax.el-api</artifactId>
-           <version>2.2.4</version>
+            <groupId>javax.el</groupId>
+            <artifactId>javax.el-api</artifactId>
+            <version>2.2.4</version>
         </dependency>
 
         <!-- Hibernate framework -->
@@ -295,17 +331,17 @@
         <dependency>
             <groupId>org.apache.poi</groupId>
             <artifactId>poi</artifactId>
-            <version>${poi.version}</version>
+            <version>${apache.poi.version}</version>
         </dependency>
         <dependency>
             <groupId>org.apache.poi</groupId>
             <artifactId>poi-ooxml</artifactId>
-            <version>${poi.version}</version>
+            <version>${apache.poi.version}</version>
         </dependency>
         <dependency>
             <groupId>org.apache.poi</groupId>
             <artifactId>poi-scratchpad</artifactId>
-            <version>${poi.version}</version>
+            <version>${apache.poi.version}</version>
         </dependency>
 
         <dependency>
@@ -324,6 +360,7 @@
 
     <!-- Common profiles for all applications. -->
     <profiles>
+
         <!-- Development profile. This profile is active by default. -->
         <profile>
             <id>env-dev</id>
@@ -334,6 +371,7 @@
                 <env>dev</env>
             </properties>
         </profile>
+
         <!-- Production profile. This profile is inactive by default. -->
         <profile>
             <id>env-prod</id>
@@ -341,6 +379,7 @@
                 <env>prod</env>
             </properties>
         </profile>
+
     </profiles>
 
 </project>
