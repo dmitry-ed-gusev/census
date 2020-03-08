@@ -5,6 +5,7 @@ target/
 *.ipr
 *.iws
 *.ids
+.idea
 # -- ignore HSql dirs (database and full text indexes)
 .db/
 .findexes/
