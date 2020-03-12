@@ -7,20 +7,21 @@
 
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <artifactId>Census</artifactId>
-        <groupId>org.census</groupId>
-        <version>1.0</version>
+        <artifactId>census</artifactId>
+        <groupId>org.dgusev</groupId>
+        <version>1.0.0</version>
     </parent>
     <groupId>org.census.docs</groupId>
     <artifactId>census-docs</artifactId>
     <name>Census :: Docs module. ERP.</name>
+    <version>1.0.0</version>
 
     <!-- This module dependencies -->
     <dependencies>
         <dependency>
             <groupId>org.census.commons</groupId>
             <artifactId>census-commons</artifactId>
-            <version>1.0</version>
+            <version>1.0.0</version>
         </dependency>
     </dependencies>
 
