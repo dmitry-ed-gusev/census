@@ -7,13 +7,14 @@
 
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <artifactId>Census</artifactId>
-        <groupId>org.census</groupId>
-        <version>1.0</version>
+        <artifactId>census</artifactId>
+        <groupId>org.dgusev</groupId>
+        <version>1.0.0</version>
     </parent>
     <groupId>org.census.commons</groupId>
     <artifactId>census-commons</artifactId>
     <name>Census :: Common modules</name>
+    <version>1.0.0</version>
 
     <build>
     </build>

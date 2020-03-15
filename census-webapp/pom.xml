@@ -7,13 +7,14 @@
 
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <artifactId>Census</artifactId>
-        <groupId>org.census</groupId>
-        <version>1.0</version>
+        <artifactId>census</artifactId>
+        <groupId>org.dgusev</groupId>
+        <version>1.0.0</version>
     </parent>
     <groupId>org.census.webapp</groupId>
     <artifactId>census-webapp</artifactId>
     <name>Census :: Web application.</name>
+    <version>1.0.0</version>
     <packaging>war</packaging>
 
     <!-- This module dependencies -->
@@ -21,12 +22,12 @@
         <dependency>
             <groupId>org.census.commons</groupId>
             <artifactId>census-commons</artifactId>
-            <version>1.0</version>
+            <version>1.0.0</version>
         </dependency>
         <dependency>
             <groupId>org.census.personnel</groupId>
             <artifactId>census-personnel</artifactId>
-            <version>1.0</version>
+            <version>1.0.0</version>
         </dependency>
 
         <!-- J2EE provided libraries (only for compile/build) -->
