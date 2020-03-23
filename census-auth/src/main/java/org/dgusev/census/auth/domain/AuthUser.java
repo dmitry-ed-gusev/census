@@ -23,14 +23,27 @@ public class AuthUser {
 
     @NotNull
     private final String  name;
+
     private final String  description;
+
     @NotNull
     @Size(min = 3, message = "Minimum length of user name should be 3 characters!")
     @Size(max = 30, message = "Maximum length of user name shouldn't be more 30 characters!")
     private final String  username;
-    private final boolean isActive;
+
     @NotNull
+    @Size(min = 3, message = "Minimum length of password should be 3 characters!")
+    @Size(max = 30, message = "Maximum length of password shouldn't be more 30 characters!")
+    private final String password;
+
+    @Column(name = "active")
+    private final boolean isActive;
+
+    @NotNull
+    @Column(name = "createdat")
     private final Date    createdAt;
+
+    @Column(name = "modifiedat")
     private final Date    modifiedAt;
 
     @ManyToMany(targetEntity=AuthRole.class)

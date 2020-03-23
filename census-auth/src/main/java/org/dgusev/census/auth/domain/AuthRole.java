@@ -24,14 +24,18 @@ public class AuthRole {
     private final Long id;
 
     @NotNull
-    private final String name;
-    private final String description;
-    @NotNull
     @Size(min = 3, message = "Minimum length of role name should be 3 characters!")
     @Size(max = 30, message = "Maximum length of role name shouldn't be more 30 characters!")
     private final String rolename;
+
+
+    private final String description;
+
     @NotNull
+    @Column(name = "createdat")
     private final Date   createdAt;
+
+    @Column(name = "modifiedat")
     private final Date   modifiedAt;
 
     // todo: another way to set / update timastamp

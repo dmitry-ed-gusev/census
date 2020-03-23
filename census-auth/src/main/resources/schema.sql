@@ -1,8 +1,13 @@
+-- noinspection SqlNoDataSourceInspectionForFile
+
 /*
     DB schema initialization for Census Auth service.
 
+    This file is default schema init file and will be used (by default)
+    just for in-memory databases (like H2).
+
     Created:  Dmitrii Gusev, 22.03.2020
-    Modified:
+    Modified: Dmitrii Gusev, 23.03.2020
 */
 
 -- users table
@@ -11,6 +16,7 @@ create table if not exists auth_user (
     name        varchar(255) not null,
     description varchar(255),
     username    varchar(30) not null,
+    password    varchar(30) not null,
     active      bool default true,                -- user active by default
     createdAt   timestamp not null default now(), -- default create timestamp -> now
     modifiedAt  timestamp on update now()         -- on row update set timestamp -> now
@@ -19,9 +25,8 @@ create table if not exists auth_user (
 -- roles table
 create table if not exists auth_role (
     id          identity,
-    name        varchar(255) not null,
-    description varchar(255),
     rolename    varchar(30) not null,
+    description varchar(255),
     createdAt   timestamp not null default now(), -- default create timestamp -> now
     modifiedAt  timestamp on update now()         -- on row update set timestamp -> now
 );
