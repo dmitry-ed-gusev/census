@@ -81,7 +81,7 @@
 
         <plugins>
 
-            <!-- todo: uncomment this plugin!
+            <!-- todo: uncomment this plugin! here plugin is applied to all modules!
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
