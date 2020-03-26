@@ -16,7 +16,7 @@
 
     <build>
         <plugins>
-            <!-- this plugin should be moved to parent? -->
+            <!-- todo: this plugin should be moved to parent? -->
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
