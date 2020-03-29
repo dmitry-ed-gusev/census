@@ -4,31 +4,36 @@
     DB schema initialization for Census Auth service.
 
     This file is default schema init file and will be used (by default)
-    just for in-memory databases (like H2).
+    just for in-memory databases (like H2) for development.
+
+    DB should not contain any business-logic, except timestamps updated.
 
     Created:  Dmitrii Gusev, 22.03.2020
-    Modified: Dmitrii Gusev, 23.03.2020
+    Modified: Dmitrii Gusev, 29.03.2020
 */
+
+-- Sequence for unique id's. Start from 10 - we have several pre-inserted users and roles.
+create sequence if not exists auth_sequence start with 10;
 
 -- users table
 create table if not exists auth_user (
     id          int not null primary key auto_increment,
     name        varchar(255) not null,
     description varchar(255),
-    username    varchar(30) not null,
+    username    varchar(30) not null unique,
     password    varchar(30) not null,
-    active      bool default true,                -- user active by default
-    createdAt   timestamp not null default now(), -- default create timestamp -> now
-    modifiedAt  timestamp on update now()         -- on row update set timestamp -> now
+    active      bool default true,
+    createdAt   timestamp not null default CURRENT_TIMESTAMP(),
+    modifiedAt  timestamp on update CURRENT_TIMESTAMP()
 );
 
 -- roles table
 create table if not exists auth_role (
     id          identity,
-    rolename    varchar(30) not null,
+    rolename    varchar(30) not null unique,
     description varchar(255),
-    createdAt   timestamp not null default now(), -- default create timestamp -> now
-    modifiedAt  timestamp on update now()         -- on row update set timestamp -> now
+    createdAt   timestamp not null default CURRENT_TIMESTAMP(),
+    modifiedAt  timestamp on update CURRENT_TIMESTAMP()
 );
 
 -- map users to roles table
@@ -36,8 +41,8 @@ create table if not exists auth_user_role (
     id         identity,
     user_id    int not null,
     role_id    int not null,
-    createdAt  timestamp not null default now(), -- default create timestamp -> now
-    modifiedAt timestamp on update now()         -- on row update set timestamp -> now
+    createdAt  timestamp not null default CURRENT_TIMESTAMP(),
+    modifiedAt timestamp on update CURRENT_TIMESTAMP()
 );
 
 -- foreign keys
