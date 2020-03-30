@@ -4,9 +4,10 @@
 #     On start up script does the following things:
 #       * automatically reads .env file and exports all variables from it
 #       * executes initializing sql scripts
+#       * as a DBMS data storage local folder attached (see volumes:)
 #
 #     Created:  Dmitrii Gusev, 29.03.2020
-#     Modified:
+#     Modified: Dmitrii Gusev, 30.03.2020
 #
 ###############################################################################
 
@@ -19,10 +20,13 @@ services:
   postgres_db:
     container_name: census-postgres
     image: postgres:11.7
-    # attach init scripts to container (execution in alphabetical order!)
+    # attach some local resources to container
     volumes:
+      # attach init scripts to container (execution in alphabetical order!)
       - ./db/prod-pgsql-1-init-schema.sql:/docker-entrypoint-initdb.d/prod-pgsql-1-init-schema.sql
       - ./db/prod-pgsql-2-init-data.sql:/docker-entrypoint-initdb.d/prod-pgsql-2-init-data.sql
+      # postgres data catalog (empty it if you need to re-run init scripts)
+      - ./db/.postgres-data:/var/lib/postgresql/data
     restart: unless-stopped
     networks:
       - mynetwork
@@ -30,13 +34,14 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
       POSTGRES_DB: CENSUS_DB
+      PGDATA: /var/lib/postgresql/data
     ports:
       - "5432:5432"
 
   # adminer - formerly phpMySqlAdmin, currently - just single php file.
   # access url: http://localhost:8080; dbms host: census-postgres (postgres container name!)
   adminer:
-    container_name: census-postgres-adminer
+    container_name: census-pgadminer
     image: adminer
     restart: unless-stopped
     networks:
@@ -46,10 +51,9 @@ services:
     depends_on:
       - postgres_db
 
-  # classical postgres admin tool, access url: http://localhost:80; dbms host: census-postgres (postgres container name!)
-  # more info see here: https://unix.stackexchange.com/questions/122845/using-a-b-for-variable-assignment-in-scripts
+  # classical postgres admin tool, access url: http://localhost:5050; dbms host: census-postgres (postgres container name!)
   pgadmin:
-    container_name: datatex-postgres-pgadmin
+    container_name: census-pgadmin
     image: dpage/pgadmin4
     environment:
       # email used as user name

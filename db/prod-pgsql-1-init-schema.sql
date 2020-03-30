@@ -4,7 +4,7 @@
     Census DB: PostgreSql schema initialization script.
 
     Created:  Dmitrii Gusev, 29.03.2020
-    Modified: Dmitrii Gusev, 29.03.2020
+    Modified: Dmitrii Gusev, 30.03.2020
 */
 
 -- common DB objects
@@ -68,8 +68,8 @@ CREATE TRIGGER auth_user_role_timestamp_update BEFORE UPDATE
     ON CENSUS_AUTH_SCHEMA.auth_user_role FOR EACH ROW EXECUTE PROCEDURE update_timestamp();
 
 -- foreign keys
-alter table CENSUS_AUTH_SCHEMA.auth_user_role add foreign key (user_id) references auth_user (id);
-alter table CENSUS_AUTH_SCHEMA.auth_user_role add foreign key (role_id) references auth_role (id);
+alter table CENSUS_AUTH_SCHEMA.auth_user_role add foreign key (user_id) references CENSUS_AUTH_SCHEMA.auth_user (id);
+alter table CENSUS_AUTH_SCHEMA.auth_user_role add foreign key (role_id) references CENSUS_AUTH_SCHEMA.auth_role (id);
 
 -- ------------------------------------------------------------------------------------------------
 
