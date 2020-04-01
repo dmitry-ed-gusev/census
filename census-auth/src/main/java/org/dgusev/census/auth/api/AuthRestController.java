@@ -11,15 +11,18 @@ import org.dgusev.census.auth.exceptions.UserUnSupportedFieldPatchException;
 import org.dgusev.census.auth.repository.AuthRoleRepository;
 import org.dgusev.census.auth.repository.AuthUserRepository;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
+import java.util.Optional;
 
 /***/
 
 @Slf4j
-@RestController
-@RequestMapping(path="/census/auth", produces="application/json")
+@RestController // <- allows write response directly to response body
+@RequestMapping(path = "/census/auth", produces = MediaType.APPLICATION_JSON_VALUE) // <- methods produce JSONs
 @CrossOrigin(origins="*")
 public class AuthRestController {
 
@@ -34,14 +37,15 @@ public class AuthRestController {
 
     // Find all users with assigned roles
     @GetMapping("/users")
+    @ResponseStatus(HttpStatus.OK) // <- usually default status on success
     public Iterable<AuthUser> listUsers() {
         LOG.debug("AuthRestController.listUsers() is working.");
         return authUserRepository.findAll();
     }
 
-    // Save user; return 201 instead of 200
+    // Save user; return 201 instead of 200 (on success)
+    @PostMapping(path = "/users", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
-    @PostMapping("/users")
     public AuthUser newAuthUser(@RequestBody AuthUser newAuthUser) {
         LOG.debug("AuthRestController.newAuthUser() is working.");
 
@@ -50,13 +54,20 @@ public class AuthRestController {
 
     // Find user by id
     @GetMapping("/users/{id}")
-    public AuthUser findOneUser(@PathVariable Long id) {
+    public ResponseEntity<AuthUser> findOneUser(@PathVariable Long id) {
         LOG.debug("AuthRestController.findOneUser() is working. User id = {}.", id);
-        return authUserRepository.findById(id).orElseThrow(() -> new UserNotFoundException(id));
+
+        // option 1: throw exception if not found
+        // return authUserRepository.findById(id).orElseThrow(() -> new UserNotFoundException(id));
+
+        // option 2: return NOT_FOUND if not found
+        Optional<AuthUser> authUser = authUserRepository.findById(id);
+        return authUser.map(user -> new ResponseEntity<>(user, HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(null, HttpStatus.NOT_FOUND));
+
     }
 
     // Save or update user by id
-    @PutMapping("/users/{id}")
+    @PutMapping(path = "/users/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
     public AuthUser saveOrUpdateAuthUser(@RequestBody AuthUser newAuthUser, @PathVariable Long id) {
         LOG.debug("AuthRestController.saveOrUpdateAuthUser() is working. User id = {}.", id);
 
@@ -77,7 +88,7 @@ public class AuthRestController {
     }
 
     // Update user name and description
-    @PatchMapping("/users/{id}")
+    @PatchMapping(path = "/users/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
     public AuthUser patchAuthUser(@RequestBody Map<String, String> update, @PathVariable Long id) {
         LOG.debug("AuthRestController.patchAuthUser() is working. User id = {}.", id);
 
@@ -105,6 +116,7 @@ public class AuthRestController {
 
     // delete user by id
     @DeleteMapping("/users/{id}")
+    @ResponseStatus(code=HttpStatus.NO_CONTENT)
     public void deleteAuthUser(@PathVariable Long id) {
         LOG.warn("Deleting auth user with id = {}.", id);
 
@@ -175,6 +187,7 @@ public class AuthRestController {
 
     // delete role by id
     @DeleteMapping("/roles/{id}")
+    @ResponseStatus(code=HttpStatus.NO_CONTENT)
     public void deleteAuthRole(@PathVariable Long id) {
         LOG.warn("Deleting auth role with id = {}.", id);
 
