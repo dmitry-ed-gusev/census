@@ -2,6 +2,7 @@ package org.dgusev.census.auth.domain;
 
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -10,13 +11,14 @@ import java.util.Date;
 
 /***/
 
+@Slf4j
+@Data
+@RequiredArgsConstructor
 @Entity
 @Table(name = "auth_role")
-@RequiredArgsConstructor
-@Data
 public class AuthRole {
 
-    @Id @GeneratedValue (strategy= GenerationType.AUTO, generator = "auth_sequence")
+    @Id @GeneratedValue (strategy = GenerationType.IDENTITY)
     private Long id;
 
     @NotNull
@@ -32,5 +34,15 @@ public class AuthRole {
 
     @Column(name = "modifiedat", updatable = false, insertable = false)
     private Date   modifiedAt;
+
+    @PrePersist
+    public void prePersist() {
+        LOG.debug("AuthRole.prePersist() is working. AuthRole: {}", this.toString());
+    }
+
+    @PreUpdate
+    public void preUpdate() {
+        LOG.debug("AuthRole.preUpdate() is working. AuthRole: {}", this.toString());
+    }
 
 }
