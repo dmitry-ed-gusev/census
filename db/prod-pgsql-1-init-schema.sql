@@ -4,7 +4,7 @@
     Census DB: PostgreSql schema initialization script.
 
     Created:  Dmitrii Gusev, 29.03.2020
-    Modified: Dmitrii Gusev, 30.03.2020
+    Modified: Dmitrii Gusev, 31.03.2020
 */
 
 -- common DB objects
@@ -28,12 +28,11 @@ create schema CENSUS_PERSONNEL_SCHEMA;
 -- ------------------------------------------------------------------------------------------------
 
 -- tables and other objects for CENSUS_AUTH_SCHEMA
-create sequence CENSUS_AUTH_SCHEMA.auth_sequence start 10;
+-- create sequence CENSUS_AUTH_SCHEMA.auth_sequence start 10;
 
 -- users table
 create table if not exists CENSUS_AUTH_SCHEMA.auth_user (
-    --id          serial,
-    id          int          not null unique,
+    id          serial primary key,
     name        varchar(255) not null,
     description varchar(255),
     username    varchar(30)  not null unique,
@@ -47,7 +46,7 @@ CREATE TRIGGER auth_user_timestamp_update BEFORE UPDATE
 
 -- roles table
 create table if not exists CENSUS_AUTH_SCHEMA.auth_role (
-    id          int         not null unique,
+    id          serial primary key,
     rolename    varchar(30) not null unique,
     description varchar(255),
     createdAt   timestamp   not null default now(),
@@ -58,7 +57,7 @@ CREATE TRIGGER auth_role_timestamp_update BEFORE UPDATE
 
 -- map users to roles table
 create table if not exists CENSUS_AUTH_SCHEMA.auth_user_role (
-    id         int not null unique,
+    id         serial primary key,
     user_id    int       not null,
     role_id    int       not null,
     createdAt  timestamp not null default now(),
