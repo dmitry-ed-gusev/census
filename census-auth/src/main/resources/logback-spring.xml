@@ -11,7 +11,11 @@
     <springProfile name="dev | default">
         <!-- root logging level for DEV / default profiles -->
         <root level="INFO" />
+        <!-- spring framework logging -->
         <logger name="org.springframework" level="INFO"/>
+        <!-- logger for Hikari connection pool -->
+        <logger name="com.zaxxer" level="DEBUG"/>
+        <!-- logger for own packages -->
         <logger name="org.dgusev" level="DEBUG" />
     </springProfile>
 
@@ -36,6 +40,7 @@
 
         <!-- logging level for spring and gusevdm loggers -->
         <logger name="org.springframework" level="INFO"/>
+        <logger name="com.zaxxer" level="DEBUG"/>
         <logger name="org.dgusev" level="INFO"/>
 
         <!-- root logging level for PROD profile -->
