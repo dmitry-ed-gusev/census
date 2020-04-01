@@ -9,15 +9,15 @@
     DB should not contain any business-logic, except timestamps updated.
 
     Created:  Dmitrii Gusev, 22.03.2020
-    Modified: Dmitrii Gusev, 29.03.2020
+    Modified: Dmitrii Gusev, 31.03.2020
 */
 
 -- Sequence for unique id's. Start from 10 - we have several pre-inserted users and roles.
-create sequence if not exists auth_sequence start with 10;
+--create sequence if not exists auth_sequence start with 10;
 
 -- users table
 create table if not exists auth_user (
-    id          int not null primary key auto_increment,
+    id          identity not null primary key,
     name        varchar(255) not null,
     description varchar(255),
     username    varchar(30) not null unique,
@@ -29,7 +29,7 @@ create table if not exists auth_user (
 
 -- roles table
 create table if not exists auth_role (
-    id          identity,
+    id          identity not null primary key,
     rolename    varchar(30) not null unique,
     description varchar(255),
     createdAt   timestamp not null default CURRENT_TIMESTAMP(),
@@ -38,7 +38,7 @@ create table if not exists auth_role (
 
 -- map users to roles table
 create table if not exists auth_user_role (
-    id         identity,
+    id         identity not null primary key,
     user_id    int not null,
     role_id    int not null,
     createdAt  timestamp not null default CURRENT_TIMESTAMP(),
