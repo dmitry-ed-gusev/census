@@ -7,7 +7,7 @@
 #       * as a DBMS data storage local folder attached (see volumes:)
 #
 #     Created:  Dmitrii Gusev, 29.03.2020
-#     Modified: Dmitrii Gusev, 30.03.2020
+#     Modified: Dmitrii Gusev, 04.04.2020
 #
 ###############################################################################
 
@@ -47,7 +47,7 @@ services:
     networks:
       - mynetwork
     ports:
-      - "8080:8080"
+      - "8181:8080"
     depends_on:
       - postgres_db
 

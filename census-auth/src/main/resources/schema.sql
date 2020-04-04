@@ -13,6 +13,7 @@
 */
 
 -- Sequence for unique id's. Start from 10 - we have several pre-inserted users and roles.
+-- We need this sequence in case of ID generation startegy AUTO, for IDENTITY strategy we don't need it
 --create sequence if not exists auth_sequence start with 10;
 
 -- users table

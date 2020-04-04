@@ -19,7 +19,8 @@ import java.util.List;
 @Table(name = "auth_user")
 public class AuthUser {
 
-    @Id @GeneratedValue (strategy = GenerationType.IDENTITY)
+    @Id @GeneratedValue (strategy = GenerationType.IDENTITY) // <- identity sequence per table
+    // (strategy = GenerationType.AUTO) <- global sequence for all tables
     private Long id;
 
     @NotNull

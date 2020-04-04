@@ -229,6 +229,10 @@
             <artifactId>ojdbc8</artifactId>
             <version>12.2.0.1.0</version>
         </dependency>
+        <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+        </dependency>
 
         <!-- Google GUAVA library (useful classes and utilities) -->
         <dependency>

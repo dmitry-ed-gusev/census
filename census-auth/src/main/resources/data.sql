@@ -8,7 +8,7 @@
     DBs (like H2).
 
     Created:  Dmitrii Gusev, 22.03.2020
-    Modified: Dmitrii Gusev, 31.03.2020
+    Modified: Dmitrii Gusev, 04.04.2020
 */
 
 -- adding some users
@@ -20,6 +20,6 @@ insert into auth_role(id, rolename, description) values (1, 'USER', 'System user
 insert into auth_role(id, rolename, description) values (2, 'ADMIN', 'System admin. Privileged user.');
 
 -- adding some mappings users <-> roles
-insert into auth_user_role(id, user_id, role_id) values(1, 1, 1); -- Test user -> user
-insert into auth_user_role(id, user_id, role_id) values(2, 2, 1); -- Dmitrii -> user
-insert into auth_user_role(id, user_id, role_id) values(3, 2, 2); -- Dmitrii -> admin
+insert into auth_user_role(user_id, role_id) values(1, 1); -- Test user -> user role
+insert into auth_user_role(user_id, role_id) values(2, 1); -- Dmitrii -> user role
+insert into auth_user_role(user_id, role_id) values(2, 2); -- Dmitrii -> admin role

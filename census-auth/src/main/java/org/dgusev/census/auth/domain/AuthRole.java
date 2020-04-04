@@ -18,7 +18,8 @@ import java.util.Date;
 @Table(name = "auth_role")
 public class AuthRole {
 
-    @Id @GeneratedValue (strategy = GenerationType.IDENTITY)
+    @Id @GeneratedValue (strategy = GenerationType.IDENTITY) // <- identity sequence per table
+    // (strategy = GenerationType.AUTO) <- global sequence for all tables
     private Long id;
 
     @NotNull
