@@ -2,6 +2,7 @@ package org.dgusev.census.auth.domain;
 
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -11,13 +12,15 @@ import java.util.List;
 
 /***/
 
+@Slf4j
+@Data
+@RequiredArgsConstructor
 @Entity
 @Table(name = "auth_user")
-@RequiredArgsConstructor
-@Data
 public class AuthUser {
 
-    @Id @GeneratedValue (strategy= GenerationType.AUTO, generator = "auth_sequence")
+    @Id @GeneratedValue (strategy = GenerationType.IDENTITY) // <- identity sequence per table
+    // (strategy = GenerationType.AUTO) <- global sequence for all tables
     private Long id;
 
     @NotNull
@@ -50,5 +53,15 @@ public class AuthUser {
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     @Size(min=1, message="You must choose at least 1 role!")
     private List<AuthRole> roles;
+
+    @PrePersist
+    public void prePersist() {
+        LOG.debug("AuthUser.prePersist() is working. AuthUser: {}", this.toString());
+    }
+
+    @PreUpdate
+    public void preUpdate() {
+        LOG.debug("AuthUser.preUpdate() is working. AuthUser: {}", this.toString());
+    }
 
 }

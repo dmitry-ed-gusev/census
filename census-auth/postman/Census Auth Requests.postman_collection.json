@@ -11,10 +11,10 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:8080/census/auth/users",
+					"raw": "http://{{HOST}}:8080/census/auth/users",
 					"protocol": "http",
 					"host": [
-						"localhost"
+						"{{HOST}}"
 					],
 					"port": "8080",
 					"path": [
@@ -107,7 +107,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"name\": \"Ivanov Ivan\",\n    \"description\": \"Secondary added user...\",\n    \"username\": \"iivanov77dddd7\",\n    \"password\": \"987654\",\n    \"roles\": [{\"id\": 1}, {\"id\": 2}]\n}",
+					"raw": "{\n    \"name\": \"Ivanov Ivan\",\n    \"description\": \"Secondary added user...\",\n    \"username\": \"iva\",\n    \"password\": \"987654\",\n    \"roles\": [{\"id\": 1}, {\"id\": 2}]\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -146,7 +146,7 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8080/census/auth/users/3",
+					"raw": "http://localhost:8080/census/auth/users/333",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -156,7 +156,7 @@
 						"census",
 						"auth",
 						"users",
-						"3"
+						"333"
 					]
 				}
 			},
@@ -177,7 +177,7 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8080/census/auth/users/2",
+					"raw": "http://localhost:8080/census/auth/users/1",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -187,7 +187,7 @@
 						"census",
 						"auth",
 						"users",
-						"2"
+						"1"
 					]
 				}
 			},
@@ -208,7 +208,7 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8080/census/auth/users/10",
+					"raw": "http://localhost:8080/census/auth/users/3",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -218,7 +218,7 @@
 						"census",
 						"auth",
 						"users",
-						"10"
+						"3"
 					]
 				}
 			},
@@ -296,7 +296,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"rolename\": \"ROLE4\",\n    \"description\": \"some role....\"\n}",
+					"raw": "{\n    \"rolename\": \"ROLE5\",\n    \"description\": \"some role....\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -326,7 +326,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"description\": \"some role....\"\n}",
+					"raw": "{\n    \"description\": \"some role!\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
