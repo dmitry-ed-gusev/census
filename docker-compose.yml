@@ -29,7 +29,7 @@ services:
       - ./db/.postgres-data:/var/lib/postgresql/data
     restart: unless-stopped
     networks:
-      - mynetwork
+      - census_network
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
@@ -40,16 +40,17 @@ services:
 
   # adminer - formerly phpMySqlAdmin, currently - just single php file.
   # access url: http://localhost:8080; dbms host: census-postgres (postgres container name!)
-  adminer:
-    container_name: census-pgadminer
-    image: adminer
-    restart: unless-stopped
-    networks:
-      - mynetwork
-    ports:
-      - "8181:8080"
-    depends_on:
-      - postgres_db
+  # todo: probably we don't need two UIs for DBMS
+#  adminer:
+#    container_name: census-pgadminer
+#    image: adminer
+#    restart: unless-stopped
+#    networks:
+#      - census_network
+#    ports:
+#      - "8181:8080"
+#    depends_on:
+#      - postgres_db
 
   # classical postgres admin tool, access url: http://localhost:5050; dbms host: census-postgres (postgres container name!)
   pgadmin:
@@ -60,15 +61,15 @@ services:
       PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL:-pgadmin4@pgadmin.org}
       PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD:-admin}
     ports:
-      - "${PGADMIN_PORT:-5050}:80"
+      - "${PGADMIN_PORT:-5050}:80" # format is <local port>:<container port>
     networks:
-      - mynetwork
+      - census_network
     restart: unless-stopped
     depends_on:
       - postgres_db
 
 # networks configuration
 networks:
-  mynetwork:
+  census_network:
     driver: bridge
-    name: postgres_network
+    name: census_app_network
