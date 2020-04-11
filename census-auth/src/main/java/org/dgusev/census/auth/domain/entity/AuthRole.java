@@ -1,4 +1,4 @@
-package org.dgusev.census.auth.domain;
+package org.dgusev.census.auth.domain.entity;
 
 import lombok.Data;
 import lombok.RequiredArgsConstructor;

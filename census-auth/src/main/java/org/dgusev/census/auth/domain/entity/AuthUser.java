@@ -1,6 +1,8 @@
-package org.dgusev.census.auth.domain;
+package org.dgusev.census.auth.domain.entity;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -14,7 +16,9 @@ import java.util.List;
 
 @Slf4j
 @Data
-@RequiredArgsConstructor
+//@RequiredArgsConstructor
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "auth_user")
 public class AuthUser {

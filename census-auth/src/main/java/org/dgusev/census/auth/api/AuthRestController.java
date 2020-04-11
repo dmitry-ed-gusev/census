@@ -2,8 +2,8 @@ package org.dgusev.census.auth.api;
 
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.dgusev.census.auth.domain.AuthRole;
-import org.dgusev.census.auth.domain.AuthUser;
+import org.dgusev.census.auth.domain.entity.AuthRole;
+import org.dgusev.census.auth.domain.entity.AuthUser;
 import org.dgusev.census.auth.exceptions.RoleUnSupportedFieldPatchException;
 import org.dgusev.census.auth.exceptions.UserUnSupportedFieldPatchException;
 import org.dgusev.census.auth.repository.AuthRoleRepository;
@@ -18,9 +18,11 @@ import java.util.Optional;
 
 /***/
 
+// todo: https://mkyong.com/spring-boot/spring-rest-validation-example/
+
 @Slf4j
 @RestController // <- allows write response directly to response body
-@RequestMapping(path = "/census/auth", produces = MediaType.APPLICATION_JSON_VALUE) // <- methods produce JSONs
+@RequestMapping(path = "/census/api/auth", produces = MediaType.APPLICATION_JSON_VALUE) // <- methods produce JSONs
 @CrossOrigin(origins="*")
 public class AuthRestController {
 
