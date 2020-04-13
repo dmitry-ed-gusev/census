@@ -15,16 +15,14 @@ public class CensusAuthApplication {
 
     public static void main(String[] args) {
 
-        // SpringApplication.run(CensusAuthApplication.class, args);
-
-        // create Spring Application
         SpringApplication application = new SpringApplication(CensusAuthApplication.class);
+
         // PID to file writer (deleted on shutdown)
         application.addListeners(new ApplicationPidFileWriter(PID_FILE_NAME));
         // web port to file writer (deleted on shutdown)
         application.addListeners(new WebServerPortFileWriter(PORT_FILE_NAME));
-        // run application
-        application.run(args);
+
+        application.run(args); // run application
 
     }
 

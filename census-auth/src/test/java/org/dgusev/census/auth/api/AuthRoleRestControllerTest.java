@@ -1,8 +1,6 @@
 package org.dgusev.census.auth.api;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.dgusev.census.auth.domain.entity.AuthRole;
 import org.dgusev.census.auth.domain.entity.AuthUser;
 import org.dgusev.census.auth.repository.AuthRoleRepository;
 import org.dgusev.census.auth.repository.AuthUserRepository;
@@ -14,36 +12,31 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+
 /**
- * Unit test for AuthRestController (with MockMvc and mocked Repositories).
+ * Unit test for AuthRoleRestController (with MockMvc and mocked Repositories).
  * This is a unit test because of mocked Repositories - testing just one layer (web).
  */
-
-// todo: https://auth0.com/blog/automatically-mapping-dto-to-entity-on-spring-boot-apis/
-// todo: https://mkyong.com/spring-boot/spring-rest-integration-test-example/
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @AutoConfigureMockMvc
 @ActiveProfiles("test")
-public class AuthRestControllerTest {
+public class AuthRoleRestControllerTest {
 
     private static final String           STR_DATETIME_WITH_TIMEZONE = "yyyy-MM-dd'T'HH:mm:ss.SSSZ";
     private static final SimpleDateFormat DATETIME_WITH_TIMEZONE     = new SimpleDateFormat(STR_DATETIME_WITH_TIMEZONE);
