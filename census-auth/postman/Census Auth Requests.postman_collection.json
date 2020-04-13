@@ -7,11 +7,23 @@
 	"item": [
 		{
 			"name": "Auth - Get users list",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "6b86030c-1957-475c-bf50-eb5d6147d594",
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
 			"request": {
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://{{HOST}}:8080/census/auth/users",
+					"raw": "http://{{HOST}}:8080/census/api/auth/users",
 					"protocol": "http",
 					"host": [
 						"{{HOST}}"
@@ -19,6 +31,7 @@
 					"port": "8080",
 					"path": [
 						"census",
+						"api",
 						"auth",
 						"users"
 					]
@@ -32,14 +45,15 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:8080/census/auth/users/2",
+					"raw": "http://{{HOST}}:8080/census/api/auth/users/2",
 					"protocol": "http",
 					"host": [
-						"localhost"
+						"{{HOST}}"
 					],
 					"port": "8080",
 					"path": [
 						"census",
+						"api",
 						"auth",
 						"users",
 						"2"
@@ -54,14 +68,15 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:8080/census/auth/users/3",
+					"raw": "http://{{HOST}}:8080/census/api/auth/users/3",
 					"protocol": "http",
 					"host": [
-						"localhost"
+						"{{HOST}}"
 					],
 					"port": "8080",
 					"path": [
 						"census",
+						"api",
 						"auth",
 						"users",
 						"3"
