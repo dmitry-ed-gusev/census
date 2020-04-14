@@ -45,44 +45,50 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ActiveProfiles("test")
 public class AuthUserRestControllerTest {
 
+    // dates
     private static final String           STR_DATETIME_WITH_TIMEZONE = "yyyy-MM-dd'T'HH:mm:ss.SSSZ";
     private static final SimpleDateFormat DATETIME_WITH_TIMEZONE     = new SimpleDateFormat(STR_DATETIME_WITH_TIMEZONE);
+
+    static { // static initialization block for datetime with timezone
+        DATETIME_WITH_TIMEZONE.setTimeZone(TimeZone.getTimeZone("GMT"));
+    }
+
+    private static final Date             CURRENT_DATE               = new Date();
+    private static final String           CURRENT_STR_DATE           = DATETIME_WITH_TIMEZONE.format(CURRENT_DATE);
+
+    // URLs
+    private static final String           AUTH_USERS_URL             = "/census/api/auth/users";
+    private static final String           AUTH_USERS_WITH_ID         = AUTH_USERS_URL + "/%s";
+
 
     private static final ObjectMapper om = new ObjectMapper();
 
     @Autowired
-    private MockMvc mockMvc;
+    private MockMvc mockMvc; // to perform HTTP REST requests
 
     @MockBean
-    private AuthUserRepository mockAuthUserRepository;
-    @MockBean
-    private AuthRoleRepository mockAuthRoleRepository;
+    private AuthUserRepository mockAuthUserRepository; // mock for repository
 
     @Before
     public void beforeEach() {}
 
     @BeforeClass
-    public static void beforeAll() {
-        DATETIME_WITH_TIMEZONE.setTimeZone(TimeZone.getTimeZone("GMT"));
-    }
+    public static void beforeAll() {}
 
     @Test
     public void testFindAllAuthUsers() throws Exception {
         // Given
-        Date date = new Date();
-        String strDate = DATETIME_WITH_TIMEZONE.format(date);
-
         List<AuthUser> users = Arrays.asList(
                 new AuthUser(1L, "Simple User #1", "Description #1",
-                        "username1", "password1", true, date, null, null),
+                        "username1", "password1", true, CURRENT_DATE, null, null),
                 new AuthUser(2L, "Simple User #2", "Description #2",
-                        "username2", "password2", false, date, null, null)
+                        "username2", "password2", false, CURRENT_DATE, null, null)
         );
         // Given
         when(mockAuthUserRepository.findAll()).thenReturn(users);
 
         // When
-        mockMvc.perform(get("/census/api/auth/users"))
+        mockMvc.perform(get(AUTH_USERS_URL))
 
                 // Then
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
@@ -95,7 +101,7 @@ public class AuthUserRestControllerTest {
                 .andExpect(jsonPath("$[0].username", is("username1")))
                 .andExpect(jsonPath("$[0].password", is("password1")))
                 .andExpect(jsonPath("$[0].active", is(true)))
-                .andExpect(jsonPath("$[0].createdAt", is(strDate)))
+                .andExpect(jsonPath("$[0].createdAt", is(CURRENT_STR_DATE)))
                 .andExpect(jsonPath("$[0].modifiedAt", is(nullValue()))) // check for null value of json element
                 .andExpect(jsonPath("$[0].roles", is(nullValue())))
                 // user #2
@@ -105,7 +111,7 @@ public class AuthUserRestControllerTest {
                 .andExpect(jsonPath("$[1].username", is("username2")))
                 .andExpect(jsonPath("$[1].password", is("password2")))
                 .andExpect(jsonPath("$[1].active", is(false)))
-                .andExpect(jsonPath("$[1].createdAt", is(strDate)))
+                .andExpect(jsonPath("$[1].createdAt", is(CURRENT_STR_DATE)))
                 .andExpect(jsonPath("$[1].modifiedAt", is(nullValue())))
                 .andExpect(jsonPath("$[1].roles", is(nullValue())));
 
@@ -114,17 +120,14 @@ public class AuthUserRestControllerTest {
     }
 
     @Test
-    public void testFindAuthUserById() throws Exception {
+    public void testFindAuthUserById_OK_200() throws Exception {
         // Given
-        Date date = new Date();
-        String strDate = DATETIME_WITH_TIMEZONE.format(date);
-
         AuthUser authUser = new AuthUser(1L, "Simple User #1", "Description #1",
-                "username1", "password1", true, date, null, null);
+                "username1", "password1", true, CURRENT_DATE, null, null);
         when(mockAuthUserRepository.findById(1L)).thenReturn(Optional.of(authUser));
 
         // When
-        mockMvc.perform(get("/census/api/auth/users/1"))
+        mockMvc.perform(get(String.format(AUTH_USERS_WITH_ID, 1)))
                 // Then
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
@@ -134,7 +137,7 @@ public class AuthUserRestControllerTest {
                 .andExpect(jsonPath("$.username", is("username1")))
                 .andExpect(jsonPath("$.password", is("password1")))
                 .andExpect(jsonPath("$.active", is(true)))
-                .andExpect(jsonPath("$.createdAt", is(strDate)))
+                .andExpect(jsonPath("$.createdAt", is(CURRENT_STR_DATE)))
                 .andExpect(jsonPath("$.modifiedAt", is(nullValue())))
                 .andExpect(jsonPath("$.roles", is(nullValue())));
 
@@ -145,32 +148,43 @@ public class AuthUserRestControllerTest {
     @Test
     public void testFindAuthUserById_NotFound_404() throws Exception {
         // When - Then
-        mockMvc.perform(get("/census/api/auth/users/111")).andExpect(status().isNotFound());
+        mockMvc.perform(get(String.format(AUTH_USERS_WITH_ID, 111))).andExpect(status().isNotFound());
         // Then
         verify(mockAuthUserRepository, times(1)).findById(111L);
     }
 
-    /*
     @Test
-    public void save_book_OK() throws Exception {
+    public void testSaveNewAuthUser_OK_201() throws Exception {
+        // Given
+        AuthUser authUser = new AuthUser(1L, "Simple User #1", "Description #1",
+                "username1", "password1", true, CURRENT_DATE, null, null);
+        when(mockAuthUserRepository.save(any(AuthUser.class))).thenReturn(authUser);
 
-        Book newBook = new Book(1L, "Spring Boot Guide", "mkyong", new BigDecimal("2.99"));
-        when(mockRepository.save(any(Book.class))).thenReturn(newBook);
-
-        mockMvc.perform(post("/books")
-                .content(om.writeValueAsString(newBook))
+        // When
+        mockMvc.perform(post(AUTH_USERS_URL)
+                .content(om.writeValueAsString(authUser))
+                // Then
                 .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON))
-                //.andDo(print())
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.id", is(1)))
-                .andExpect(jsonPath("$.name", is("Spring Boot Guide")))
-                .andExpect(jsonPath("$.author", is("mkyong")))
-                .andExpect(jsonPath("$.price", is(2.99)));
+                .andExpect(jsonPath("$.name", is("Simple User #1")))
+                .andExpect(jsonPath("$.description", is("Description #1")))
+                .andExpect(jsonPath("$.username", is("username1")))
+                .andExpect(jsonPath("$.password", is("password1")))
+                .andExpect(jsonPath("$.active", is(true)))
+                .andExpect(jsonPath("$.createdAt", is(CURRENT_STR_DATE)))
+                .andExpect(jsonPath("$.modifiedAt", is(nullValue())))
+                .andExpect(jsonPath("$.roles", is(nullValue())));
+        // Then
+        verify(mockAuthUserRepository, times(1)).save(any(AuthUser.class));
+    }
 
-        verify(mockRepository, times(1)).save(any(Book.class));
+    @Test
+    public void testSaveNewAuthUser_Fail_() throws Exception {
 
     }
 
+    /*
     @Test
     public void update_book_OK() throws Exception {
 
