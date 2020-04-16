@@ -19,6 +19,9 @@ import static org.dgusev.census.auth.CensusAuthDefaults.*;
 /** REST API controller for providing AuthUsers objects. */
 
 // todo: https://mkyong.com/spring-boot/spring-rest-validation-example/
+// todo: https://www.baeldung.com/http-put-patch-difference-spring
+
+// todo: implement add user to the role / remove user from the role
 
 @Slf4j
 @RestController // <- allows write response directly to response body
@@ -42,6 +45,20 @@ public class AuthUserRestController {
         return authUserRepository.findAll();
     }
 
+    // Find user by id (200 -> OK, 404 -> not found)
+    @GetMapping(URI_USERS_WITH_ID)
+    public ResponseEntity<AuthUser> findOneUser(@PathVariable Long id) {
+        LOG.debug("AuthUserRestController.findOneUser() is working. User id = {}.", id);
+
+        // option 1: throw exception if user is not found
+        // return authUserRepository.findById(id).orElseThrow(() -> new UserNotFoundException(id));
+
+        // option 2: return NOT_FOUND (404) if user is not found, OK (200) otherwise
+        Optional<AuthUser> authUser = authUserRepository.findById(id);
+        return authUser.map(user -> new ResponseEntity<>(user, HttpStatus.OK))
+                .orElseGet(() -> new ResponseEntity<>(null, HttpStatus.NOT_FOUND));
+    }
+
     // Save user; return 201 instead of 200 (on success)
     @PostMapping(path = URI_USERS, consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
@@ -51,21 +68,9 @@ public class AuthUserRestController {
         return authUserRepository.save(newAuthUser);
     }
 
-    // Find user by id (200 -> OK, 404 -> not found)
-    @GetMapping(URI_USERS_WITH_ID)
-    public ResponseEntity<AuthUser> findOneUser(@PathVariable Long id) {
-        LOG.debug("AuthUserRestController.findOneUser() is working. User id = {}.", id);
-
-        // option 1: throw exception if not found
-        // return authUserRepository.findById(id).orElseThrow(() -> new UserNotFoundException(id));
-
-        // option 2: return NOT_FOUND if not found
-        Optional<AuthUser> authUser = authUserRepository.findById(id);
-        return authUser.map(user -> new ResponseEntity<>(user, HttpStatus.OK))
-                .orElseGet(() -> new ResponseEntity<>(null, HttpStatus.NOT_FOUND));
-    }
-
-    // Save or update user by id
+    // Save or update user by id (PUT - replace resource entirely). Won't set null / empty values.
+    // We will update: name, description, username, password, activity status.
+    // Operation is idempotent.
     @PutMapping(path = URI_USERS_WITH_ID, consumes = MediaType.APPLICATION_JSON_VALUE)
     public AuthUser saveOrUpdateAuthUser(@RequestBody AuthUser newAuthUser, @PathVariable Long id) {
         LOG.debug("AuthUserRestController.saveOrUpdateAuthUser() is working. User id = {}.", id);
@@ -81,22 +86,30 @@ public class AuthUserRestController {
                         user.setDescription(newAuthUser.getDescription());
                     }
 
+                    if (!StringUtils.isBlank(newAuthUser.getUsername())) { // change username
+                        user.setUsername(newAuthUser.getUsername());
+                    }
+
                     if (!StringUtils.isBlank(newAuthUser.getPassword())) { // change user password
                         user.setPassword(newAuthUser.getPassword());
                     }
 
-                    // user.setUsername(newAuthUser.getUsername()); // username can't be changed
+                    user.setActive(newAuthUser.isActive()); // change activity status
 
-                    return authUserRepository.save(user);
+                    return authUserRepository.save(user); // update (save) user and return it
                 })
                 .orElseGet(() -> { // creating new user
+                    // todo: disable adding of nw user - PUT is only for update for existing one
+                    // todo: see PATCH method below
                     LOG.debug("User id = {} not found. Adding new user.", id);
                     newAuthUser.setId(id); // todo: id will be generated anyway, so provided ID won't be used
                     return authUserRepository.save(newAuthUser);
                 });
     }
 
-    // Update user name and description
+    // Update existing auth user (PATCH - partial update of the resource). Won't set null / empty values.
+    // We will update: name, description, username, password, activity status.
+    // Operation is idempotent.
     @PatchMapping(path = URI_USERS_WITH_ID, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<AuthUser> patchAuthUser(@RequestBody Map<String, String> update, @PathVariable Long id) {
         LOG.debug("AuthUserRestController.patchAuthUser() is working. User id = {}.", id);
@@ -124,7 +137,7 @@ public class AuthUserRestController {
                 });
     }
 
-    // delete user by id
+    // delete user by id, always return 204 (no content)
     @DeleteMapping(URI_USERS_WITH_ID)
     @ResponseStatus(code = HttpStatus.NO_CONTENT)
     public void deleteAuthUser(@PathVariable Long id) {

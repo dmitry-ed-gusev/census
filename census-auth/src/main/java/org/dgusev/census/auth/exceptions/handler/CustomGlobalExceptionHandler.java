@@ -4,6 +4,7 @@ import org.dgusev.census.auth.exceptions.RoleNotFoundException;
 import org.dgusev.census.auth.exceptions.RoleUnSupportedFieldPatchException;
 import org.dgusev.census.auth.exceptions.UserNotFoundException;
 import org.dgusev.census.auth.exceptions.UserUnSupportedFieldPatchException;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -30,6 +31,13 @@ public class CustomGlobalExceptionHandler extends ResponseEntityExceptionHandler
     @ExceptionHandler(EmptyResultDataAccessException.class)
     public void springEmptyResultData(HttpServletResponse response) throws IOException {
         response.sendError(HttpStatus.NOT_FOUND.value());
+    }
+
+    /** Handle data integrity violations for DBMS - unique constraints etc. */
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    public void springDataIntegrityViolation(HttpServletResponse response) throws IOException {
+        response.sendError(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Data Integrity Error!");
+
     }
 
 }

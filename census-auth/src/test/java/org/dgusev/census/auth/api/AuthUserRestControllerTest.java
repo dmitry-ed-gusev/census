@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
@@ -30,6 +31,7 @@ import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 /**
  * Unit test for AuthRestController (with MockMvc and mocked Repositories).
@@ -76,7 +78,7 @@ public class AuthUserRestControllerTest {
     public static void beforeAll() {}
 
     @Test
-    public void testFindAllAuthUsers() throws Exception {
+    public void testFindAllAuthUsers_OK_200() throws Exception {
         // Given
         List<AuthUser> users = Arrays.asList(
                 new AuthUser(1L, "Simple User #1", "Description #1",
@@ -89,7 +91,6 @@ public class AuthUserRestControllerTest {
 
         // When
         mockMvc.perform(get(AUTH_USERS_URL))
-
                 // Then
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
@@ -163,8 +164,8 @@ public class AuthUserRestControllerTest {
         // When
         mockMvc.perform(post(AUTH_USERS_URL)
                 .content(om.writeValueAsString(authUser))
-                // Then
                 .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON))
+                // Then
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.id", is(1)))
                 .andExpect(jsonPath("$.name", is("Simple User #1")))
@@ -180,8 +181,95 @@ public class AuthUserRestControllerTest {
     }
 
     @Test
-    public void testSaveNewAuthUser_Fail_() throws Exception {
+    public void testSaveNewAuthUser_Fail_500() throws Exception {
+        // Given
+        AuthUser authUser = new AuthUser(1L, "Simple User #1", "Description #1",
+                "username1", "password1", true, CURRENT_DATE, null, null);
+        when(mockAuthUserRepository.save(any(AuthUser.class))).thenThrow(DataIntegrityViolationException.class);
 
+        // When
+        mockMvc.perform(post(AUTH_USERS_URL)
+                .content(om.writeValueAsString(authUser))
+                .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON))
+                // Then
+                .andExpect(status().isInternalServerError());
+                //.andExpect(jsonPath("$.message", is("Data Integrity Error!")));
+
+        // Then
+        verify(mockAuthUserRepository, times(1)).save(any(AuthUser.class));
+    }
+
+    @Test
+    public void testUpdateExistingUser_PUT_OK_200() {
+//        mockMvc.perform(put("/heavyresource/1")
+//                .contentType(MediaType.APPLICATION_JSON_VALUE)
+//                .content(objectMapper.writeValueAsString(
+//                        new HeavyResource(1, "Tom", "Jackson", 12, "heaven street")))
+//        ).andExpect(status().isOk());
+    }
+
+    @Test
+    public void testUpdateNonExistingUser_PUT_FAIL_404() {
+
+    }
+
+    @Test
+    public void testUpdateExistingUser_PATCH_OK_200() {
+        // option 1
+//        mockMvc.perform(patch("/heavyrecource/1")
+//                .contentType(MediaType.APPLICATION_JSON_VALUE)
+//                .content(objectMapper.writeValueAsString(
+//                        new HeavyResourceAddressOnly(1, "5th avenue")))
+//        ).andExpect(status().isOk());
+
+        // option 2
+//        HashMap<String, Object> updates = new HashMap<>();
+//        updates.put("address", "5th avenue");
+//
+//        mockMvc.perform(patch("/heavyresource/1")
+//                .contentType(MediaType.APPLICATION_JSON_VALUE)
+//                .content(objectMapper.writeValueAsString(updates))
+//        ).andExpect(status().isOk());
+    }
+
+    @Test
+    public void testUpdateNonExistingUser_PATCH_FAIL_404() {
+
+    }
+
+    @Test
+    public void testDeleteAuthUser_Existing_User_OK_204() throws Exception {
+        // Given
+        AuthUser authUser = new AuthUser(1L, "Simple User #1", "Description #1",
+                "username1", "password1", true, CURRENT_DATE, null, null);
+        // return found user
+        when(mockAuthUserRepository.findById(1L)).thenReturn(Optional.of(authUser));
+        // do nothing when call deleteById()
+        doNothing().when(mockAuthUserRepository).deleteById(1L);
+
+        // When
+        mockMvc.perform(delete(String.format(AUTH_USERS_WITH_ID, 1)))
+                //.andDo(print())
+                // Then
+                .andExpect(status().isNoContent());
+
+        // Then
+        verify(mockAuthUserRepository, times(1)).deleteById(1L);
+    }
+
+    @Test
+    public void testDeleteAuthUser_Non_Existing_User_OK_204() throws Exception {
+        // Given
+        when(mockAuthUserRepository.findById(1L)).thenReturn(Optional.empty()); // user not found
+        // do nothing when call deleteById()
+        doNothing().when(mockAuthUserRepository).deleteById(1L);
+
+        // When
+        mockMvc.perform(delete(String.format(AUTH_USERS_WITH_ID, 1)))
+                // Then
+                .andExpect(status().isNoContent());
+        // Then
+        verify(mockAuthUserRepository, times(0)).deleteById(1L);
     }
 
     /*
@@ -235,17 +323,6 @@ public class AuthUserRestControllerTest {
         verify(mockRepository, times(0)).save(any(Book.class));
     }
 
-    @Test
-    public void delete_book_OK() throws Exception {
-
-        doNothing().when(mockRepository).deleteById(1L);
-
-        mockMvc.perform(delete("/books/1"))
-                //.andDo(print())
-                .andExpect(status().isOk());
-
-        verify(mockRepository, times(1)).deleteById(1L);
-    }
 
     private static void printJSON(Object object) {
         String result;
