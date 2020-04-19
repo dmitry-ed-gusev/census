@@ -37,7 +37,6 @@ public class CustomGlobalExceptionHandler extends ResponseEntityExceptionHandler
     @ExceptionHandler(DataIntegrityViolationException.class)
     public void springDataIntegrityViolation(HttpServletResponse response) throws IOException {
         response.sendError(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Data Integrity Error!");
-
     }
 
 }

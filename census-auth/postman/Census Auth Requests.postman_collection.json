@@ -229,13 +229,28 @@
 			"response": []
 		},
 		{
-			"name": "Auth - Save or Update user (update)",
+			"name": "Auth User - Update existing user (OK)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "c9e81c0e-47c1-4102-9ba8-7411a22887f4",
+						"exec": [
+							"// check status code: 200",
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
 			"request": {
 				"method": "PUT",
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"name\": \"Ivanov Ivan\",\n    \"description\": \"Secondary added user...\",\n    \"username\": \"iva\",\n    \"password\": \"987654\",\n    \"roles\": [{\"id\": 1}, {\"id\": 2}]\n}",
+					"raw": "{\n    \"name\": \"Ivanov Ivan\",\n    \"description\": \"Secondary added user...\",\n    \"username\": \"iva-test\",\n    \"password\": \"987654\",\n    \"roles\": [{\"id\": 1}, {\"id\": 2}]\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -243,24 +258,40 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8080/census/auth/users/2",
+					"raw": "http://{{HOST}}:8080/census/api/auth/users/1",
 					"protocol": "http",
 					"host": [
-						"localhost"
+						"{{HOST}}"
 					],
 					"port": "8080",
 					"path": [
 						"census",
+						"api",
 						"auth",
 						"users",
-						"2"
+						"1"
 					]
 				}
 			},
 			"response": []
 		},
 		{
-			"name": "Auth - Save or Update user (save)",
+			"name": "Auth User - Update non-existing user (FAIL)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "e67c9c7b-ef42-432b-b43b-aeab3bf6b49a",
+						"exec": [
+							"// check status code: 404",
+							"pm.test(\"Status code is 404\", function () {",
+							"    pm.response.to.have.status(404);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
 			"request": {
 				"method": "PUT",
 				"header": [],
@@ -274,14 +305,15 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8080/census/auth/users/333",
+					"raw": "http://{{HOST}}:8080/census/api/auth/users/333",
 					"protocol": "http",
 					"host": [
-						"localhost"
+						"{{HOST}}"
 					],
 					"port": "8080",
 					"path": [
 						"census",
+						"api",
 						"auth",
 						"users",
 						"333"
@@ -291,13 +323,28 @@
 			"response": []
 		},
 		{
-			"name": "Auth - Update by fields (patch)",
+			"name": "Auth User - Update (patch) user by fields",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "fffde4f3-19b2-4105-88fc-a1b69daf94d0",
+						"exec": [
+							"// check status code: 200",
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
 			"request": {
 				"method": "PATCH",
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"name\": \"Dmitrii Gusev\",\n    \"description\": \"restored user\"\n}",
+					"raw": "{\n    \"name\": \"Dmitrii Gusev\",\n    \"description\": \"restored user\",\n    \"username\": \"new-user-name\",\n    \"active\": true\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -305,17 +352,65 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8080/census/auth/users/1",
+					"raw": "http://{{HOST}}:8080/census/api/auth/users/1",
 					"protocol": "http",
 					"host": [
-						"localhost"
+						"{{HOST}}"
 					],
 					"port": "8080",
 					"path": [
 						"census",
+						"api",
 						"auth",
 						"users",
 						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Auth User - Update (patch) non-existing user by fields",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "0b6bd3fd-8b96-46f9-8b37-c719fd42a398",
+						"exec": [
+							"// check status code: 404",
+							"pm.test(\"Status code is 404\", function () {",
+							"    pm.response.to.have.status(404);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"Dmitrii Gusev\",\n    \"description\": \"restored user\",\n    \"username\": \"new-user-name\",\n    \"active\": true\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://{{HOST}}:8080/census/api/auth/users/1111",
+					"protocol": "http",
+					"host": [
+						"{{HOST}}"
+					],
+					"port": "8080",
+					"path": [
+						"census",
+						"api",
+						"auth",
+						"users",
+						"1111"
 					]
 				}
 			},
@@ -360,7 +455,7 @@
 			"response": []
 		},
 		{
-			"name": "Auth User - Delete non-existing user by id Copy",
+			"name": "Auth User - Delete non-existing user by id",
 			"event": [
 				{
 					"listen": "test",

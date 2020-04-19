@@ -3,7 +3,6 @@ package org.dgusev.census.auth.api;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.dgusev.census.auth.domain.entity.AuthUser;
-import org.dgusev.census.auth.exceptions.UserUnSupportedFieldPatchException;
 import org.dgusev.census.auth.repository.AuthUserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -64,15 +63,14 @@ public class AuthUserRestController {
     @ResponseStatus(HttpStatus.CREATED)
     public AuthUser newAuthUser(@RequestBody AuthUser newAuthUser) {
         LOG.debug("AuthUserRestController.newAuthUser() is working.");
-
         return authUserRepository.save(newAuthUser);
     }
 
     // Save or update user by id (PUT - replace resource entirely). Won't set null / empty values.
     // We will update: name, description, username, password, activity status.
-    // Operation is idempotent.
+    // Operation is idempotent. Success -> 200 (OK), Fail -> 404 (Not Found).
     @PutMapping(path = URI_USERS_WITH_ID, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public AuthUser saveOrUpdateAuthUser(@RequestBody AuthUser newAuthUser, @PathVariable Long id) {
+    public ResponseEntity<AuthUser> updateAuthUser(@RequestBody AuthUser newAuthUser, @PathVariable Long id) {
         LOG.debug("AuthUserRestController.saveOrUpdateAuthUser() is working. User id = {}.", id);
 
         return authUserRepository.findById(id)
@@ -96,14 +94,13 @@ public class AuthUserRestController {
 
                     user.setActive(newAuthUser.isActive()); // change activity status
 
-                    return authUserRepository.save(user); // update (save) user and return it
+                    // update user by provided id
+                    return new ResponseEntity<>(authUserRepository.save(user), HttpStatus.OK);
                 })
                 .orElseGet(() -> { // creating new user
-                    // todo: disable adding of nw user - PUT is only for update for existing one
-                    // todo: see PATCH method below
+                    // throw new UserNotFoundException(id);
                     LOG.debug("User id = {} not found. Adding new user.", id);
-                    newAuthUser.setId(id); // todo: id will be generated anyway, so provided ID won't be used
-                    return authUserRepository.save(newAuthUser);
+                    return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
                 });
     }
 
@@ -116,23 +113,33 @@ public class AuthUserRestController {
 
         return authUserRepository.findById(id)
                 .map(user -> {
-                    String name = update.get("name");
-                    String description = update.get("description");
-                    if (!StringUtils.isEmpty(name) || !StringUtils.isEmpty(description)) { // there are fields for update
-                        if (!StringUtils.isEmpty(name)) { // name is not empty - update it
-                            user.setName(name);
-                        }
-                        if (!StringUtils.isEmpty(description)) { // description is not empty - update it
-                            user.setDescription(description);
-                        }
-                        // better create a custom method to update a value = :newValue where id = :id
-                        return new ResponseEntity<>(authUserRepository.save(user), HttpStatus.OK);
-                    } else {
-                        throw new UserUnSupportedFieldPatchException(update.keySet());
-                    } // end of IF
+                    String  name        = update.get("name");
+                    String  description = update.get("description");
+                    String  username    = update.get("username");
+                    String  password    = update.get("password");
+                    boolean isActive    = "true".equals(update.get("active"));
+
+                    // set values field-by-field
+                    if (!StringUtils.isEmpty(name)) { // name is not empty - update it
+                        user.setName(name);
+                    }
+                    if (!StringUtils.isEmpty(description)) { // description is not empty - update it
+                        user.setDescription(description);
+                    }
+                    if (!StringUtils.isEmpty(username)) {
+                        user.setUsername(username);
+                    }
+                    if (!StringUtils.isEmpty(password)) {
+                        user.setPassword(password);
+                    }
+                    user.setActive(isActive);
+
+                    // better create a custom method to update a value = :newValue where id = :id
+                    return new ResponseEntity<>(authUserRepository.save(user), HttpStatus.OK);
                 }) // end of map()
                 .orElseGet(() -> {
                     // throw new UserNotFoundException(id);
+                    LOG.debug("User id = {} not found. Adding new user.", id);
                     return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
                 });
     }
@@ -146,5 +153,7 @@ public class AuthUserRestController {
         // delete if exists - operation should be idempotent
         authUserRepository.findById(id).ifPresent(user -> authUserRepository.deleteById(id));
     }
+
+    // todo: implement endpoint: /census/api/auth/users/{id}/roles (GET/POST/DELETE)
 
 }
