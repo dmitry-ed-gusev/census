@@ -1,16 +1,31 @@
 package org.dgusev.census.auth.api;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import org.dgusev.census.auth.domain.entity.AuthUser;
 import org.dgusev.census.auth.repository.AuthUserRepository;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.skyscreamer.jsonassert.JSONAssert;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
+
+import java.text.SimpleDateFormat;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.List;
+import java.util.TimeZone;
+
+import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.*;
 
 /***/
 
@@ -19,7 +34,26 @@ import org.springframework.test.context.junit4.SpringRunner;
 @ActiveProfiles("test")
 public class AuthUserRestControllerRestTemplateTest {
 
-    private static final ObjectMapper om = new ObjectMapper();
+    // dates
+    private static final String           STR_DATETIME_WITH_TIMEZONE = "yyyy-MM-dd'T'HH:mm:ss.SSSZ";
+    private static final SimpleDateFormat DATETIME_WITH_TIMEZONE     = new SimpleDateFormat(STR_DATETIME_WITH_TIMEZONE);
+    private static final Date             CURRENT_DATE               = new Date();
+    private static final String           CURRENT_STR_DATE           = DATETIME_WITH_TIMEZONE.format(CURRENT_DATE);
+
+    // URLs
+    private static final String           AUTH_USERS_URL             = "/census/api/auth/users";
+    private static final String           AUTH_USERS_WITH_ID         = AUTH_USERS_URL + "/%s";
+
+    private static final ObjectMapper MAPPER = new ObjectMapper();
+
+    // static initialization block for datetime with timezone + some other initializations
+    static {
+        // setup timezone
+        DATETIME_WITH_TIMEZONE.setTimeZone(TimeZone.getTimeZone("GMT"));
+        // setup proper date mapping for Jackson ObjectMapper
+        MAPPER.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+        MAPPER.setDateFormat(DATETIME_WITH_TIMEZONE);
+    }
 
     @Autowired
     private TestRestTemplate restTemplate;
@@ -27,15 +61,38 @@ public class AuthUserRestControllerRestTemplateTest {
     @MockBean
     private AuthUserRepository mockAuthUserRepository;
 
+    private AuthUser authUser = null;
+
     @Before
-    public void init() {
+    public void beforeEach() {
         //Book book = new Book(1L, "Book Name", "Mkyong", new BigDecimal("9.99"));
         //when(mockRepository.findById(1L)).thenReturn(Optional.of(book));
+
+        authUser = new AuthUser(1L, "Simple User #1", "Description #1",
+                "username1", "password1", true, CURRENT_DATE, null, null);
     }
 
-    @Test
-    public void test() {
+    @BeforeClass
+    public static void beforeAll() {}
 
+    @Test
+    public void testFindAllAuthUsers_GET_OK_200() throws Exception {
+        // Given
+        List<AuthUser> users = Arrays.asList(
+                new AuthUser(1L, "Simple User #1", "Description #1",
+                        "username1", "password1", true, CURRENT_DATE, null, null),
+                new AuthUser(2L, "Simple User #2", "Description #2",
+                        "username2", "password2", false, CURRENT_DATE, null, null)
+        );
+        when(mockAuthUserRepository.findAll()).thenReturn(users);
+        String expected = MAPPER.writeValueAsString(users);
+        // When
+        ResponseEntity<String> response = restTemplate.getForEntity(AUTH_USERS_URL, String.class);
+        // Then
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        JSONAssert.assertEquals(expected, response.getBody(), false);
+        // Then
+        verify(mockAuthUserRepository, times(1)).findAll();
     }
 
     /*
@@ -53,25 +110,6 @@ public class AuthUserRestControllerRestTemplateTest {
 
         verify(mockRepository, times(1)).findById(1L);
 
-    }
-
-    @Test
-    public void find_allBook_OK() throws Exception {
-
-        List<Book> books = Arrays.asList(
-                new Book(1L, "Book A", "Ah Pig", new BigDecimal("1.99")),
-                new Book(2L, "Book B", "Ah Dog", new BigDecimal("2.99")));
-
-        when(mockRepository.findAll()).thenReturn(books);
-
-        String expected = om.writeValueAsString(books);
-
-        ResponseEntity<String> response = restTemplate.getForEntity("/books", String.class);
-
-        assertEquals(HttpStatus.OK, response.getStatusCode());
-        JSONAssert.assertEquals(expected, response.getBody(), false);
-
-        verify(mockRepository, times(1)).findAll();
     }
 
     @Test
