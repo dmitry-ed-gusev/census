@@ -249,7 +249,9 @@ public class AuthUserRestControllerMockMvcTest {
                 // Then
                 .andExpect(status().isOk());
 
-        // Then (invoke save() with updated user)
+        // Then
+        verify(mockAuthUserRepository, times(1)).findById(1L);
+        // invoke save() with updated user
         verify(mockAuthUserRepository, times(1)).save(eq(updatedAuthUser));
     }
 

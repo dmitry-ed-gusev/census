@@ -4,28 +4,26 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import org.dgusev.census.auth.domain.entity.AuthUser;
 import org.dgusev.census.auth.repository.AuthUserRepository;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.*;
 import org.junit.runner.RunWith;
 import org.skyscreamer.jsonassert.JSONAssert;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.web.client.TestRestTemplate;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.http.*;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.text.SimpleDateFormat;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
-import java.util.TimeZone;
+import java.util.*;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 /***/
 
@@ -39,7 +37,6 @@ public class AuthUserRestControllerRestTemplateTest {
     private static final SimpleDateFormat DATETIME_WITH_TIMEZONE     = new SimpleDateFormat(STR_DATETIME_WITH_TIMEZONE);
     private static final Date             CURRENT_DATE               = new Date();
     private static final String           CURRENT_STR_DATE           = DATETIME_WITH_TIMEZONE.format(CURRENT_DATE);
-
     // URLs
     private static final String           AUTH_USERS_URL             = "/census/api/auth/users";
     private static final String           AUTH_USERS_WITH_ID         = AUTH_USERS_URL + "/%s";
@@ -65,9 +62,6 @@ public class AuthUserRestControllerRestTemplateTest {
 
     @Before
     public void beforeEach() {
-        //Book book = new Book(1L, "Book Name", "Mkyong", new BigDecimal("9.99"));
-        //when(mockRepository.findById(1L)).thenReturn(Optional.of(book));
-
         authUser = new AuthUser(1L, "Simple User #1", "Description #1",
                 "username1", "password1", true, CURRENT_DATE, null, null);
     }
@@ -90,138 +84,158 @@ public class AuthUserRestControllerRestTemplateTest {
         ResponseEntity<String> response = restTemplate.getForEntity(AUTH_USERS_URL, String.class);
         // Then
         assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(MediaType.APPLICATION_JSON, response.getHeaders().getContentType());
         JSONAssert.assertEquals(expected, response.getBody(), false);
-        // Then
         verify(mockAuthUserRepository, times(1)).findAll();
     }
 
-    /*
     @Test
-    public void find_bookId_OK() throws JSONException {
-
-        String expected = "{id:1,name:\"Book Name\",author:\"Mkyong\",price:9.99}";
-
-        ResponseEntity<String> response = restTemplate.getForEntity("/books/1", String.class);
-
+    public void testFindAuthUserById_GET_OK_200() throws Exception {
+        // Given
+        when(mockAuthUserRepository.findById(1L)).thenReturn(Optional.of(authUser));
+        String expected = MAPPER.writeValueAsString(authUser);
+        // When
+        ResponseEntity<String> response = restTemplate.getForEntity(String.format(AUTH_USERS_WITH_ID, 1L), String.class);
+        // Then
         assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertEquals(MediaType.APPLICATION_JSON_UTF8, response.getHeaders().getContentType());
-
+        assertEquals(MediaType.APPLICATION_JSON, response.getHeaders().getContentType());
         JSONAssert.assertEquals(expected, response.getBody(), false);
-
-        verify(mockRepository, times(1)).findById(1L);
-
+        verify(mockAuthUserRepository, times(1)).findById(1L);
     }
 
     @Test
-    public void find_bookIdNotFound_404() throws Exception {
-
-        String expected = "{status:404,error:\"Not Found\",message:\"Book id not found : 5\",path:\"/books/5\"}";
-
-        ResponseEntity<String> response = restTemplate.getForEntity("/books/5", String.class);
-
+    public void testFindAuthUserById_GET_NotFound_404() throws Exception {
+        // When
+        ResponseEntity<String> response = restTemplate.getForEntity(String.format(AUTH_USERS_WITH_ID, 111L), String.class);
+        // Then
         assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
-        JSONAssert.assertEquals(expected, response.getBody(), false);
-
+        assertNull(response.getBody());
+        verify(mockAuthUserRepository, times(1)).findById(111L);
     }
 
     @Test
-    public void save_book_OK() throws Exception {
-
-        Book newBook = new Book(1L, "Spring Boot Guide", "mkyong", new BigDecimal("2.99"));
-        when(mockRepository.save(any(Book.class))).thenReturn(newBook);
-
-        String expected = om.writeValueAsString(newBook);
-
-        ResponseEntity<String> response = restTemplate.postForEntity("/books", newBook, String.class);
-
+    public void testSaveNewAuthUser_POST_OK_201() throws Exception {
+        // Given
+        when(mockAuthUserRepository.save(any(AuthUser.class))).thenReturn(authUser);
+        String expected = MAPPER.writeValueAsString(authUser);
+        // When
+        ResponseEntity<String> response = restTemplate.postForEntity(AUTH_USERS_URL, authUser, String.class);
+        // Then
         assertEquals(HttpStatus.CREATED, response.getStatusCode());
+        assertEquals(MediaType.APPLICATION_JSON, response.getHeaders().getContentType());
         JSONAssert.assertEquals(expected, response.getBody(), false);
-
-        verify(mockRepository, times(1)).save(any(Book.class));
-
+        verify(mockAuthUserRepository, times(1)).save(any(AuthUser.class));
     }
 
     @Test
-    public void update_book_OK() throws Exception {
+    public void testSaveNewAuthUser_POST_Fail_500() throws Exception {
+        // Given
+        when(mockAuthUserRepository.save(any(AuthUser.class))).thenThrow(DataIntegrityViolationException.class);
+        // When
+        ResponseEntity<String> response = restTemplate.postForEntity(AUTH_USERS_URL, authUser, String.class);
+        // Then
+        assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
+        assertEquals(MediaType.APPLICATION_JSON, response.getHeaders().getContentType());
+        assertTrue(response.getBody() != null && response.getBody().contains("Data Integrity Error!"));
+        verify(mockAuthUserRepository, times(1)).save(any(AuthUser.class));
+    }
 
-        Book updateBook = new Book(1L, "ABC", "mkyong", new BigDecimal("19.99"));
-        when(mockRepository.save(any(Book.class))).thenReturn(updateBook);
-
+    @Test
+    public void testUpdateExistingUser_PUT_OK_200() throws Exception {
+        // Given
+        when(mockAuthUserRepository.findById(1L)).thenReturn(Optional.of(authUser)); // found user
+        when(mockAuthUserRepository.save(any(AuthUser.class))).thenReturn(authUser); // call to save
+        String expected = MAPPER.writeValueAsString(authUser);
+        // When
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
-        HttpEntity<String> entity = new HttpEntity<>(om.writeValueAsString(updateBook), headers);
-
-        ResponseEntity<String> response = restTemplate.exchange("/books/1", HttpMethod.PUT, entity, String.class);
-
+        HttpEntity<String> entity = new HttpEntity<>(expected, headers);
+        ResponseEntity<String> response = restTemplate.exchange(String.format(AUTH_USERS_WITH_ID, 1L),
+                HttpMethod.PUT, entity, String.class);
+        // Then
         assertEquals(HttpStatus.OK, response.getStatusCode());
-        JSONAssert.assertEquals(om.writeValueAsString(updateBook), response.getBody(), false);
-
-        verify(mockRepository, times(1)).findById(1L);
-        verify(mockRepository, times(1)).save(any(Book.class));
-
-    }
-
-    @Test
-    public void patch_bookAuthor_OK() {
-
-        when(mockRepository.save(any(Book.class))).thenReturn(new Book());
-        String patchInJson = "{\"author\":\"ultraman\"}";
-
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
-        HttpEntity<String> entity = new HttpEntity<>(patchInJson, headers);
-
-        ResponseEntity<String> response = restTemplate.exchange("/books/1", HttpMethod.PUT, entity, String.class);
-
-        assertEquals(HttpStatus.OK, response.getStatusCode());
-
-        verify(mockRepository, times(1)).findById(1L);
-        verify(mockRepository, times(1)).save(any(Book.class));
-
-    }
-
-    @Test
-    public void patch_bookPrice_405() throws JSONException {
-
-        String expected = "{status:405,error:\"Method Not Allowed\",message:\"Field [price] update is not allow.\"}";
-
-        String patchInJson = "{\"price\":\"99.99\"}";
-
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
-        HttpEntity<String> entity = new HttpEntity<>(patchInJson, headers);
-
-        ResponseEntity<String> response = restTemplate.exchange("/books/1", HttpMethod.PATCH, entity, String.class);
-
-        assertEquals(HttpStatus.METHOD_NOT_ALLOWED, response.getStatusCode());
+        assertEquals(MediaType.APPLICATION_JSON, response.getHeaders().getContentType());
         JSONAssert.assertEquals(expected, response.getBody(), false);
-
-        verify(mockRepository, times(1)).findById(1L);
-        verify(mockRepository, times(0)).save(any(Book.class));
+        verify(mockAuthUserRepository, times(1)).findById(1L);
+        verify(mockAuthUserRepository, times(1)).save(any(AuthUser.class));
     }
 
     @Test
-    public void delete_book_OK() {
+    public void testUpdateNonExistingUser_PUT_FAIL_404() throws Exception {
+        // Given
+        when(mockAuthUserRepository.findById(1L)).thenReturn(Optional.empty()); // user not found
+        // When
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        HttpEntity<String> entity = new HttpEntity<>(MAPPER.writeValueAsString(authUser), headers);
+        ResponseEntity<String> response = restTemplate.exchange(String.format(AUTH_USERS_WITH_ID, 1L),
+                HttpMethod.PUT, entity, String.class);
+        // Then
+        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+        verify(mockAuthUserRepository, times(1)).findById(1L);
+        verify(mockAuthUserRepository, times(0)).save(any(AuthUser.class));
+    }
 
-        doNothing().when(mockRepository).deleteById(1L);
+    @Test
+    @Ignore (value = "Standard JDK HTTP doesn't support PATCH HTTP method!")
+    // todo: https://stackoverflow.com/questions/29447382/resttemplate-patch-request
+    public void testUpdateExistingUser_PATCH_OK_200() throws Exception {
+        // Given
+        Map<String, String> update = new HashMap<String, String>() {{
+            put("name",        "New Name");
+            put("description", "New Description");
+            put("username",    "new_username");
+            put("password",    "new_password");
+            put("active",      "true");
+        }};
+        // updated user, that should be passed to save() method of the repository (save to DB)
+        AuthUser updatedAuthUser = new AuthUser(1L, update.get("name"), update.get("description"),
+                update.get("username"), update.get("password"), "true".equals(update.get("active")), CURRENT_DATE, null, null);
+        // setup mock for findById() call - return existing user
+        when(mockAuthUserRepository.findById(1L)).thenReturn(Optional.of(authUser));
+        String updateData = MAPPER.writeValueAsString(update);
 
+        // When
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        HttpEntity<String> entity = new HttpEntity<>(updateData, headers);
+        ResponseEntity<String> response = restTemplate.exchange(String.format(AUTH_USERS_WITH_ID, 1L),
+                HttpMethod.PATCH, entity, String.class);
+
+        // Then
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(MediaType.APPLICATION_JSON, response.getHeaders().getContentType());
+        verify(mockAuthUserRepository, times(1)).findById(1L);
+        // invoke save() with updated user
+        verify(mockAuthUserRepository, times(1)).save(eq(updatedAuthUser));
+    }
+
+    @Test
+    public void testDeleteAuthUser_Existing_User_DELETE_OK_204() throws Exception {
+        // Given
+        when(mockAuthUserRepository.findById(1L)).thenReturn(Optional.of(authUser));
+        doNothing().when(mockAuthUserRepository).deleteById(1L);
+        // When
         HttpEntity<String> entity = new HttpEntity<>(null, new HttpHeaders());
-        ResponseEntity<String> response = restTemplate.exchange("/books/1", HttpMethod.DELETE, entity, String.class);
-
-        assertEquals(HttpStatus.OK, response.getStatusCode());
-
-        verify(mockRepository, times(1)).deleteById(1L);
+        ResponseEntity<String> response = restTemplate.exchange(String.format(AUTH_USERS_WITH_ID, 1L),
+                HttpMethod.DELETE, entity, String.class);
+        // Then
+        assertEquals(HttpStatus.NO_CONTENT, response.getStatusCode());
+        verify(mockAuthUserRepository, times(1)).deleteById(1L);
     }
 
-    private static void printJSON(Object object) {
-        String result;
-        try {
-            result = om.writerWithDefaultPrettyPrinter().writeValueAsString(object);
-            System.out.println(result);
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-        }
+    @Test
+    public void testDeleteAuthUser_Non_Existing_User_DELETE_OK_204() throws Exception {
+        // Given
+        when(mockAuthUserRepository.findById(1L)).thenReturn(Optional.empty()); // user not found
+        doNothing().when(mockAuthUserRepository).deleteById(1L);
+        // When
+        HttpEntity<String> entity = new HttpEntity<>(null, new HttpHeaders());
+        ResponseEntity<String> response = restTemplate.exchange(String.format(AUTH_USERS_WITH_ID, 1L),
+                HttpMethod.DELETE, entity, String.class);
+        // Then
+        assertEquals(HttpStatus.NO_CONTENT, response.getStatusCode());
+        verify(mockAuthUserRepository, times(0)).deleteById(1L);
     }
-    */
 
 }
