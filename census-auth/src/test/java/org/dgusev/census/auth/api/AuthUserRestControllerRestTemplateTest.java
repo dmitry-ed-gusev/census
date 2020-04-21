@@ -4,7 +4,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import org.dgusev.census.auth.domain.entity.AuthUser;
 import org.dgusev.census.auth.repository.AuthUserRepository;
-import org.junit.*;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Ignore;
+import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.skyscreamer.jsonassert.JSONAssert;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,9 +24,6 @@ import java.util.*;
 
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 /***/
 
@@ -36,7 +36,6 @@ public class AuthUserRestControllerRestTemplateTest {
     private static final String           STR_DATETIME_WITH_TIMEZONE = "yyyy-MM-dd'T'HH:mm:ss.SSSZ";
     private static final SimpleDateFormat DATETIME_WITH_TIMEZONE     = new SimpleDateFormat(STR_DATETIME_WITH_TIMEZONE);
     private static final Date             CURRENT_DATE               = new Date();
-    private static final String           CURRENT_STR_DATE           = DATETIME_WITH_TIMEZONE.format(CURRENT_DATE);
     // URLs
     private static final String           AUTH_USERS_URL             = "/census/api/auth/users";
     private static final String           AUTH_USERS_WITH_ID         = AUTH_USERS_URL + "/%s";
