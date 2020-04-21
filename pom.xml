@@ -282,6 +282,12 @@
             <version>1.4.01</version>
         </dependency>
 
+        <dependency>
+            <groupId>io.rest-assured</groupId>
+            <artifactId>rest-assured</artifactId>
+            <scope>test</scope>
+        </dependency>
+
     </dependencies>
 
     <!-- Project dependencies management - info inherited by all child modules. -->
