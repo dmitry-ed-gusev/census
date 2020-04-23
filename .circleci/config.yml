@@ -1,9 +1,60 @@
+###############################################################################
+#
+#     Circle CI build configuration file.
+#
+#     This config uses dependencies cache! Dependencies cache strategy is suitable
+#     for single module maven project, for multi-module project you have to use
+#     different config!
+#
+#     Created:  Dmitrii Gusev, 23.04.2020
+#     Modified:
+#
+###############################################################################
+
+# todo: add variable - system name
+
 version: 2.1
+jobs:
+  build:
+    working_directory: ~/census # working directory in the CircleCI docker container
 
-orbs:
-  maven: circleci/maven@0.0.12
+    docker:
+      - image: circleci/openjdk:8-jdk-stretch # CircleCI prepared JDK 8 docker image
 
-workflows:
-  maven_test:
-    jobs:
-      - maven/test # checkout, build, test, and upload test results
+    steps:
+      - checkout # check out the code in the project directory
+
+      # fix for the issue: empty Sonar analysis for feature and other branches (except master) with CircleCI (fix for checkout step)
+      # fix should not be applied to master branch itself
+      - run: ~/census/.circleci/git_force_local_master_update.sh
+
+      - run: echo "Restore / save cache..."
+      - restore_cache: # download and cache dependencies (restore cache)
+          keys:
+            - v1-dependencies-{{ checksum "pom.xml" }}
+            - v1-dependencies- # fallback to using the latest cache if no exact match is found
+
+      - run: mvn dependency:go-offline # pull down the cache, if present
+
+      - save_cache: # save cache to speed up things for next run (usable for next run for <restore_cache> command)
+          paths:
+            - ~/.m2
+          key: v1-dependencies-{{ checksum "pom.xml" }}
+
+      - run: echo "Starting [Census] build..." # run the `echo` command
+#      - run: mvn clean install sonar:sonar # build with default profile <env-dev>
+      - run: mvn clean install # build with default profile <env-dev>
+
+      - store_test_results: # uploads the test data from <target/surefire-reports> so it can show up in the CircleCI dashboard
+          path: target/surefire-reports
+
+#      - run: echo "Analyzing with SonarCloud..."
+#      - run:
+#          name: Analyze on SonarCloud
+#          command: mvn verify sonar:sonar
+
+#workflows:
+#  main:
+#    jobs:
+#      - build:
+#          context: SonarCloud
