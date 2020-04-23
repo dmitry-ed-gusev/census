@@ -229,9 +229,8 @@
             <artifactId>h2</artifactId>
         </dependency>
         <dependency>
-            <groupId>com.oracle</groupId>
+            <groupId>com.oracle.ojdbc</groupId>
             <artifactId>ojdbc8</artifactId>
-            <version>12.2.0.1.0</version>
         </dependency>
         <dependency>
             <groupId>org.postgresql</groupId>
