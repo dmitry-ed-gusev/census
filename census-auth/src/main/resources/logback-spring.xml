@@ -1,4 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
+
+<!-- https://docs.spring.io/spring-boot/docs/current/reference/html/spring-boot-features.html#boot-features-logback-extensions -->
+
 <configuration>
     <!-- include some base config provided by Spring Boot -->
     <include resource="org/springframework/boot/logging/logback/base.xml"/>
@@ -10,9 +13,11 @@
     <!-- development / default spring profile -->
     <springProfile name="dev | default">
         <!-- root logging level for DEV / default profiles -->
-        <root level="INFO" />
+        <root level="DEBUG" />
         <!-- spring framework logging -->
-        <logger name="org.springframework" level="INFO"/>
+        <logger name="org.springframework" level="DEBUG"/>
+        <!-- hibernate framework logging -->
+        <logger name="org.hibernate" level="DEBUG"/>
         <!-- logger for Hikari connection pool -->
         <logger name="com.zaxxer" level="DEBUG"/>
         <!-- logger for own packages -->
