@@ -16,6 +16,7 @@
 version: 2.1
 jobs:
   build:
+
     working_directory: ~/census # working directory in the CircleCI docker container
 
     docker:
@@ -42,8 +43,8 @@ jobs:
           key: v1-dependencies-{{ checksum "pom.xml" }}
 
       - run: echo "Starting [Census] build..." # run the `echo` command
-#      - run: mvn clean install sonar:sonar # build with default profile <env-dev>
-      - run: mvn clean install # build with default profile <env-dev>
+      - run: mvn clean install sonar:sonar # build with default profile <env-dev>
+#      - run: mvn clean install # build with default profile <env-dev>
 
       - store_test_results: # uploads the test data from <target/surefire-reports> so it can show up in the CircleCI dashboard
           path: target/surefire-reports
@@ -53,8 +54,8 @@ jobs:
 #          name: Analyze on SonarCloud
 #          command: mvn verify sonar:sonar
 
-#workflows:
-#  main:
-#    jobs:
-#      - build:
-#          context: SonarCloud
+workflows:
+  main:
+    jobs:
+      - build:
+          context: SonarCloud
