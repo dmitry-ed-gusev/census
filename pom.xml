@@ -36,6 +36,11 @@
 
     <!-- online repositories for project -->
     <repositories>
+        <repository>
+            <id>example-repo</id>
+            <name>Example Repository</name>
+            <url>file:~/.m2</url>
+        </repository>
         <!-- spring online repository -->
         <repository>
             <id>springsource-repo</id>
