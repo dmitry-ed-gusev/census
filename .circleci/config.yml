@@ -30,7 +30,7 @@ jobs:
       - run: ~/census/.circleci/git_force_local_master_update.sh
 
       # additional step (restore cache) for Maven multi-module project
-      - run: echo "Restore / save cache..."
+      - run: echo "Restore cache..."
       - run:
           name: Generate cumulative pom.xml checksum
           # steps for the command below:
@@ -44,16 +44,22 @@ jobs:
       - restore_cache: # download and cache dependencies (restore cache)
           key: circleci-census-{{ checksum "~/pom-checksum" }}
 
-      - run: mvn dependency:go-offline # pull down the cache, if present
+      # - run: mvn dependency:go-offline # pull down the cache, if present
 
-      - save_cache: # save cache to speed up things for next run (usable for next run for <restore_cache> command)
-          paths:
-            - ~/.m2
-          key: circleci-census-{{ checksum "pom.xml" }}
+#      - save_cache: # save cache to speed up things for next run (usable for next run for <restore_cache> command)
+#          paths:
+#            - ~/.m2
+#          key: circleci-census-{{ checksum "pom.xml" }}
 
       - run: echo "Starting [Census] build..." # run the `echo` command
       - run: mvn clean verify sonar:sonar # build with default profile <env-dev>
 #      - run: mvn clean install # build with default profile <env-dev>
+
+      - run: echo "Save cache..."
+      - save_cache: # save cache to speed up things for next run (usable for next run for <restore_cache> command)
+          paths:
+            - ~/.m2
+          key: circleci-census-{{ checksum "pom.xml" }}
 
       - store_test_results: # uploads the test data from <target/surefire-reports> so it can show up in the CircleCI dashboard
           path: target/surefire-reports
