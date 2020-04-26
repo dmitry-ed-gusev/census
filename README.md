@@ -1,7 +1,14 @@
 # Census simple ERP system, (C) 2010-2020 #
 
-## How to build project ##
-TBD
+`develop` branch build status:
+[![CircleCI](https://circleci.com/bb/dmitry-ed-gusev/census/tree/develop.svg?style=svg)](https://circleci.com/bb/dmitry-ed-gusev/census/tree/develop)
+
+## How to build project locally ##
+Execute the following command in the terminal:  
+  
+`mvn clean install`
+
+All necessary dependencies should be downloaded automatically.
 
 ## Project modules ##
 * **[census-auth]** Simple authorization microservice. Works via REST over http/https protocol.
