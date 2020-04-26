@@ -1,0 +1,71 @@
+###############################################################################
+#
+#     Circle CI build configuration file.
+#
+#     This config uses dependencies cache! Dependencies cache strategy is suitable
+#     for single module maven project, for multi-module project you have to use
+#     different config!
+#
+#     Created:  Dmitrii Gusev, 23.04.2020
+#     Modified: Dmitrii Gusev, 26.04.2020
+#
+###############################################################################
+
+# todo: add variable - system name
+
+version: 2.1
+jobs:
+  build:
+
+    working_directory: ~/census # working directory in the CircleCI docker container
+
+    docker:
+      - image: circleci/openjdk:8-jdk-stretch # CircleCI prepared JDK 8 docker image
+
+    steps:
+      - checkout # check out the code in the project directory
+
+      # fix for the issue: empty Sonar analysis for feature and other branches (except master) with CircleCI (fix for checkout step)
+      # fix should not be applied to master branch itself
+      - run: ~/census/.circleci/git_force_local_master_update.sh
+
+      # additional step (restore cache) for Maven multi-module project
+      - run: echo "Restore cache..."
+      - run:
+          name: Generate cumulative pom.xml checksum
+          # steps for the command below:
+          #   1. find all pom.xml files for all modules
+          #   2. for each file execute sha256sum and append sum to ~/pom-checksum.tmp file
+          #   3. sort records in the file ~/pom-checksum.tmp and write output to ~/pom-checksum
+          command: |
+            find . -type f -name "pom.xml" -exec sh -c "sha256sum {} >> ~/pom-checksum.tmp" \;
+            sort -o ~/pom-checksum ~/pom-checksum.tmp
+          when: always
+      - restore_cache: # download and cache dependencies (restore cache)
+          key: circleci-census-{{ checksum "~/pom-checksum" }}
+
+      # - run: mvn dependency:go-offline # pull down the cache, if present
+
+      - run: echo "Starting [Census] build..." # run the `echo` command
+      - run: mvn clean verify sonar:sonar # build with default profile <env-dev>
+#      - run: mvn clean install # build with default profile <env-dev>
+
+      - run: echo "Save cache..."
+      - save_cache: # save cache to speed up things for next run (usable for next run for <restore_cache> command)
+          paths:
+            - ~/.m2
+          key: circleci-census-{{ checksum "~/pom-checksum" }}
+
+      - store_test_results: # uploads the test data from <target/surefire-reports> so it can show up in the CircleCI dashboard
+          path: target/surefire-reports
+
+#      - run: echo "Analyzing with SonarCloud..."
+#      - run:
+#          name: Analyze on SonarCloud
+#          command: mvn verify sonar:sonar
+
+workflows:
+  main:
+    jobs:
+      - build:
+          context: SonarCloud

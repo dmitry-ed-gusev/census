@@ -1,0 +1,707 @@
+{
+	"info": {
+		"_postman_id": "cdc6d32a-8fe7-49a1-b596-39043081f302",
+		"name": "Census Auth Requests",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Auth User - Get users list",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "6b86030c-1957-475c-bf50-eb5d6147d594",
+						"exec": [
+							"// check status code: 200",
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"// todo: add check for content and json array length"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://{{HOST}}:8080/census/api/auth/users",
+					"protocol": "http",
+					"host": [
+						"{{HOST}}"
+					],
+					"port": "8080",
+					"path": [
+						"census",
+						"api",
+						"auth",
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Auth User - Find user by id",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "7d792613-7126-486f-be3b-7abd3d8e97f1",
+						"exec": [
+							"// check status code: 200",
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"// check JSON values ",
+							"pm.test(\"Verify Json values\", function () { ",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.id).is.to.equal(2); ",
+							"    pm.expect(jsonData.name).is.to.equal(\"Dmitrii Gusev\"); ",
+							"    pm.expect(jsonData.description).is.to.equal(\"Fisrt system user\"); ",
+							"    pm.expect(jsonData.username).is.to.equal(\"dgusev\");",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://{{HOST}}:8080/census/api/auth/users/2",
+					"protocol": "http",
+					"host": [
+						"{{HOST}}"
+					],
+					"port": "8080",
+					"path": [
+						"census",
+						"api",
+						"auth",
+						"users",
+						"2"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Auth User - Find user by id (FAIL)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "2d4acfdf-5fd6-4e38-8b4d-86ab7d76ef38",
+						"exec": [
+							"// check status code: 404",
+							"pm.test(\"Status code is 404\", function () {",
+							"    pm.response.to.have.status(404);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://{{HOST}}:8080/census/api/auth/users/3",
+					"protocol": "http",
+					"host": [
+						"{{HOST}}"
+					],
+					"port": "8080",
+					"path": [
+						"census",
+						"api",
+						"auth",
+						"users",
+						"3"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Auth User - Add user",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "1722bb1d-76ef-4501-b124-9e8026c2210f",
+						"exec": [
+							"// check status code: 201",
+							"pm.test(\"Status code is 201\", function () {",
+							"    pm.response.to.have.status(201);",
+							"});",
+							"",
+							"// todo: add check for content"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"Ivanov Ivan\",\n    \"description\": \"Secondary added user...\",\n    \"username\": \"iva\",\n    \"password\": \"987654\",\n    \"roles\": [{\"id\": 1}, {\"id\": 2}]\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://{{HOST}}:8080/census/api/auth/users",
+					"protocol": "http",
+					"host": [
+						"{{HOST}}"
+					],
+					"port": "8080",
+					"path": [
+						"census",
+						"api",
+						"auth",
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Auth User - Add user (FAIL)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "1722bb1d-76ef-4501-b124-9e8026c2210f",
+						"exec": [
+							"// check status code: 500",
+							"pm.test(\"Status code is 500\", function () {",
+							"    pm.response.to.have.status(500);",
+							"});",
+							"",
+							"// check body contains string",
+							"pm.test(\"Body matches string\", function () {",
+							"    pm.expect(pm.response.text()).to.include(\"Data Integrity Error!\");",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"Ivanov Ivan\",\n    \"description\": \"Secondary added user...\",\n    \"username\": \"test\",\n    \"password\": \"test\",\n    \"roles\": [{\"id\": 1}, {\"id\": 2}]\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://{{HOST}}:8080/census/api/auth/users",
+					"protocol": "http",
+					"host": [
+						"{{HOST}}"
+					],
+					"port": "8080",
+					"path": [
+						"census",
+						"api",
+						"auth",
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Auth User - Update existing user (OK)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "c9e81c0e-47c1-4102-9ba8-7411a22887f4",
+						"exec": [
+							"// check status code: 200",
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"Ivanov Ivan\",\n    \"description\": \"Secondary added user...\",\n    \"username\": \"iva-test\",\n    \"password\": \"987654\",\n    \"roles\": [{\"id\": 1}, {\"id\": 2}]\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://{{HOST}}:8080/census/api/auth/users/1",
+					"protocol": "http",
+					"host": [
+						"{{HOST}}"
+					],
+					"port": "8080",
+					"path": [
+						"census",
+						"api",
+						"auth",
+						"users",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Auth User - Update non-existing user (FAIL)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "e67c9c7b-ef42-432b-b43b-aeab3bf6b49a",
+						"exec": [
+							"// check status code: 404",
+							"pm.test(\"Status code is 404\", function () {",
+							"    pm.response.to.have.status(404);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"Zzz Dddd\",\n    \"description\": \"Secondary added user...\",\n    \"username\": \"iivanov_aaa\",\n    \"password\": \"987654\",\n    \"roles\": [{\"id\": 1}]\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://{{HOST}}:8080/census/api/auth/users/333",
+					"protocol": "http",
+					"host": [
+						"{{HOST}}"
+					],
+					"port": "8080",
+					"path": [
+						"census",
+						"api",
+						"auth",
+						"users",
+						"333"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Auth User - Update (patch) user by fields",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "fffde4f3-19b2-4105-88fc-a1b69daf94d0",
+						"exec": [
+							"// check status code: 200",
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"Dmitrii Gusev\",\n    \"description\": \"restored user\",\n    \"username\": \"new-user-name\",\n    \"active\": true\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://{{HOST}}:8080/census/api/auth/users/1",
+					"protocol": "http",
+					"host": [
+						"{{HOST}}"
+					],
+					"port": "8080",
+					"path": [
+						"census",
+						"api",
+						"auth",
+						"users",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Auth User - Update (patch) non-existing user by fields",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "0b6bd3fd-8b96-46f9-8b37-c719fd42a398",
+						"exec": [
+							"// check status code: 404",
+							"pm.test(\"Status code is 404\", function () {",
+							"    pm.response.to.have.status(404);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"Dmitrii Gusev\",\n    \"description\": \"restored user\",\n    \"username\": \"new-user-name\",\n    \"active\": true\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://{{HOST}}:8080/census/api/auth/users/1111",
+					"protocol": "http",
+					"host": [
+						"{{HOST}}"
+					],
+					"port": "8080",
+					"path": [
+						"census",
+						"api",
+						"auth",
+						"users",
+						"1111"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Auth User - Delete existing user by id",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "baaae288-e2fd-417c-8c4e-0feea0acfae9",
+						"exec": [
+							"// check status code: 204",
+							"pm.test(\"Status code is 204\", function () {",
+							"    pm.response.to.have.status(204);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://{{HOST}}:8080/census/api/auth/users/1",
+					"protocol": "http",
+					"host": [
+						"{{HOST}}"
+					],
+					"port": "8080",
+					"path": [
+						"census",
+						"api",
+						"auth",
+						"users",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Auth User - Delete non-existing user by id",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "baaae288-e2fd-417c-8c4e-0feea0acfae9",
+						"exec": [
+							"// check status code: 204",
+							"pm.test(\"Status code is 204\", function () {",
+							"    pm.response.to.have.status(204);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://{{HOST}}:8080/census/api/auth/users/111",
+					"protocol": "http",
+					"host": [
+						"{{HOST}}"
+					],
+					"port": "8080",
+					"path": [
+						"census",
+						"api",
+						"auth",
+						"users",
+						"111"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Auth - Get roles list",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/census/auth/roles",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"census",
+						"auth",
+						"roles"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Auth - Find role by id (ok)",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/census/auth/roles/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"census",
+						"auth",
+						"roles",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Auth - Find role by id (fail)",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/census/auth/roles/111",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"census",
+						"auth",
+						"roles",
+						"111"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Auth - Add role",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"rolename\": \"ROLE5\",\n    \"description\": \"some role....\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/census/auth/roles",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"census",
+						"auth",
+						"roles"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Auth - Save or Update role (update)",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"description\": \"some role!\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/census/auth/roles/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"census",
+						"auth",
+						"roles",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Auth - Save or Update role (save)",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"rolename\": \"TESTER1\",\n    \"description\": \"System tester role\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/census/auth/roles/777",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"census",
+						"auth",
+						"roles",
+						"777"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Auth - Update by fields (patch)",
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"description\": \"System tester role\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/census/auth/roles/2",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"census",
+						"auth",
+						"roles",
+						"2"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Auth - Delete role by id",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/census/auth/roles/10",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"census",
+						"auth",
+						"roles",
+						"10"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"protocolProfileBehavior": {}
+}
