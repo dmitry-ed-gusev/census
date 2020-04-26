@@ -59,7 +59,7 @@ jobs:
       - save_cache: # save cache to speed up things for next run (usable for next run for <restore_cache> command)
           paths:
             - ~/.m2
-          key: circleci-census-{{ checksum "pom.xml" }}
+          key: circleci-census-{{ checksum "~/pom-checksum" }}
 
       - store_test_results: # uploads the test data from <target/surefire-reports> so it can show up in the CircleCI dashboard
           path: target/surefire-reports
