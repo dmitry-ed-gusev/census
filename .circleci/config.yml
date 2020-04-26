@@ -46,11 +46,6 @@ jobs:
 
       # - run: mvn dependency:go-offline # pull down the cache, if present
 
-#      - save_cache: # save cache to speed up things for next run (usable for next run for <restore_cache> command)
-#          paths:
-#            - ~/.m2
-#          key: circleci-census-{{ checksum "pom.xml" }}
-
       - run: echo "Starting [Census] build..." # run the `echo` command
       - run: mvn clean verify sonar:sonar # build with default profile <env-dev>
 #      - run: mvn clean install # build with default profile <env-dev>

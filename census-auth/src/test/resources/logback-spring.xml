@@ -12,9 +12,9 @@
 
     <!-- logging levels for tests (all to debug) -->
     <root level="DEBUG" />
-<!--    <logger name="org.springframework" level="INFO"/>-->
-<!--    <logger name="org.hibernate" level="INFO"/>-->
-<!--    <logger name="com.zaxxer" level="INFO"/>-->
-<!--    <logger name="org.dgusev" level="DEBUG" />-->
+    <logger name="org.springframework" level="INFO"/>
+    <logger name="org.hibernate" level="INFO"/>
+    <logger name="com.zaxxer" level="INFO"/>
+    <logger name="org.dgusev" level="DEBUG" />
 
 </configuration>
