@@ -1,0 +1,1 @@
+Directory for log files stored during local service(s) execution.

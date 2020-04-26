@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- https://docs.spring.io/spring-boot/docs/current/reference/html/spring-boot-features.html#boot-features-logback-extensions -->
+
+<configuration>
+    <!-- include some base config provided by Spring Boot -->
+    <include resource="org/springframework/boot/logging/logback/base.xml"/>
+    <!-- include defaults provided by Spring Boot -->
+    <include resource="org/springframework/boot/logging/logback/defaults.xml" />
+    <!-- include Spring Boot console appender-->
+    <include resource="org/springframework/boot/logging/logback/console-appender.xml"/>
+
+    <!-- logging levels for tests (all to debug) -->
+    <root level="DEBUG" />
+    <logger name="org.springframework" level="INFO"/>
+    <logger name="org.hibernate" level="INFO"/>
+    <logger name="com.zaxxer" level="INFO"/>
+    <logger name="org.dgusev" level="DEBUG" />
+
+</configuration>

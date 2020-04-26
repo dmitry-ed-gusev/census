@@ -1,0 +1,1 @@
+Databases files: sql scripts (added to repo) and DBMS data (for dockerized containers) ignored.
