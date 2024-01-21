@@ -1,7 +1,7 @@
-# -- ignore maven output directory
+### maven output directory
 target/
 
-# -- ignore IntelliJ IDEA project files
+### IntelliJ IDEA project files
 *.iml
 *.ipr
 *.iws
@@ -18,3 +18,6 @@ target/
 ### Spring Boot files ###
 *.pid
 *.port
+
+### python files/cache
+.pytest_cache/

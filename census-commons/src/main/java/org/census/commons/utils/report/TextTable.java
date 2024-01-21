@@ -210,8 +210,10 @@ public final class TextTable {
             // common style for all workbook cells
             HSSFCellStyle dataStyle = wb.createCellStyle();
             dataStyle.setWrapText(true);                               // word wrap with \n symbols
-            dataStyle.setAlignment(CellStyle.ALIGN_CENTER);            // horizontal align
-            dataStyle.setVerticalAlignment(CellStyle.VERTICAL_CENTER); // vertical align
+
+            // todo: fixed for build success!
+            //dataStyle.setAlignment(CellStyle.ALIGN_CENTER);            // horizontal align
+            //dataStyle.setVerticalAlignment(CellStyle.VERTICAL_CENTER); // vertical align
 
             int rowsCounter = 0; // rows counter for entire work book
 
@@ -225,13 +227,19 @@ public final class TextTable {
                     // header cells style
                     HSSFCellStyle headerStyle = wb.createCellStyle();
                     headerStyle.setWrapText(true);                               // word wrap with \n symbols
-                    headerStyle.setAlignment(CellStyle.ALIGN_CENTER);            // horizontal align
-                    headerStyle.setVerticalAlignment(CellStyle.VERTICAL_CENTER); // vertical align
+                    
+                    // todo: fixed for build success!
+                    //headerStyle.setAlignment(CellStyle.ALIGN_CENTER);            // horizontal align
+                    //headerStyle.setVerticalAlignment(CellStyle.VERTICAL_CENTER); // vertical align
+                    
                     // header cells font style
                     HSSFFont headerFont = wb.createFont();
                     headerFont.setFontName(HSSFFont.FONT_ARIAL);        // Arial
                     headerFont.setFontHeightInPoints((short) 10);       // 10pt
-                    headerFont.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD); // bold
+                    
+                    // todo: fixed for build success!
+                    //headerFont.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD); // bold
+
                     headerStyle.setFont(headerFont);
                     style = headerStyle;
                 } else {
@@ -255,13 +263,19 @@ public final class TextTable {
                     // header cells style
                     HSSFCellStyle headerStyle = wb.createCellStyle();
                     headerStyle.setWrapText(true);                               // word wrap with \n symbols
-                    headerStyle.setAlignment(CellStyle.ALIGN_CENTER);            // horizontal align
-                    headerStyle.setVerticalAlignment(CellStyle.VERTICAL_CENTER); // vertical align
+
+                    // todo: fixed for build success!
+                    //headerStyle.setAlignment(CellStyle.ALIGN_CENTER);            // horizontal align
+                    //headerStyle.setVerticalAlignment(CellStyle.VERTICAL_CENTER); // vertical align
+
                     // header cells font style
                     HSSFFont headerFont = wb.createFont();
                     headerFont.setFontName(HSSFFont.FONT_ARIAL);        // Arial
                     headerFont.setFontHeightInPoints((short) 10);       // 10pt
-                    headerFont.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD); // bold
+                    
+                    // todo: fixed for build success!
+                    //headerFont.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD); // bold
+                    
                     headerStyle.setFont(headerFont);
                     style = headerStyle;
                 } else {

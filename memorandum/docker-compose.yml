@@ -1,0 +1,80 @@
+
+version: '3.5'
+
+services:
+
+  # mysql service description
+  mysql:
+    image: mysql:5.7
+    command: --max_allowed_packet=256M
+    container_name: ${MYSQL_NAME}
+    restart: unless-stopped
+    networks:
+      - mynetwork
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=${MYSQL_DBNAME}
+      - MYSQL_USER=${MYSQL_USER}
+      - MYSQL_PASSWORD=${MYSQL_PASS}
+
+  # mysql db service
+  mysql:
+    image: mysql:5.7
+    container_name: mysql.5.7
+    networks:
+      - mynetwork
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=cp23965_pult
+      - MYSQL_USER=cp23965_pult
+      - MYSQL_PASSWORD=dt38TyQy
+    volumes:
+      # map catalog [mysql_dump] in current working dir to container catalog [/docker-entrypoint-initdb.d].
+      # By default, all .sql/.sh scripts there will be executed on container build (first start!), not on
+      # simple start of existing container.
+      - ./mysql_dump:/docker-entrypoint-initdb.d
+    ports:
+      # map host port 3306 to container port 3306 (format -> host:container)
+      - "3306:3306"
+
+
+   db:
+     image: mysql:5.7
+     volumes:
+       - /opt/test:/var/lib/mysql
+       - ./mysql-dump:/docker-entrypoint-initdb.d
+     environment:
+       MYSQL_ROOT_PASSWORD: root
+       MYSQL_DATABASE: testdb1
+       MYSQL_USER: testuser
+       MYSQL_PASSWORD: root
+     ports:
+       - 3306:3306
+phpmyadmin:
+    depends_on:
+      - db
+    image: phpmyadmin/phpmyadmin
+    ports:
+      - '8081:80'
+    environment:
+      PMA_HOST: db
+      MYSQL_ROOT_PASSWORD: root
+web:
+    depends_on:
+      - db
+    image: tomcat
+    volumes:
+      - ./target/LoginWebApp-1.war:/usr/local/tomcat/webapps/LoginWebApp-1.war
+    ports:
+      - '8082:8080'
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: testdb1
+      MYSQL_USER: testuser
+      MYSQL_PASSWORD: root
+
+# networks configuration
+networks:
+  census_network:
+    driver: bridge
+    name: census_app_network
