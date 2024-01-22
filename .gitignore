@@ -21,3 +21,6 @@ target/
 
 ### python files/cache
 .pytest_cache/
+
+### mysql data files ###
+*/.mysql/var/lib/*
