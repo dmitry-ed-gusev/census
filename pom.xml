@@ -22,7 +22,8 @@
         <!-- Hibernate framework -->
         <org.hibernate.version>5.0.6.Final</org.hibernate.version>
         <org.hibernate.search.version>5.5.3.Final</org.hibernate.search.version>
-        <servlet.api.version>2.5</servlet.api.version>
+        <!-- <servlet.api.version>2.5</servlet.api.version> -->
+        <servlet.api.version>3.0-alpha-1</servlet.api.version>
         <jstl.version>1.2</jstl.version>
         <apache.poi.version>5.2.1</apache.poi.version>
         <log4j.version>1.2.17</log4j.version>
@@ -52,6 +53,12 @@
             <name>Hibernate repository</name>
             <url>https://repository.jboss.org/nexus/content/groups/public/</url>
         </repository>
+        <repository>
+            <id>central</id>
+            <name>maven central</name>
+            <url>https://mvnrepository.com/artifact/javax.servlet/javax.servlet-api</url>
+        </repository>
+
     </repositories>
 
     <!-- Project modules. Order of modules is important. -->
@@ -64,6 +71,8 @@
         <module>census-webapp</module>
         <!-- Memorandum project: old version -->
         <module>memorandum</module>
+        <!-- Memorandum Project with Spring -->
+        <module>memo-spring</module>
         <module>census-timesheets</module>
         <!-- Census Authorization Service (microservice) -->
         <module>census-auth</module>

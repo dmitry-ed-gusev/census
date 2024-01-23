@@ -1,0 +1,14 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Spring Boot-MemoApplication<ru.dmgusev-memorandum>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "ru.dmgusev.memorandum.MemoApplication",
+            "projectName": "ru.dmgusev-memorandum",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        }
+    ]
+}

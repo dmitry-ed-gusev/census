@@ -1,0 +1,75 @@
+<?xml version="1.0"?>
+<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+         xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+
+    <!-- We using direct versions numbers (instead of placeholders ${}), because this module used by other
+      projects and placeholders don't work with jar dependency. -->
+
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <artifactId>census</artifactId>
+        <groupId>org.dgusev</groupId>
+        <version>1.0.0</version>
+    </parent>
+
+    <groupId>ru.dmgusev</groupId>
+    <artifactId>memorandum</artifactId>
+    <name>Memorandum [Spring] :: Electronic Documents Managent System (EDMS).</name>
+    <version>1.0.0</version>
+    <packaging>war</packaging>
+
+    <build>
+      <finalName>memos-spring</finalName>
+    </build>
+
+    <!-- This module dependencies -->
+    <dependencies>
+
+        <!-- <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
+        </dependency> -->
+
+
+        <!-- <dependency>
+            <groupId>org.census.commons</groupId>
+            <artifactId>census-commons</artifactId>
+            <version>1.0.0</version>
+        </dependency> -->
+
+        <!-- J2EE provided libraries (only for compile/build) -->
+        <!-- <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>servlet-api</artifactId>
+            <version>${servlet.api.version}</version>
+            <scope>provided</scope>
+        </dependency> -->
+
+        <!-- JSTL library. We don't need scope 'provided' for Tomcat, for other containers - maybe... -->
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>jstl</artifactId>
+            <version>${jstl.version}</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>   
+        </dependency>
+
+        <dependency>
+            <groupId>com.google.code.gson</groupId>
+            <artifactId>gson</artifactId>
+            <version>2.10.1</version>
+        </dependency>
+        
+        <dependency>
+            <groupId>org.apache.tomcat.embed</groupId>
+            <artifactId>tomcat-embed-jasper</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        
+    </dependencies>
+
+</project>
